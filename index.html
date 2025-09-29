@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mini Games Lobby</title>
 <style>
-  /* Body and background */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
@@ -14,16 +13,14 @@
     padding: 0;
   }
 
-  /* Header with neon flicker */
   header {
     background: linear-gradient(90deg, #8a2be2, #4b0082);
     color: white;
     padding: 30px 20px;
-    text-align: center;
-    font-size: 32px;
+    font-size: 36px;
     font-weight: bold;
+    text-align: center;
     letter-spacing: 1px;
-    border-bottom: 2px solid #8a2be2;
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
     animation: neon-flicker 2s infinite alternate;
   }
@@ -37,22 +34,20 @@
     }
   }
 
-  /* Lobby grid */
   .lobby {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 25px;
-    padding: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: 20px;
+    padding: 40px;
+    justify-items: center;
   }
 
-  /* Neon game cards */
   .game-card {
-    background: #1a0a3b;
+    background-color: #1c1c2c;
     border-radius: 12px;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    height: 120px;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+    width: 150px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,36 +56,13 @@
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    padding: 10px;
     color: #fff;
-    border: 2px solid rgba(138,43,226,0.5);
-    animation: pulse-glow 3s infinite alternate;
-  }
-
-  @keyframes pulse-glow {
-    0% {
-      box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    50% {
-      box-shadow: 0 0 15px #9b30ff, 0 0 25px #6a0dad, 0 0 40px #9b30ff;
-    }
-    100% {
-      box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
   }
 
   .game-card:hover {
-    transform: translateY(-8px) scale(1.07);
-    box-shadow: 0 0 30px #9b30ff, 0 0 60px #6a0dad, 0 0 80px #9b30ff;
-    border: 2px solid #9b30ff;
-    color: #f0f0ff;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad, 0 0 30px #fff;
   }
-
-  /* Responsive for smaller screens */
-  @media (max-width: 1100px) { .lobby { grid-template-columns: repeat(4, 1fr); } }
-  @media (max-width: 850px) { .lobby { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 600px) { .lobby { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 400px) { .lobby { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -98,32 +70,31 @@
 <header>Mini Games Lobby</header>
 
 <div class="lobby">
-  <div class="game-card" onclick="openGame('sudoku')">Sudoku</div>
-  <div class="game-card" onclick="openGame('rock-paper-scissors')">Rock Paper Scissors</div>
-  <div class="game-card" onclick="openGame('scramble')">Scramble</div>
-  <div class="game-card" onclick="openGame('color-game')">Color Game</div>
-  <div class="game-card" onclick="openGame('guess-game')">Guess Game</div>
-  <div class="game-card" onclick="openGame('tic-tac-toe')">Tic Tac Toe</div>
-  <div class="game-card" onclick="openGame('memory-match')">Memory Match</div>
-  <div class="game-card" onclick="openGame('number-puzzle')">Number Puzzle</div>
-  <div class="game-card" onclick="openGame('snake')">Snake</div>
-  <div class="game-card" onclick="openGame('typing-test')">Typing Test</div>
-  <div class="game-card" onclick="openGame('reaction-speed')">Reaction Speed</div>
-  <div class="game-card" onclick="openGame('hangman')">Hangman</div>
-  <div class="game-card" onclick="openGame('whack-a-mole')">Whack-a-Mole</div>
-  <div class="game-card" onclick="openGame('connect-four')">Connect Four</div>
-  <div class="game-card" onclick="openGame('balloon-pop')">Balloon Pop</div>
-  <div class="game-card" onclick="openGame('math-quiz')">Math Quiz</div>
-  <div class="game-card" onclick="openGame('word-search')">Word Search</div>
-  <div class="game-card" onclick="openGame('color-match')">Color Match</div>
-  <div class="game-card" onclick="openGame('flappy-bird')">Flappy Bird</div>
-  <div class="game-card" onclick="openGame('2048')">2048</div>
+  <div class="game-card" onclick="openGame('sudoku.html')">Sudoku</div>
+  <div class="game-card" onclick="openGame('rock-paper-scissors.html')">Rock Paper Scissors</div>
+  <div class="game-card" onclick="openGame('scramble.html')">Scramble</div>
+  <div class="game-card" onclick="openGame('color-game.html')">Color Game</div>
+  <div class="game-card" onclick="openGame('guess-game.html')">Guess Game</div>
+  <div class="game-card" onclick="openGame('tic-tac-toe.html')">Tic Tac Toe</div>
+  <div class="game-card" onclick="openGame('memory-match.html')">Memory Match</div>
+  <div class="game-card" onclick="openGame('number-puzzle.html')">Number Puzzle</div>
+  <div class="game-card" onclick="openGame('snake.html')">Snake</div>
+  <div class="game-card" onclick="openGame('typing-test.html')">Typing Test</div>
+  <div class="game-card" onclick="openGame('reaction-speed.html')">Reaction Speed</div>
+  <div class="game-card" onclick="openGame('hangman.html')">Hangman</div>
+  <div class="game-card" onclick="openGame('whack-a-mole.html')">Whack-a-Mole</div>
+  <div class="game-card" onclick="openGame('connect-four.html')">Connect Four</div>
+  <div class="game-card" onclick="openGame('balloon-pop.html')">Balloon Pop</div>
+  <div class="game-card" onclick="openGame('math-quiz.html')">Math Quiz</div>
+  <div class="game-card" onclick="openGame('word-search.html')">Word Search</div>
+  <div class="game-card" onclick="openGame('color-match.html')">Color Match</div>
+  <div class="game-card" onclick="openGame('flappy-bird.html')">Flappy Bird</div>
+  <div class="game-card" onclick="openGame('2048.html')">2048</div>
 </div>
 
 <script>
-function openGame(game) {
-  alert("You clicked on " + game + "! You can redirect to the game page here.");
-  // Example: window.location.href = game + '.html';
+function openGame(gameFile) {
+  window.location.href = gameFile;
 }
 </script>
 
