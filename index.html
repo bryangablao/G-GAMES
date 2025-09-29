@@ -43,26 +43,37 @@
   }
 
   .game-card {
-    background-color: #1c1c2c;
-    border-radius: 12px;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    width: 150px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-  }
+  background-color: #1c1c2c;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  transition: all 0.4s ease;
+  background: linear-gradient(145deg, #1c1c2c, #2a2a3a);
+}
 
-  .game-card:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad, 0 0 30px #fff;
-  }
+.game-card:hover {
+  transform: translateY(-5px) scale(1.08);
+  box-shadow: 0 0 25px #9b30ff, 0 0 50px #6a0dad, 0 0 30px #fff;
+  background: linear-gradient(135deg, #8a2be2, #4b0082, #ff00ff);
+  background-size: 400% 400%;
+  animation: gradientGlow 3s ease infinite;
+}
+
+@keyframes gradientGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 </style>
 </head>
 <body>
