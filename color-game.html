@@ -1,84 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Color Game</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+/* === Global Body & Background === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; padding: 0;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at top left, #380098, black);
+  background-size: 200% 200%;
+  animation: gradientMove 10s infinite alternate;
+  overflow-x: hidden;
+}
+@keyframes gradientMove {
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
-  }
+/* === Header === */
+header{
+  background: linear-gradient(90deg,#8a2be2,#4b0082);
+  padding:30px 20px;
+  font-size:36px;
+  font-weight:bold;
+  letter-spacing:1px;
+  color:white;
+  text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+  position: relative;
+  z-index:10;
+}
+@keyframes neon-flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
+  20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+/* === Help Icon === */
+#helpIcon{
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  width: 35px; height:35px;
+  line-height:35px;
+  background: rgba(255,255,255,0.1);
+  border-radius:50%;
+  cursor:pointer; user-select:none;
+  z-index:20;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* === Modal for Help & Achievements === */
+.modal{
+  display:none;
+  position:fixed; top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+  flex-direction:column;
+  text-align:center;
+}
+.modal-content{
+  background:rgba(20,20,30,0.95);
+  padding:20px 30px;
+  border-radius:12px;
+  box-shadow:0 0 15px #8a2be2;
+  max-width:350px;
+}
+.modal-content h2{margin-top:0;}
+.modal button{
+  margin-top:20px;
+  padding:10px 25px;
+  border:none; border-radius:10px;
+  font-size:16px;
+  background:#8a2be2; color:white;
+  cursor:pointer;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+}
+.modal button:hover{transform:scale(1.05);}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+/* === Game Layout === */
+.container{max-width:500px; margin:40px auto; position:relative; z-index:10;}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+.color-box{
+  width:200px; height:200px;
+  margin: 0 auto 20px auto;
+  border-radius:15px;
+  box-shadow:0 0 15px #8a2be2;
+}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+.choices button{
+  padding:12px 25px; margin:10px;
+  font-size:18px; border-radius:10px; border:none;
+  background:linear-gradient(135deg,#8a2be2,#4b0082);
+  color:white;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+  cursor:pointer; transition: all 0.3s ease;
+}
+.choices button:hover{transform:scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;}
+
+.status{font-size:20px; margin-bottom:15px; height:24px;}
+
+/* === Scoreboard === */
+.scoreboard{
+  display:flex; justify-content:center; align-items:center;
+  background:rgba(255,255,255,0.1);
+  border-radius:12px;
+  padding:15px 25px;
+  box-shadow:0 0 15px #8a2be2;
+  margin:20px auto;
+  font-size:18px; color:gold;
+}
+
+.reset-button,.back-button{
+  background:#8a2be2; border:none;
+  padding:12px 25px; color:white; font-size:16px;
+  border-radius:10px; cursor:pointer;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+  margin-top:10px; margin-right:10px;
+}
+.reset-button:hover,.back-button:hover{
+  transform:scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;
+}
+
+footer{margin-top:30px; font-size:16px; color:#ccc;}
+
+/* === Background Canvases === */
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
+}
+
+/* === Confetti === */
+.confetti{
+  position:fixed; width:10px; height:10px;
+  background:#ff0; pointer-events:none;
+  z-index:200; opacity:0.9;
+}
 </style>
 </head>
 <body>
 
-<header>Color Game</header>
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+
+<header>
+  Color Game
+  <div id="helpIcon" onclick="openHelp()">?</div>
+</header>
 
 <div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Color Game here.</div>
+  <div class="color-box" id="colorBox"></div>
+  <div class="status" id="statusMsg">Guess the color!</div>
+
+  <div class="choices" id="choicesContainer"></div>
+
+  <div class="scoreboard">
+    Correct: <span id="correctScore">0</span>
+    &nbsp; | &nbsp;
+    Wrong: <span id="wrongScore">0</span>
+  </div>
+
+  <button class="reset-button" onclick="resetGame()">Reset Score</button>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
-<script>
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+<footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
+<!-- Help Modal -->
+<div id="helpModal" class="modal">
+  <div class="modal-content">
+    <h2>How to Play</h2>
+    <p>A color will appear in the square above.<br/>
+       Choose the correct color name from the buttons.<br/>
+       Every correct guess adds +1 to your score.<br/>
+       Try to reach milestones without mistakes!</p>
+    <button onclick="closeHelp()">Close</button>
+  </div>
+</div>
+
+<!-- Achievement Modal -->
+<div id="achieveModal" class="modal">
+  <div class="modal-content">
+    <h2 id="achieveMsg">🏆 Achievement Unlocked!</h2>
+    <button onclick="closeAchieve()">Close</button>
+  </div>
+</div>
+
+<script>
+/* ======= Color Game Logic ======= */
+const colorList = [
+  "Red","Blue","Green","Yellow","Orange","Purple","Pink","Brown","Black","White",
+  "Cyan","Magenta","Lime","Maroon","Olive","Navy","Teal","Aqua","Gold","Silver",
+  "Gray","Indigo","Violet","Beige","Coral","Crimson","Khaki","Lavender","Plum","Salmon",
+  "Tan","Turquoise","Azure","Ivory","Mint","Peach","Rose","Orchid","Chartreuse","Chocolate",
+  "Tomato","Honeydew","Wheat","SlateBlue","SkyBlue","SeaGreen","HotPink","DeepPink","MediumVioletRed","SpringGreen",
+  "ForestGreen","MediumSeaGreen","LightCoral","LightSalmon","DeepSkyBlue","DodgerBlue","RoyalBlue","DarkBlue","DarkRed","DarkGreen",
+  "LightGreen","LightBlue","PaleTurquoise","PowderBlue","PapayaWhip","Moccasin","LemonChiffon","Bisque","LightCyan","GhostWhite",
+  "FloralWhite","Snow","MistyRose","AliceBlue","AntiqueWhite","BurlyWood","CadetBlue","DarkCyan","DarkMagenta","DarkKhaki",
+  "DarkOrange","DarkOrchid","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","FireBrick","Gainsboro","IndianRed","LightSteelBlue",
+  "MediumAquamarine","MediumOrchid","MediumPurple","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","PaleGreen","PaleVioletRed","Sienna","Thistle"
+];
+
+let correct=0, wrong=0, currentColor="", streak=0;
+
+/* pick random color and 3 wrong ones */
+function newRound(){
+  const answer = colorList[Math.floor(Math.random()*colorList.length)];
+  currentColor = answer;
+  document.getElementById("colorBox").style.background = answer;
+
+  let options = [answer];
+  while(options.length<4){
+    let c = colorList[Math.floor(Math.random()*colorList.length)];
+    if(!options.includes(c)) options.push(c);
+  }
+  options.sort(()=>Math.random()-0.5);
+
+  const container = document.getElementById("choicesContainer");
+  container.innerHTML="";
+  options.forEach(opt=>{
+    const btn=document.createElement("button");
+    btn.textContent=opt;
+    btn.onclick=()=>checkAnswer(opt);
+    container.appendChild(btn);
+  });
+}
+
+function checkAnswer(choice){
+  if(choice===currentColor){
+    correct++; streak++;
+    document.getElementById("statusMsg").textContent="✅ Correct!";
+  }else{
+    wrong++; streak=0;
+    document.getElementById("statusMsg").textContent=`❌ Wrong! It was ${currentColor}`;
+  }
+  document.getElementById("correctScore").textContent=correct;
+  document.getElementById("wrongScore").textContent=wrong;
+
+  checkAchievements();
+  newRound();
+}
+
+function resetGame(){
+  correct=0; wrong=0; streak=0;
+  document.getElementById("correctScore").textContent=correct;
+  document.getElementById("wrongScore").textContent=wrong;
+  document.getElementById("statusMsg").textContent="Guess the color!";
+  newRound();
+}
+
+/* ==== Achievements ==== */
+function checkAchievements(){
+  if(streak===10) showAchievement("🏆 Amazing! 10 correct in a row!");
+  else if(streak===25) showAchievement("🌟 Fantastic! 25 correct streak!");
+  else if(streak===50) showAchievement("🔥 Incredible! 50 correct in a row!");
+  else if(streak===100) showAchievement("👑 PERFECT MASTER GUESSER! 100 flawless streak!");
+}
+
+function showAchievement(msg){
+  document.getElementById("achieveMsg").textContent=msg;
+  document.getElementById("achieveModal").style.display="flex";
+  startConfetti();
+}
+
+function closeAchieve(){
+  document.getElementById("achieveModal").style.display="none";
+  removeConfetti();
+}
+
+/* ==== Help Modal ==== */
+function openHelp(){document.getElementById("helpModal").style.display="flex";}
+function closeHelp(){document.getElementById("helpModal").style.display="none";}
+
+/* ==== Navigation ==== */
+function goBack(){window.location.href="index.html";}
+
+/* ==== Confetti ==== */
+let confettis=[];
+function startConfetti(){
+  for(let i=0;i<150;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*window.innerWidth+"px";
+    c.style.top=Math.random()*window.innerHeight+"px";
+    c.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    confettis.push(c);
+    animateConfetti(c);
+  }
+}
+function animateConfetti(c){
+  let y=parseFloat(c.style.top);
+  const fall=setInterval(()=>{
+    y+=3;
+    c.style.top=y+"px";
+    if(y>window.innerHeight){c.remove(); clearInterval(fall);}
+  },16);
+}
+function removeConfetti(){confettis.forEach(c=>c.remove());confettis=[];}
+
+/* ==== Stars Background ==== */
+const starsCanvas=document.getElementById("starsCanvas");
+const starsCtx=starsCanvas.getContext("2d");
+let stars=[];
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
+
+/* ==== Ripple Trail ==== */
+const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCtx=rippleCanvas.getContext("2d");
+let ripples=[];
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
+animateRipples();
+
+/* start game */
+newRound();
+</script>
 </body>
 </html>
