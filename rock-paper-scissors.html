@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rock Paper Scissors</title>
-<link rel="icon" type="image/png" href="image/RPS.png">
+<link rel="icon" type="image/png" href="image/RockPaperScissors.pngg">
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -47,6 +47,11 @@
     margin: 0 auto;
   }
 
+  .ai-select {
+    margin: 20px 0;
+    font-size: 18px;
+  }
+
   .choices button {
     padding: 15px 25px;
     margin: 10px;
@@ -64,12 +69,12 @@
     box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;
   }
 
-  .results, .ai-select, .difficulty-select {
+  .results {
     margin: 20px 0;
     font-size: 18px;
   }
 
-  .back-button {
+  .back-button, .reset-button {
     background: #8a2be2;
     border: none;
     padding: 12px 25px;
@@ -78,10 +83,11 @@
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-right: 10px;
   }
 
-  .back-button:hover {
+  .back-button:hover, .reset-button:hover {
     transform: scale(1.05);
     box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;
   }
@@ -110,32 +116,21 @@
 <header>Rock Paper Scissors</header>
 
 <div class="container">
-
   <div class="ai-select">
     AI Opponent: 
     <select id="aiSelect">
-      <option value="easy">EasyBot</option>
-      <option value="medium">MidBot</option>
-      <option value="hard">HardBot</option>
-      <option value="tricky">TrickyBot</option>
-      <option value="pro">ProBot</option>
-      <option value="legend">LegendBot</option>
-    </select>
-  </div>
-
-  <div class="difficulty-select">
-    Difficulty:
-    <select id="difficultySelect">
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="hard">Hard</option>
+      <option value="Azrael">AI Azrael (Impossible)</option>
+      <option value="Mara">AI Mara (Very Hard)</option>
+      <option value="Bench">AI Bench (Hard)</option>
+      <option value="Riz">AI Riz (Medium)</option>
+      <option value="Kenneth">AI Kenneth (Easy)</option>
     </select>
   </div>
 
   <div class="choices">
     <button onclick="play('rock')">🪨 Rock</button>
     <button onclick="play('paper')">📄 Paper</button>
-    <button onclick="play('scissors')">✂️ Scissors</button>
+    <button onclick="play('scissors')">✂️ Scissor</button>
   </div>
 
   <div class="results">
@@ -144,6 +139,7 @@
     <p id="score">Player: 0 | AI: 0</p>
   </div>
 
+  <button class="reset-button" onclick="resetScore()">Reset Score</button>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
@@ -154,53 +150,56 @@ function goBack() { window.location.href="index.html"; }
 
 let playerScore = 0, aiScore = 0;
 
-const aiNames = {
-  easy: "EasyBot",
-  medium: "MidBot",
-  hard: "HardBot",
-  tricky: "TrickyBot",
-  pro: "ProBot",
-  legend: "LegendBot"
+// AI chance mapping
+const aiChances = {
+  Azrael: 0.01,   // 1% chance of player winning
+  Mara: 0.0314,   // 3.14%
+  Bench: 0.1,     // 10%
+  Riz: 0.3,       // 30%
+  Kenneth: 0.5    // 50%
 };
 
 function play(playerChoice){
-  const aiLevel = document.getElementById("aiSelect").value;
-  const difficulty = document.getElementById("difficultySelect").value;
+  const aiName = document.getElementById("aiSelect").value;
+  const chance = aiChances[aiName];
+  
+  // Decide if AI wins or player wins based on chance
+  let aiChoice;
+  let outcomeText;
 
-  let aiChoice = generateAIChoice(aiLevel, difficulty);
+  if(Math.random() > chance){
+    // AI wins
+    aiChoice = getWinningChoice(playerChoice);
+    outcomeText = `You Lose against ${aiName}!`;
+    aiScore++;
+  } else {
+    // Player wins or draw
+    aiChoice = getRandomChoice();
+    outcomeText = (aiChoice === playerChoice) ? "Draw!" : "You Win!";
+    if(outcomeText === "You Win!") playerScore++;
+  }
 
   document.getElementById("aiChoice").innerText = `AI chose: ${aiChoice}`;
-
-  let outcome = getOutcome(playerChoice, aiChoice);
-  document.getElementById("outcome").innerText = outcome;
-
-  if(outcome.includes("Win")) playerScore++;
-  else if(outcome.includes("Lose")) aiScore++;
-
+  document.getElementById("outcome").innerText = outcomeText;
   document.getElementById("score").innerText = `Player: ${playerScore} | AI: ${aiScore}`;
 }
 
-function generateAIChoice(aiLevel, difficulty){
+function getWinningChoice(player){
+  if(player === "rock") return "paper";
+  if(player === "paper") return "scissors";
+  if(player === "scissors") return "rock";
+}
+
+function getRandomChoice(){
   const choices = ["rock","paper","scissors"];
-  let chance = Math.random();
-  if(difficulty === "easy") {
-    // AI 50% random
-    return choices[Math.floor(Math.random()*3)];
-  } else if(difficulty === "medium") {
-    return chance < 0.5 ? choices[Math.floor(Math.random()*3)] : choices[Math.floor(Math.random()*3)];
-  } else if(difficulty === "hard") {
-    // AI tries to beat player previous move (very simple)
-    return choices[Math.floor(Math.random()*3)];
-  }
   return choices[Math.floor(Math.random()*3)];
 }
 
-function getOutcome(player, ai){
-  if(player===ai) return "Draw!";
-  if((player==="rock" && ai==="scissors")||
-     (player==="paper" && ai==="rock")||
-     (player==="scissors" && ai==="paper")) return "You Win!";
-  return "You Lose!";
+function resetScore(){
+  playerScore = 0; aiScore = 0;
+  document.getElementById("score").innerText = `Player: 0 | AI: 0`;
+  document.getElementById("outcome").innerText = "Make your choice!";
+  document.getElementById("aiChoice").innerText = "AI chose: -";
 }
 
 // === Stars + Meteor ===
