@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Games Lobby</title>
+<title>G-GAMES</title>
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,15 +25,24 @@
   header {
     background: linear-gradient(90deg, #8a2be2, #4b0082);
     color: white;
-    padding: 30px 20px;
-    font-size: 36px;
+    padding: 20px;
+    font-size: 32px;
     font-weight: bold;
     text-align: center;
     letter-spacing: 1px;
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
     animation: neon-flicker 2s infinite alternate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     position: relative;
     z-index: 10;
+  }
+
+  header img {
+    height: 50px;
+    width: auto;
   }
 
   @keyframes neon-flicker {
@@ -47,9 +56,9 @@
 
   .lobby {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 20px;
-    padding: 40px;
+    grid-template-columns: repeat(5, 1fr); /* Always 5 columns */
+    gap: 15px;
+    padding: 20px;
     max-width: 1000px;
     margin: 0 auto;
     position: relative;
@@ -57,7 +66,7 @@
   }
 
   .game-card {
-    aspect-ratio: 1 / 1; /* 🔑 Keeps perfect square */
+    aspect-ratio: 1 / 1; /* Perfect square */
     background-color: #1c1c2c;
     border-radius: 12px;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
@@ -98,6 +107,16 @@
   }
   #starsCanvas { z-index: 0; }
   #rippleCanvas { z-index: 0; }
+
+  /* Make grid responsive on mobile */
+  @media (max-width: 600px) {
+    .lobby {
+      grid-template-columns: repeat(5, 1fr); /* still 5 columns */
+      gap: 8px;
+      padding: 10px;
+    }
+    .game-card { font-size: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -105,7 +124,10 @@
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>Mini Games Lobby</header>
+<header>
+  <img src="G-GAMES/image/G-GAMES.png" alt="G-GAMES Logo">
+  G-GAMES
+</header>
 
 <div class="lobby">
   <div class="game-card" onclick="openGame('sudoku.html')">Sudoku</div>
