@@ -39,7 +39,7 @@ header{
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
 
-/* === Help Icon === */
+/* === Help Icon like Guess Game === */
 #helpIcon{
   position: absolute;
   top: 10px; right: 15px;
@@ -51,37 +51,20 @@ header{
   cursor:pointer; user-select:none;
   z-index:20;
 }
-
-/* === Modal for Help & Achievements === */
-.modal{
+#helpText{
   display:none;
-  position:fixed; top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  z-index:100;
-  flex-direction:column;
-  text-align:center;
+  position: absolute;
+  top: 70px; right: 15px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 0 10px #8a2be2;
+  z-index:20;
 }
-.modal-content{
-  background:rgba(20,20,30,0.95);
-  padding:20px 30px;
-  border-radius:12px;
-  box-shadow:0 0 15px #8a2be2;
-  max-width:350px;
-}
-.modal-content h2{margin-top:0;}
-.modal button{
-  margin-top:20px;
-  padding:10px 25px;
-  border:none; border-radius:10px;
-  font-size:16px;
-  background:#8a2be2; color:white;
-  cursor:pointer;
-  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
-}
-.modal button:hover{transform:scale(1.05);}
 
 /* === Game Layout === */
 .container{max-width:500px; margin:40px auto; position:relative; z-index:10;}
@@ -151,8 +134,16 @@ footer{margin-top:30px; font-size:16px; color:#ccc;}
 
 <header>
   Color Game
-  <div id="helpIcon" onclick="openHelp()">?</div>
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
+
+<div id="helpText">
+  <strong>How to Play Color Game:</strong><br>
+  1. A color will appear in the square.<br>
+  2. Choose the correct color name from the buttons.<br>
+  3. Every correct guess increases your score.<br>
+  4. Try to reach milestones without mistakes!
+</div>
 
 <div class="container">
   <div class="color-box" id="colorBox"></div>
@@ -172,27 +163,16 @@ footer{margin-top:30px; font-size:16px; color:#ccc;}
 
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
-<!-- Help Modal -->
-<div id="helpModal" class="modal">
-  <div class="modal-content">
-    <h2>How to Play</h2>
-    <p>A color will appear in the square above.<br/>
-       Choose the correct color name from the buttons.<br/>
-       Every correct guess adds +1 to your score.<br/>
-       Try to reach milestones without mistakes!</p>
-    <button onclick="closeHelp()">Close</button>
-  </div>
-</div>
-
-<!-- Achievement Modal -->
-<div id="achieveModal" class="modal">
-  <div class="modal-content">
-    <h2 id="achieveMsg">🏆 Achievement Unlocked!</h2>
-    <button onclick="closeAchieve()">Close</button>
-  </div>
-</div>
-
 <script>
+/* Toggle Help Box */
+function toggleHelp(){
+  const help=document.getElementById('helpText');
+  help.style.display = (help.style.display==='block') ? 'none' : 'block';
+}
+
+/* Go back */
+function goBack(){window.location.href="index.html";}
+
 /* ======= Color Game Logic ======= */
 const colorList = [
   "Red","Blue","Green","Yellow","Orange","Purple","Pink","Brown","Black","White",
@@ -209,7 +189,6 @@ const colorList = [
 
 let correct=0, wrong=0, currentColor="", streak=0;
 
-/* pick random color and 3 wrong ones */
 function newRound(){
   const answer = colorList[Math.floor(Math.random()*colorList.length)];
   currentColor = answer;
@@ -242,8 +221,6 @@ function checkAnswer(choice){
   }
   document.getElementById("correctScore").textContent=correct;
   document.getElementById("wrongScore").textContent=wrong;
-
-  checkAchievements();
   newRound();
 }
 
@@ -254,56 +231,6 @@ function resetGame(){
   document.getElementById("statusMsg").textContent="Guess the color!";
   newRound();
 }
-
-/* ==== Achievements ==== */
-function checkAchievements(){
-  if(streak===10) showAchievement("🏆 Amazing! 10 correct in a row!");
-  else if(streak===25) showAchievement("🌟 Fantastic! 25 correct streak!");
-  else if(streak===50) showAchievement("🔥 Incredible! 50 correct in a row!");
-  else if(streak===100) showAchievement("👑 PERFECT MASTER GUESSER! 100 flawless streak!");
-}
-
-function showAchievement(msg){
-  document.getElementById("achieveMsg").textContent=msg;
-  document.getElementById("achieveModal").style.display="flex";
-  startConfetti();
-}
-
-function closeAchieve(){
-  document.getElementById("achieveModal").style.display="none";
-  removeConfetti();
-}
-
-/* ==== Help Modal ==== */
-function openHelp(){document.getElementById("helpModal").style.display="flex";}
-function closeHelp(){document.getElementById("helpModal").style.display="none";}
-
-/* ==== Navigation ==== */
-function goBack(){window.location.href="index.html";}
-
-/* ==== Confetti ==== */
-let confettis=[];
-function startConfetti(){
-  for(let i=0;i<150;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*window.innerWidth+"px";
-    c.style.top=Math.random()*window.innerHeight+"px";
-    c.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
-    document.body.appendChild(c);
-    confettis.push(c);
-    animateConfetti(c);
-  }
-}
-function animateConfetti(c){
-  let y=parseFloat(c.style.top);
-  const fall=setInterval(()=>{
-    y+=3;
-    c.style.top=y+"px";
-    if(y>window.innerHeight){c.remove(); clearInterval(fall);}
-  },16);
-}
-function removeConfetti(){confettis.forEach(c=>c.remove());confettis=[];}
 
 /* ==== Stars Background ==== */
 const starsCanvas=document.getElementById("starsCanvas");
