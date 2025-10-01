@@ -55,7 +55,7 @@
   td {
     width: 40px;
     height: 40px;
-    border: 1px solid black; /* small box lines */
+    border: 1px solid black; /* black grid lines for all */
     text-align: center;
     font-size: 20px;
     font-weight: bold;
@@ -74,21 +74,20 @@
     border: none;
     background: rgba(255,255,255,0.8);
     color: black;
+    -moz-appearance: textfield;
+  }
+
+  /* remove number spinners for Chrome */
+  td input::-webkit-outer-spin-button,
+  td input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   td.wrong {
     background: #ff0000;
     color: #fff;
   }
-
-  /* 3x3 thicker lines */
-  tr:nth-child(3n) td { border-bottom: 3px solid white; }
-  td:nth-child(3n) { border-right: 3px solid white; }
-  /* Outer border */
-  tr:first-child td { border-top: 3px solid black; }
-  tr:last-child td { border-bottom: 3px solid black; }
-  td:first-child { border-left: 3px solid black; }
-  td:last-child { border-right: 3px solid black; }
 
   .buttons {
     display: flex;
@@ -123,7 +122,6 @@
     font-weight: bold;
   }
 
-  /* Canvases for stars & ripples */
   #starsCanvas, #rippleCanvas {
     position: fixed;
     top: 0; left: 0;
@@ -148,6 +146,15 @@
 <header>Sudoku</header>
 
 <div class="container">
+  <div class="buttons">
+    <button onclick="newGame()">New Game</button>
+    <button onclick="resetGame()">Reset</button>
+    <button onclick="surrenderGame()">Surrender</button>
+    <button onclick="goBack()">Back to Lobby</button>
+  </div>
+
+  <table id="sudokuGrid"></table>
+
   <div class="level-select">
     Difficulty:
     <select id="level">
@@ -156,20 +163,13 @@
       <option value="hard">Hard</option>
     </select>
   </div>
-  <table id="sudokuGrid"></table>
-  <div class="buttons">
-    <button onclick="newGame()">New Game</button>
-    <button onclick="resetGame()">Reset</button>
-    <button onclick="surrenderGame()">Surrender</button>
-    <button onclick="goBack()">Back to Lobby</button>
-  </div>
+
   <div class="developer">🚀 Developed by Accx Creations</div>
 </div>
 
 <script>
 let currentPuzzle=[], solution=[];
 
-// Sudoku generation
 function generatePuzzle(level){
   let fullGrid = generateFullSudoku();
   let squaresToRemove = level==='easy'?35: level==='medium'?45:55;
@@ -187,7 +187,6 @@ function generatePuzzle(level){
   renderGrid();
 }
 
-// Backtracking Sudoku generator
 function generateFullSudoku(){
   let grid = Array.from({length:9},()=>Array(9).fill(0));
   function isSafe(r,c,n){
@@ -254,8 +253,9 @@ function resetGame(){
   for(let r=0;r<9;r++){
     for(let c=0;c<9;c++){
       if(currentPuzzle[r][c]===0){
-        document.getElementById('sudokuGrid').rows[r].cells[c].querySelector('input').value='';
-        document.getElementById('sudokuGrid').rows[r].cells[c].classList.remove('wrong');
+        let td=document.getElementById('sudokuGrid').rows[r].cells[c];
+        td.querySelector('input').value='';
+        td.classList.remove('wrong');
       }
     }
   }
