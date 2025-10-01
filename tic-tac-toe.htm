@@ -1,84 +1,501 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Tic Tac Toe</title>
+<link rel="icon" type="image/png" href="image/TicTacToe.png">
 <style>
+  /* Page background & header (same style as other pages) */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
+    background: radial-gradient(circle at top left, #380098, black);
+    background-size: 200% 200%;
+    animation: gradientMove 10s infinite alternate;
     color: #fff;
     margin: 0;
     padding: 0;
     text-align: center;
+    overflow-x: hidden;
   }
+  @keyframes gradientMove { 0% { background-position:0% 50%; } 100% { background-position:100% 50%; } }
 
   header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
+    background: linear-gradient(90deg,#8a2be2,#4b0082);
     color: white;
     padding: 30px 20px;
-    font-size: 32px;
+    font-size: 36px;
     font-weight: bold;
     letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+    text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
     animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
+    position: relative;
+    z-index: 10;
   }
-
   @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
+    0%,19%,21%,23%,25%,54%,56%,100% { text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2; }
+    20%,24%,55% { text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2; }
   }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
-
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
+  /* Help icon and help text (matches RPS behavior) */
+  #helpIcon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
     cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 20;
+  }
+  #helpText {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 10px;
+    width: 260px;
+    text-align: left;
+    font-size: 14px;
+    color: #fff;
+    box-shadow: 0 0 10px #8a2be2;
+    z-index: 20;
   }
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
+  /* Container style consistent with your other games */
+  .container {
+    max-width: 520px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid #8a2be2;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #8a2be2, 0 0 30px #4b0082;
+    position: relative;
+    z-index: 10;
   }
+
+  /* Tic Tac Toe board */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    gap: 12px;
+    justify-content: center;
+    margin: 10px auto 20px;
+  }
+  .cell {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(145deg,#1c1c2c,#2a2a3a);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(138,43,226,0.15);
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    user-select: none;
+  }
+  .cell:hover { transform: translateY(-4px); box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad; }
+  .cell.disabled { cursor: default; transform:none; box-shadow: none; opacity:0.9; }
+  .cell.x { color: #ffd700; } /* player color */
+  .cell.o { color: #00ffd6; } /* AI color */
+
+  .controls { display:flex; justify-content:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+  button.control {
+    background: #8a2be2; border:none; padding:10px 18px; color:white; border-radius:10px;
+    font-size:16px; cursor:pointer; box-shadow:0 0 10px #8a2be2; transition:transform .12s;
+  }
+  button.control:hover { transform:scale(1.05); box-shadow:0 0 20px #9b30ff; }
+
+  /* Scoreboard consistent style */
+  .scoreboard {
+    display:flex; justify-content:center; align-items:center; gap:18px;
+    margin-top: 12px;
+    background: rgba(0,0,0,0.25);
+    padding: 10px 18px;
+    border-radius: 10px;
+    color: gold;
+    font-weight: 600;
+  }
+  .scoreboard div { min-width: 90px; text-align:center; }
+
+  .status { margin-top:12px; font-size:18px; color:#ffd700; min-height:22px; }
+
+  /* footer & canvas */
+  footer { margin-top:18px; font-size:14px; color:#ccc; }
+  #starsCanvas, #rippleCanvas { position: fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; }
+
+  /* End modal */
+  #endModal {
+    display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+    background: rgba(0,0,0,0.8); color:#fff; justify-content:center; align-items:center;
+    z-index:100; flex-direction:column; text-align:center;
+  }
+  #endModal h2{ font-size:32px; margin-bottom:14px; }
+  #endModal button { padding:10px 20px; border-radius:8px; border:none; background:#8a2be2; color:#fff; cursor:pointer; box-shadow:0 0 10px #8a2be2; }
+  #endModal button:hover { transform:scale(1.05); }
+  /* confetti/sad drop styles (same style used in other pages) */
+  .confetti { position:fixed; width:10px; height:10px; pointer-events:none; z-index:200; opacity:0.95; }
+  .sadDrop { position: fixed; width:12px; height:12px; pointer-events:none; z-index:200; opacity: 0.95; color: red; text-align:center; }
 </style>
 </head>
 <body>
 
-<header>Tic Tac Toe</header>
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
 
-<div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Tic Tac Toe here.</div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+<header>
+  Tic Tac Toe
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
+</header>
+
+<!-- help text (toggled) -->
+<div id="helpText">
+  <strong>How to play Tic Tac Toe:</strong><br>
+  1. You are <strong>X</strong>, AI is <strong>O</strong>.<br>
+  2. Click a cell to place X.<br>
+  3. Get 3 in a row (horizontal, vertical, diagonal) to win.<br>
+  4. AI is unbeatable (minimax). Good luck!
+</div>
+
+<div class="container" role="main">
+  <div class="status" id="status">Your turn — place an X.</div>
+
+  <div class="board" id="board" aria-label="Tic Tac Toe board">
+    <!-- 9 cells inserted by JS -->
+  </div>
+
+  <div class="controls">
+    <button class="control" id="newGameBtn">New Game</button>
+    <button class="control" id="resetScoreBtn">Reset Score</button>
+    <button class="control" id="backBtn">Back to Lobby</button>
+  </div>
+
+  <div class="scoreboard" aria-live="polite">
+    <div>Player (X)<br><span id="playerWins">0</span></div>
+    <div>Draws<br><span id="draws">0</span></div>
+    <div>AI (O)<br><span id="aiWins">0</span></div>
+  </div>
+</div>
+
+<footer>© 2025 All Rights Reserved | 🚀 Developed by Accx Creations</footer>
+
+<!-- End modal -->
+<div id="endModal">
+  <h2 id="endMessage">You Win!</h2>
+  <div style="margin-bottom:12px;"><button onclick="closeEndModal()">Close</button></div>
 </div>
 
 <script>
-function goBack() {
-  window.location.href = "index.html";
+/* ---------- Help toggle (same behavior as RPS) ---------- */
+function toggleHelp(){
+  const h = document.getElementById('helpText');
+  h.style.display = (h.style.display === 'block') ? 'none' : 'block';
 }
-</script>
 
+/* ---------- Navigation ---------- */
+document.getElementById('backBtn').addEventListener('click', ()=>{ window.location.href='index.html'; });
+
+/* ---------- Game state ---------- */
+let board = Array(9).fill('');
+let playerTurn = true; // player starts
+let gameOver = false;
+let playerWins = 0, aiWins = 0, draws = 0;
+
+/* ---------- Build board in DOM ---------- */
+const boardEl = document.getElementById('board');
+function renderBoard(){
+  boardEl.innerHTML = '';
+  for(let i=0;i<9;i++){
+    const cell = document.createElement('div');
+    cell.className = 'cell' + (board[i] ? ' ' + board[i].toLowerCase() : '');
+    cell.dataset.index = i;
+    cell.setAttribute('role','button');
+    cell.setAttribute('aria-label','Cell '+(i+1));
+    cell.addEventListener('click', onCellClick);
+    cell.textContent = board[i];
+    if(board[i]) cell.classList.add('disabled');
+    boardEl.appendChild(cell);
+  }
+}
+renderBoard();
+
+/* ---------- Utilities ---------- */
+const winningCombos = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+
+function checkWinner(b){
+  for(const combo of winningCombos){
+    const [a,b1,c] = combo;
+    if(b[a] && b[a] === b[b1] && b[a] === b[c]) return b[a]; // 'X' or 'O'
+  }
+  if(b.every(cell=>cell)) return 'draw';
+  return null;
+}
+
+/* ---------- Player click handler ---------- */
+function onCellClick(e){
+  if(gameOver) return;
+  const idx = Number(e.currentTarget.dataset.index);
+  if(board[idx]) return;
+  makeMove(idx, 'X');
+  const result = checkWinner(board);
+  if(result) return handleResult(result);
+  // AI turn
+  playerTurn = false;
+  document.getElementById('status').textContent = "AI is thinking...";
+  setTimeout(()=> {
+    aiMove();
+    const r = checkWinner(board);
+    if(r) handleResult(r);
+    else {
+      playerTurn = true;
+      document.getElementById('status').textContent = "Your turn — place an X.";
+    }
+    renderBoard();
+  }, 250); // small delay for feel
+}
+
+/* ---------- Make move ---------- */
+function makeMove(index, mark){
+  if(board[index] || gameOver) return false;
+  board[index] = mark;
+  renderBoard();
+  return true;
+}
+
+/* ---------- AI (Minimax - unbeatable) ---------- */
+function aiMove(){
+  const best = minimax(board.slice(), 'O');
+  makeMove(best.index, 'O');
+}
+
+/* Minimax returns { index, score } */
+function minimax(bd, player){
+  const winner = checkWinner(bd);
+  if(winner === 'O') return { score: 10 };
+  if(winner === 'X') return { score: -10 };
+  if(winner === 'draw') return { score: 0 };
+
+  const moves = [];
+  for(let i=0;i<9;i++){
+    if(!bd[i]){
+      const move = {};
+      move.index = i;
+      bd[i] = player;
+
+      const result = minimax(bd, player === 'O' ? 'X' : 'O');
+      move.score = result.score;
+
+      bd[i] = '';
+      moves.push(move);
+    }
+  }
+
+  // choose best depending on player
+  let bestMove;
+  if(player === 'O'){ // maximize
+    let bestScore = -Infinity;
+    for(const mv of moves){
+      if(mv.score > bestScore){ bestScore = mv.score; bestMove = mv; }
+    }
+  } else { // minimize
+    let bestScore = Infinity;
+    for(const mv of moves){
+      if(mv.score < bestScore){ bestScore = mv.score; bestMove = mv; }
+    }
+  }
+  return bestMove;
+}
+
+/* ---------- Handle result ---------- */
+function handleResult(result){
+  gameOver = true;
+  const modal = document.getElementById('endModal');
+  const endMsg = document.getElementById('endMessage');
+
+  if(result === 'X'){
+    endMsg.textContent = "🎉 You Win!";
+    playerWins++;
+    startConfetti();
+  } else if(result === 'O'){
+    endMsg.textContent = "😢 You Lose!";
+    aiWins++;
+    startSadDrops();
+  } else {
+    endMsg.textContent = "🤝 It's a Draw!";
+    draws++;
+  }
+  updateScoreboard();
+  modal.style.display = 'flex';
+  document.getElementById('status').textContent = endMsg.textContent;
+}
+
+/* ---------- Controls: New Game, Reset Score ---------- */
+document.getElementById('newGameBtn').addEventListener('click', resetBoard);
+document.getElementById('resetScoreBtn').addEventListener('click', resetScore);
+
+function resetBoard(){
+  board = Array(9).fill('');
+  playerTurn = true;
+  gameOver = false;
+  document.getElementById('status').textContent = "Your turn — place an X.";
+  document.getElementById('endModal').style.display = 'none';
+  removeConfetti();
+  removeSadDrops();
+  renderBoard();
+}
+
+function resetScore(){
+  playerWins = 0; aiWins = 0; draws = 0;
+  updateScoreboard();
+}
+
+/* ---------- Update scoreboard DOM ---------- */
+function updateScoreboard(){
+  document.getElementById('playerWins').textContent = playerWins;
+  document.getElementById('aiWins').textContent = aiWins;
+  document.getElementById('draws').textContent = draws;
+}
+
+/* Close end modal and start new round */
+function closeEndModal(){
+  document.getElementById('endModal').style.display = 'none';
+  removeConfetti();
+  removeSadDrops();
+  resetBoard();
+}
+
+/* ---------- Confetti & Sad Drops (copied style from other pages) ---------- */
+let confettiInterval = null, confettis = [];
+function startConfetti(){
+  removeConfetti();
+  confettiInterval = setInterval(()=>{
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*window.innerWidth + 'px';
+    c.style.top  = '-20px';
+    c.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    confettis.push(c);
+    animateConfetti(c);
+  }, 20);
+  setTimeout(()=> clearInterval(confettiInterval), 2500);
+}
+function animateConfetti(c){
+  let y = parseFloat(c.style.top);
+  let x = parseFloat(c.style.left);
+  const fall = setInterval(()=>{
+    y += 3 + Math.random()*2;
+    x += Math.sin(y/10) * 1.5;
+    c.style.top = y + 'px';
+    c.style.left = x + 'px';
+    if(y > window.innerHeight + 40){ c.remove(); clearInterval(fall); }
+  }, 16);
+}
+function removeConfetti(){ confettis.forEach(c=>c.remove()); confettis = []; clearInterval(confettiInterval); }
+
+let sadDrops = [];
+function startSadDrops(){
+  removeSadDrops();
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div');
+    s.className = 'sadDrop';
+    s.innerText = '✖';
+    s.style.left = Math.random()*window.innerWidth + 'px';
+    s.style.top = '-20px';
+    s.style.color = 'red';
+    s.style.fontSize = '14px';
+    document.body.appendChild(s);
+    sadDrops.push(s);
+    animateSadDrop(s);
+  }
+}
+function animateSadDrop(s){
+  let y = -20;
+  const fall = setInterval(()=>{
+    y += 4 + Math.random()*2;
+    s.style.top = y + 'px';
+    if(y > window.innerHeight + 40){ s.remove(); clearInterval(fall); }
+  }, 16);
+}
+function removeSadDrops(){ sadDrops.forEach(s=>s.remove()); sadDrops = []; }
+
+/* ---------- Stars background & ripple effect (copied) ---------- */
+const starsCanvas = document.getElementById('starsCanvas');
+const starsCtx = starsCanvas.getContext('2d');
+let starsArr = [];
+function resizeStarsCanvas(){
+  starsCanvas.width = window.innerWidth;
+  starsCanvas.height = window.innerHeight;
+  generateStars();
+}
+function generateStars(){
+  starsArr = [];
+  for(let i=0;i<200;i++){
+    starsArr.push({ x: Math.random()*starsCanvas.width, y: Math.random()*starsCanvas.height, alpha: Math.random()*0.7+0.3, radius: Math.random()*1.5+0.5, flickerSpeed: Math.random()*0.05+0.02 });
+  }
+}
+function animateStars(){
+  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
+  starsArr.forEach(s=>{
+    s.alpha += s.flickerSpeed * (Math.random()<0.5 ? -1 : 1);
+    if(s.alpha < 0.1) s.alpha = 0.1;
+    if(s.alpha > 1) s.alpha = 1;
+    starsCtx.beginPath();
+    starsCtx.arc(s.x, s.y, s.radius, 0, Math.PI*2);
+    starsCtx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+    starsCtx.fill();
+  });
+  requestAnimationFrame(animateStars);
+}
+window.addEventListener('resize', resizeStarsCanvas);
+resizeStarsCanvas();
+generateStars();
+animateStars();
+
+const rippleCanvas = document.getElementById('rippleCanvas');
+const rippleCtx = rippleCanvas.getContext('2d');
+let ripples = [];
+function resizeRippleCanvas(){ rippleCanvas.width = window.innerWidth; rippleCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeRippleCanvas);
+resizeRippleCanvas();
+window.addEventListener('mousemove', (e)=> {
+  ripples.push({ x: e.clientX, y: e.clientY, radius: 0, alpha: 0.3, lineWidth: 1 + Math.random() });
+  if(ripples.length > 20) ripples.shift();
+});
+function animateRipples(){
+  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
+  ripples.forEach((r,i)=>{
+    r.radius += 1.5;
+    r.alpha -= 0.007;
+    if(r.alpha <= 0){ ripples.splice(i,1); return; }
+    rippleCtx.beginPath();
+    rippleCtx.arc(r.x, r.y, r.radius, 0, Math.PI*2);
+    rippleCtx.strokeStyle = `rgba(56,0,152,${r.alpha})`;
+    rippleCtx.lineWidth = r.lineWidth;
+    rippleCtx.stroke();
+  });
+  requestAnimationFrame(animateRipples);
+}
+animateRipples();
+
+/* initial render/update */
+renderBoard();
+updateScoreboard();
+</script>
 </body>
 </html>
