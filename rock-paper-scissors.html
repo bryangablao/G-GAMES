@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -40,6 +39,37 @@
   @keyframes neon-flicker {
     0%,19%,21%,23%,25%,54%,56%,100% { text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2; }
     20%,24%,55% { text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2; }
+  }
+
+  /* === Help icon === */
+  #helpIcon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 20;
+  }
+  #helpText {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 10px;
+    width: 250px;
+    text-align: left;
+    font-size: 14px;
+    color: #fff;
+    box-shadow: 0 0 10px #8a2be2;
+    z-index: 20;
   }
 
   .container {
@@ -93,7 +123,7 @@
   }
 
   footer {
-    margin-top: 40px;
+    margin-top: 20px;
     font-size: 16px;
     color: #ccc;
   }
@@ -155,6 +185,49 @@
     text-align: center;
     color: red;
   }
+
+  /* Scoreboard Styles */
+  .scoreboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid #8a2be2;
+    border-radius: 15px;
+    padding: 15px 25px;
+    max-width: 350px;
+    margin: 20px auto;
+    box-shadow: 0 0 15px #8a2be2, 0 0 30px #4b0082;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .score-player, .score-ai {
+    flex: 1;
+    text-align: center;
+  }
+
+  .score-player h3, .score-ai h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2;
+  }
+
+  .score-player p, .score-ai p {
+    margin: 5px 0 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: gold;
+    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2;
+  }
+
+  .score-vs {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0 15px;
+    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2;
+  }
 </style>
 </head>
 <body>
@@ -162,11 +235,22 @@
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>Rock Paper Scissors</header>
+<header>
+  Rock Paper Scissors
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
+</header>
+
+<div id="helpText">
+  <strong>How to play Rock Paper Scissors:</strong><br>
+  1. Choose Rock 🪨, Paper 📄, or Scissors ✂️.<br>
+  2. Rock beats Scissors, Scissors beats Paper, Paper beats Rock.<br>
+  3. First to reach 20 points wins.<br>
+  4. Select AI difficulty to challenge yourself!
+</div>
 
 <div class="container">
   <div class="ai-select">
-    AI Opponent: 
+    AI Opponent:
     <select id="aiSelect">
       <option value="Azrael">AI Azrael (Impossible)</option>
       <option value="Mara">AI Mara (Very Hard)</option>
@@ -179,46 +263,54 @@
   <div class="choices">
     <button onclick="play('rock')">🪨 Rock</button>
     <button onclick="play('paper')">📄 Paper</button>
-    <button onclick="play('scissors')">✂️ Scissor</button>
+    <button onclick="play('scissors')">✂️ Scissors</button>
   </div>
 
   <div class="results">
     <p id="aiChoice">AI chose: -</p>
     <p id="outcome">Make your choice!</p>
-    <p id="score">Player: 0 | AI: 0</p>
+
+    <div class="scoreboard">
+      <div class="score-player">
+        <h3>Player</h3>
+        <p id="playerScore">0</p>
+      </div>
+      <div class="score-vs">VS</div>
+      <div class="score-ai">
+        <h3>AI</h3>
+        <p id="aiScore">0</p>
+      </div>
+    </div>
   </div>
 
   <button class="reset-button" onclick="resetScore()">Reset Score</button>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
-<footer>🚀 Developed by Accx Creations</footer>
+<footer>© 2025 All Rights Reserved | 🚀 Developed by Accx Creations</footer>
 
-<!-- Modal -->
 <div id="endModal">
   <h2 id="modalMessage">You Win!</h2>
   <button onclick="closeModal()">Close</button>
 </div>
 
 <script>
+function toggleHelp() {
+  const help = document.getElementById('helpText');
+  help.style.display = help.style.display === 'block' ? 'none' : 'block';
+}
+
 function goBack() { window.location.href="index.html"; }
 
 let playerScore = 0, aiScore = 0;
 const winScore = 20;
 
-// Updated AI chances
-const aiChances = {
-  Azrael: 0.3,   // 30%
-  Mara: 0.5,     // 50%
-  Bench: 0.6,    // 60%
-  Riz: 0.8,      // 80%
-  Kenneth: 1.0   // 100%
-};
+const aiChances = { Azrael: 0.3, Mara: 0.5, Bench: 0.6, Riz: 0.8, Kenneth: 1.0 };
 
 function play(playerChoice){
   const aiName = document.getElementById("aiSelect").value;
   const chance = aiChances[aiName];
-  
+ 
   let aiChoice, outcomeText;
 
   if(Math.random() > chance){
@@ -233,7 +325,8 @@ function play(playerChoice){
 
   document.getElementById("aiChoice").innerText = `AI chose: ${aiChoice}`;
   document.getElementById("outcome").innerText = outcomeText;
-  document.getElementById("score").innerText = `Player: ${playerScore} | AI: ${aiScore}`;
+  document.getElementById("playerScore").innerText = playerScore;
+  document.getElementById("aiScore").innerText = aiScore;
 
   checkWin(outcomeText.includes("Win"));
 }
@@ -251,12 +344,13 @@ function getRandomChoice(){
 
 function resetScore(){
   playerScore = 0; aiScore = 0;
-  document.getElementById("score").innerText = `Player: 0 | AI: 0`;
+  document.getElementById("playerScore").innerText = playerScore;
+  document.getElementById("aiScore").innerText = aiScore;
   document.getElementById("outcome").innerText = "Make your choice!";
   document.getElementById("aiChoice").innerText = "AI chose: -";
 }
 
-function checkWin(isWin=false){
+function checkWin(){
   if(playerScore >= winScore || aiScore >= winScore){
     const modal = document.getElementById('endModal');
     const message = document.getElementById('modalMessage');
@@ -275,7 +369,7 @@ function closeModal(){
   resetScore();
 }
 
-// === Confetti and Sad Drop ===
+/* Confetti & Drops */
 let confettiInterval=null, confettis=[];
 function startConfetti(){
   removeConfetti();
@@ -292,7 +386,7 @@ function startConfetti(){
 }
 function animateConfetti(c){
   let y=0, x=parseFloat(c.style.left);
-  const fall = setInterval(()=>{
+  const fall=setInterval(()=>{
     y+=3; x+=Math.sin(y/10)*2;
     c.style.top=y+'px'; c.style.left=x+'px';
     if(y>window.innerHeight){c.remove(); clearInterval(fall);}
@@ -300,7 +394,6 @@ function animateConfetti(c){
 }
 function removeConfetti(){ confettis.forEach(c=>c.remove()); confettis=[]; }
 
-// Sad Drops
 let sadDrops=[];
 function startSadDrops(){
   removeSadDrops();
@@ -316,27 +409,25 @@ function startSadDrops(){
   }
 }
 function animateSadDrop(s){
-  let y=0, x=parseFloat(s.style.left);
+  let y=0;
   const fall=setInterval(()=>{
     y+=4;
     s.style.top=y+'px';
     if(y>window.innerHeight){s.remove(); clearInterval(fall);}
   },16);
 }
-function removeSadDrops(){ sadDrops.forEach(s=>s.remove()); sadDrops=[];}
+function removeSadDrops(){ sadDrops.forEach(s=>s.remove()); sadDrops=[]; }
 
-// === Stars + Meteor ===
-const starsCanvas = document.getElementById('starsCanvas');
-const starsCtx = starsCanvas.getContext('2d');
-let stars = [], meteor=null;
+/* Stars */
+const starsCanvas=document.getElementById('starsCanvas');
+const starsCtx=starsCanvas.getContext('2d');
+let stars=[];
 function resizeStarsCanvas(){starsCanvas.width=window.innerWidth; starsCanvas.height=window.innerHeight; generateStars();}
-function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,baseAlpha:Math.random()*0.7+0.3,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,flickerSpeed:Math.random()*0.05+0.02});}}
-function drawMeteor(){if(!meteor) return;starsCtx.save();const grad=starsCtx.createLinearGradient(meteor.x,meteor.y,meteor.x-meteor.vx*10,meteor.y-meteor.vy*10);grad.addColorStop(0,`rgba(255,255,255,${meteor.alpha})`);grad.addColorStop(1,`rgba(255,255,255,0)`);starsCtx.strokeStyle=grad;starsCtx.lineWidth=2;starsCtx.beginPath();starsCtx.moveTo(meteor.x,meteor.y);starsCtx.lineTo(meteor.x-meteor.vx*20,meteor.y-meteor.vy*20);starsCtx.stroke();starsCtx.restore();}
-function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(star=>{star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);if(star.alpha<0.1) star.alpha=0.1;if(star.alpha>1) star.alpha=1;starsCtx.beginPath();starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;starsCtx.fill();});if(meteor){meteor.x+=meteor.vx;meteor.y+=meteor.vy;meteor.alpha-=0.01;drawMeteor();if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){meteor=null;setTimeout(spawnMeteor,Math.random()*5000+3000);}}requestAnimationFrame(animateStars);}
-function spawnMeteor(){meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1};}
-window.addEventListener('resize',resizeStarsCanvas); resizeStarsCanvas(); animateStars(); setTimeout(spawnMeteor,3000);
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,flickerSpeed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(star=>{star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);if(star.alpha<0.1)star.alpha=0.1;if(star.alpha>1)star.alpha=1;starsCtx.beginPath();starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener('resize',resizeStarsCanvas);resizeStarsCanvas();animateStars();
 
-// === Ripple Effect ===
+/* Ripple */
 const rippleCanvas=document.getElementById('rippleCanvas');
 const rippleCtx=rippleCanvas.getContext('2d');
 let ripples=[];
@@ -346,6 +437,5 @@ window.addEventListener('mousemove',(e)=>{ripples.push({x:e.clientX,y:e.clientY,
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
 </script>
-
 </body>
 </html>
