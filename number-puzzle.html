@@ -39,7 +39,7 @@ header {
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
 
-/* === Help Icon like Color Game === */
+/* === Help Icon === */
 #helpIcon {
   position: absolute;
   top: 10px; right: 15px;
@@ -66,7 +66,7 @@ header {
   z-index: 20;
 }
 
-/* === Game Layout === */
+/* === Container & Buttons === */
 .container {
   max-width: 500px; 
   margin: 40px auto; 
@@ -74,6 +74,30 @@ header {
   z-index: 10;
 }
 
+.controls {
+  margin-bottom: 30px;
+}
+
+.controls button,
+.back-button {
+  background: linear-gradient(135deg,#8a2be2,#4b0082);
+  border: none; 
+  padding: 12px 25px; 
+  color: white; 
+  font-size: 16px; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  margin-right: 10px; 
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+  transition: all 0.3s ease;
+}
+.controls button:hover,
+.back-button:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+}
+
+/* === Puzzle Tiles === */
 .board {
   display: grid;
   grid-template-columns: repeat(4, 80px);
@@ -83,7 +107,7 @@ header {
 }
 
 .tile {
-  background: #8a2be2;
+  background: linear-gradient(135deg,#4b0082,#6a0dad); /* darker than buttons */
   color: #fff;
   font-size: 24px;
   font-weight: bold;
@@ -91,24 +115,16 @@ header {
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  box-shadow: 0 0 8px #4b0082, 0 0 16px #6a0dad;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .tile:hover { transform: scale(1.05); }
-.empty { background: transparent; box-shadow: none; cursor: default; }
-
-.controls button,
-.back-button {
-  background: #8a2be2; border: none; 
-  padding: 12px 25px; color: white; font-size: 16px; 
-  border-radius: 10px; cursor: pointer; 
-  margin-top: 10px; margin-right: 10px;
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
-  transition: all 0.3s ease;
+.tile.hint { 
+  box-shadow: 0 0 20px #ffea00, 0 0 40px #ffd700; 
+  transform: scale(1.1);
 }
-.controls button:hover,
-.back-button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad; }
+.empty { background: transparent; box-shadow: none; cursor: default; }
 
 /* === Background Canvases === */
 #starsCanvas,#rippleCanvas{
@@ -138,9 +154,10 @@ header {
 <div class="container">
   <div class="controls">
     <button onclick="newGame()">New Game</button>
+    <button onclick="showHint()">Hint</button>
+    <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
   <div id="board" class="board"></div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
 <script>
@@ -221,6 +238,20 @@ function checkWin(){
 }
 
 function newGame(){ initBoard(); }
+
+/* === Hint Feature === */
+function showHint() {
+  document.querySelectorAll(".tile.hint").forEach(t => t.classList.remove("hint"));
+  const emptyIndex = board.indexOf(0);
+  const validMoves = getValidMoves(emptyIndex);
+  let hintIndex = validMoves.find(i => board[i] !== i + 1);
+  if (hintIndex === undefined) hintIndex = validMoves[0];
+  const tileElements = document.querySelectorAll(".tile");
+  tileElements[hintIndex].classList.add("hint");
+  setTimeout(() => {
+    tileElements[hintIndex].classList.remove("hint");
+  }, 2000);
+}
 
 /* === Stars Background === */
 const starsCanvas=document.getElementById("starsCanvas");
