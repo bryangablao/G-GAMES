@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rock Paper Scissors</title>
-<link rel="icon" type="image/png" href="image/RockPaperScissors.pngg">
+<link rel="icon" type="image/png" href="image/RockPaperScissors.png">
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -106,6 +106,34 @@
   }
   #starsCanvas { z-index:0; }
   #rippleCanvas { z-index:0; }
+
+  /* Modal Styles */
+  #endModal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    flex-direction: column;
+    text-align: center;
+  }
+  #endModal h2 { font-size: 32px; margin-bottom: 20px; }
+  #endModal button {
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #8a2be2;
+    color: white;
+    box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+  }
+  #endModal button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;}
 </style>
 </head>
 <body>
@@ -145,10 +173,17 @@
 
 <footer>🚀 Developed by Accx Creations</footer>
 
+<!-- Modal -->
+<div id="endModal">
+  <h2 id="modalMessage">You Win!</h2>
+  <button onclick="closeModal()">Close</button>
+</div>
+
 <script>
 function goBack() { window.location.href="index.html"; }
 
 let playerScore = 0, aiScore = 0;
+const winScore = 20;
 
 // AI chance mapping
 const aiChances = {
@@ -163,17 +198,13 @@ function play(playerChoice){
   const aiName = document.getElementById("aiSelect").value;
   const chance = aiChances[aiName];
   
-  // Decide if AI wins or player wins based on chance
-  let aiChoice;
-  let outcomeText;
+  let aiChoice, outcomeText;
 
   if(Math.random() > chance){
-    // AI wins
     aiChoice = getWinningChoice(playerChoice);
     outcomeText = `You Lose against ${aiName}!`;
     aiScore++;
   } else {
-    // Player wins or draw
     aiChoice = getRandomChoice();
     outcomeText = (aiChoice === playerChoice) ? "Draw!" : "You Win!";
     if(outcomeText === "You Win!") playerScore++;
@@ -182,6 +213,8 @@ function play(playerChoice){
   document.getElementById("aiChoice").innerText = `AI chose: ${aiChoice}`;
   document.getElementById("outcome").innerText = outcomeText;
   document.getElementById("score").innerText = `Player: ${playerScore} | AI: ${aiScore}`;
+
+  checkWin();
 }
 
 function getWinningChoice(player){
@@ -200,6 +233,20 @@ function resetScore(){
   document.getElementById("score").innerText = `Player: 0 | AI: 0`;
   document.getElementById("outcome").innerText = "Make your choice!";
   document.getElementById("aiChoice").innerText = "AI chose: -";
+}
+
+function checkWin(){
+  if(playerScore >= winScore || aiScore >= winScore){
+    const modal = document.getElementById('endModal');
+    const message = document.getElementById('modalMessage');
+    message.innerText = (playerScore >= winScore) ? "🎉 Congratulations! You Win!" : "😢 You Lose! Better luck next time!";
+    modal.style.display = "flex";
+  }
+}
+
+function closeModal(){
+  document.getElementById('endModal').style.display = "none";
+  resetScore();
 }
 
 // === Stars + Meteor ===
