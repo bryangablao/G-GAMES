@@ -6,7 +6,6 @@
 <title>Sudoku</title>
 <link rel="icon" href="image/Sudoku.png">
 <style>
-  /* ===== Body & Background ===== */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: radial-gradient(circle at top left, #380098, black);
@@ -24,7 +23,6 @@
     100% { background-position: 100% 50%; }
   }
 
-  /* ===== Header ===== */
   header {
     background: linear-gradient(90deg, #8a2be2, #4b0082);
     color: white;
@@ -37,15 +35,6 @@
     animation: neon-flicker 2s infinite alternate;
     position: relative;
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-  }
-
-  header img {
-    width: 50px;
-    height: 50px;
   }
 
   @keyframes neon-flicker {
@@ -57,13 +46,40 @@
     }
   }
 
-  /* ===== Sudoku Container ===== */
   #sudoku-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    margin: 40px 20px;
+    align-items: center;
+    margin: 40px 10px;
+    gap: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #8a2be2;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  td input {
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    outline: none;
+    background: #1c1c2c;
+    color: white;
+  }
+
+  td input:disabled {
+    color: #ccc;
+    font-weight: bold;
   }
 
   .back-button {
@@ -76,7 +92,6 @@
     cursor: pointer;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
     transition: all 0.3s ease;
-    margin-top: 30px;
   }
 
   .back-button:hover {
@@ -84,16 +99,31 @@
     box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
   }
 
-  /* ===== Canvases for stars & ripples ===== */
+  button#check-btn {
+    margin-top: 20px;
+    background: #4b0082;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 10px #8a2be2;
+  }
+
+  button#check-btn:hover {
+    box-shadow: 0 0 20px #9b30ff;
+  }
+
+  /* Canvases */
   #starsCanvas, #rippleCanvas {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    pointer-events: none;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    pointer-events:none;
   }
-  #starsCanvas { z-index: 0; }
-  #rippleCanvas { z-index: 0; }
-
+  #starsCanvas{z-index:0;} 
+  #rippleCanvas{z-index:0;}
 </style>
 </head>
 <body>
@@ -101,22 +131,93 @@
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>
-  <img src="image/Sudoku.png" alt="Sudoku Icon">
-  Sudoku
-</header>
+<header>Sudoku</header>
 
 <div id="sudoku-container">
-  <!-- Replace this div with your actual Sudoku game -->
-  <div class="placeholder" style="font-size:20px; color:#ccc; margin-bottom:40px;">
-    Sudoku game will be displayed here.
-  </div>
+  <table id="sudoku-grid"></table>
+  <button id="check-btn" onclick="checkSudoku()">Check Solution</button>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
 <script>
-function goBack() {
-  window.location.href = "index.html";
+function goBack(){ window.location.href="index.html"; }
+
+/* ===== Sudoku Game Logic ===== */
+const sudokuGrid = document.getElementById("sudoku-grid");
+
+// Example easy puzzle (0 = empty)
+let puzzle = [
+  [5,3,0,0,7,0,0,0,0],
+  [6,0,0,1,9,5,0,0,0],
+  [0,9,8,0,0,0,0,6,0],
+  [8,0,0,0,6,0,0,0,3],
+  [4,0,0,8,0,3,0,0,1],
+  [7,0,0,0,2,0,0,0,6],
+  [0,6,0,0,0,0,2,8,0],
+  [0,0,0,4,1,9,0,0,5],
+  [0,0,0,0,8,0,0,7,9]
+];
+
+// Create table
+for(let i=0;i<9;i++){
+  let row = sudokuGrid.insertRow();
+  for(let j=0;j<9;j++){
+    let cell = row.insertCell();
+    let input = document.createElement("input");
+    input.type="number";
+    input.min="1";
+    input.max="9";
+    if(puzzle[i][j]!==0){
+      input.value = puzzle[i][j];
+      input.disabled = true;
+    }
+    cell.appendChild(input);
+
+    // Add thicker border for 3x3 sections
+    if(j%3===2) cell.style.borderRight="4px solid #ff00ff";
+    if(i%3===2) cell.style.borderBottom="4px solid #ff00ff";
+  }
+}
+
+// Check Sudoku solution
+function checkSudoku(){
+  let inputs = sudokuGrid.getElementsByTagName("input");
+  let valid = true;
+  for(let i=0;i<9;i++){
+    for(let j=0;j<9;j++){
+      let val = parseInt(inputs[i*9+j].value);
+      if(isNaN(val) || val<1 || val>9 || !isValid(i,j,val)){
+        valid = false;
+        inputs[i*9+j].style.background="#800000";
+      } else {
+        inputs[i*9+j].style.background="#1c1c2c";
+      }
+    }
+  }
+  if(valid) alert("Congratulations! You solved the Sudoku!");
+}
+
+// Check row, col, box
+function isValid(row,col,num){
+  let inputs = sudokuGrid.getElementsByTagName("input");
+
+  // Row
+  for(let c=0;c<9;c++){
+    if(c!==col && parseInt(inputs[row*9+c].value)===num) return false;
+  }
+  // Column
+  for(let r=0;r<9;r++){
+    if(r!==row && parseInt(inputs[r*9+col].value)===num) return false;
+  }
+  // 3x3 Box
+  let startRow = Math.floor(row/3)*3;
+  let startCol = Math.floor(col/3)*3;
+  for(let r=startRow;r<startRow+3;r++){
+    for(let c=startCol;c<startCol+3;c++){
+      if((r!==row || c!==col) && parseInt(inputs[r*9+c].value)===num) return false;
+    }
+  }
+  return true;
 }
 
 /* ===== Stars + Meteor ===== */
