@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G-GAMES</title>
+<link rel="icon" type="image/png" href="G-GAMES/image/G-GAMES.png">
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,24 +26,15 @@
   header {
     background: linear-gradient(90deg, #8a2be2, #4b0082);
     color: white;
-    padding: 20px;
-    font-size: 32px;
+    padding: 30px 20px;
+    font-size: 36px;
     font-weight: bold;
     text-align: center;
     letter-spacing: 1px;
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
     animation: neon-flicker 2s infinite alternate;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
     position: relative;
     z-index: 10;
-  }
-
-  header img {
-    height: 50px;
-    width: auto;
   }
 
   @keyframes neon-flicker {
@@ -56,17 +48,17 @@
 
   .lobby {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Always 5 columns */
-    gap: 15px;
+    grid-template-columns: repeat(5, 1fr); /* 5 columns fixed */
+    gap: 10px;
     padding: 20px;
-    max-width: 1000px;
+    max-width: 100%; 
     margin: 0 auto;
     position: relative;
     z-index: 1;
   }
 
   .game-card {
-    aspect-ratio: 1 / 1; /* Perfect square */
+    aspect-ratio: 1 / 1; /* perfect square */
     background-color: #1c1c2c;
     border-radius: 12px;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
@@ -75,13 +67,13 @@
     align-items: center;
     cursor: pointer;
     text-align: center;
-    font-size: 16px;
+    font-size: clamp(12px, 3vw, 16px);
     font-weight: bold;
     color: #fff;
     transition: all 0.4s ease;
     background: linear-gradient(145deg, #1c1c2c, #2a2a3a);
     word-wrap: break-word;
-    padding: 10px;
+    padding: 5px;
   }
 
   .game-card:hover {
@@ -108,14 +100,15 @@
   #starsCanvas { z-index: 0; }
   #rippleCanvas { z-index: 0; }
 
-  /* Make grid responsive on mobile */
-  @media (max-width: 600px) {
+  /* Mobile adjustments */
+  @media screen and (max-width: 500px) {
     .lobby {
-      grid-template-columns: repeat(5, 1fr); /* still 5 columns */
-      gap: 8px;
+      gap: 5px;
       padding: 10px;
     }
-    .game-card { font-size: 12px; }
+    .game-card {
+      font-size: clamp(10px, 4vw, 14px);
+    }
   }
 </style>
 </head>
@@ -124,10 +117,7 @@
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>
-  <img src="G-GAMES/image/G-GAMES.png" alt="G-GAMES Logo">
-  G-GAMES
-</header>
+<header>Mini Games Lobby</header>
 
 <div class="lobby">
   <div class="game-card" onclick="openGame('sudoku.html')">Sudoku</div>
@@ -223,7 +213,6 @@ function spawnMeteor(){
 window.addEventListener('resize',resizeStarsCanvas);
 resizeStarsCanvas();
 animateStars();
-setTimeout(spawnMeteor,3000);
 
 // === Ripple Effect ===
 const rippleCanvas=document.getElementById('rippleCanvas');
