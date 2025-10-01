@@ -23,7 +23,8 @@
     letter-spacing: 1px;
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
     animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
+    position: relative;
   }
 
   @keyframes neon-flicker {
@@ -35,26 +36,91 @@
     }
   }
 
+  /* Help Button */
+  .help-btn {
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    background: #4b0082;
+    border: none;
+    color: white;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(4, 80px);
+    gap: 5px;
+    margin-bottom: 20px;
+  }
+
+  .tile {
+    background: #8a2be2;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tile:hover {
+    transform: scale(1.05);
+  }
+
+  .empty {
+    background: transparent;
+    box-shadow: none;
+    cursor: default;
+  }
+
+  .controls {
+    margin-bottom: 20px;
+  }
+
+  .control-button {
+    background: #8a2be2;
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 0 10px;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+    transition: all 0.3s ease;
+  }
+
+  .control-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
   }
 
   .back-button {
     background: #8a2be2;
     border: none;
-    padding: 15px 30px;
+    padding: 12px 25px;
     color: white;
     font-size: 18px;
     border-radius: 10px;
     cursor: pointer;
+    margin-top: 15px;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
     transition: all 0.3s ease;
   }
@@ -63,22 +129,156 @@
     transform: scale(1.05);
     box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
   }
+
+  /* Help Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+  .modal-content {
+    background: #1e1e2f;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    color: #fff;
+    text-align: left;
+    box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
+  }
+  .close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
 
-<header>Number Puzzle</header>
+<header>
+  Number Puzzle
+  <button class="help-btn" onclick="openHelp()">?</button>
+</header>
 
 <div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Number Puzzle here.</div>
+  <div class="controls">
+    <button class="control-button" onclick="newGame()">New Game</button>
+  </div>
+  <div id="board" class="board"></div>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
+<!-- Help Modal -->
+<div id="helpModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeHelp()">&times;</span>
+    <h2>How to Play</h2>
+    <p>Arrange the numbers in order from 1 to 15 by sliding tiles into the empty space.</p>
+    <ul>
+      <li>Click a tile next to the empty space to move it.</li>
+      <li>Keep sliding until all numbers are in order.</li>
+      <li>Goal: Reach the solved state (1–15 in sequence).</li>
+    </ul>
+    <p><b>Tip:</b> Start solving row by row.</p>
+  </div>
+</div>
+
 <script>
+let board = [];
+const size = 4; // 4x4 puzzle
+const boardElement = document.getElementById("board");
+
+function initBoard() {
+  board = Array.from({length: size * size}, (_, i) => i);
+  shuffleBoard();
+  renderBoard();
+}
+
+function shuffleBoard() {
+  for (let i = board.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [board[i], board[j]] = [board[j], board[i]];
+  }
+  if (!isSolvable(board)) shuffleBoard();
+}
+
+function renderBoard() {
+  boardElement.innerHTML = "";
+  board.forEach((num, idx) => {
+    const tile = document.createElement("div");
+    tile.classList.add("tile");
+    if (num === 0) {
+      tile.classList.add("empty");
+    } else {
+      tile.textContent = num;
+      tile.onclick = () => moveTile(idx);
+    }
+    boardElement.appendChild(tile);
+  });
+}
+
+function moveTile(index) {
+  const emptyIndex = board.indexOf(0);
+  const validMoves = getValidMoves(emptyIndex);
+  if (validMoves.includes(index)) {
+    [board[emptyIndex], board[index]] = [board[index], board[emptyIndex]];
+    renderBoard();
+    checkWin();
+  }
+}
+
+function getValidMoves(emptyIndex) {
+  const moves = [];
+  const row = Math.floor(emptyIndex / size);
+  const col = emptyIndex % size;
+  if (row > 0) moves.push(emptyIndex - size);
+  if (row < size - 1) moves.push(emptyIndex + size);
+  if (col > 0) moves.push(emptyIndex - 1);
+  if (col < size - 1) moves.push(emptyIndex + 1);
+  return moves;
+}
+
+function isSolvable(arr) {
+  let invCount = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] && arr[j] && arr[i] > arr[j]) invCount++;
+    }
+  }
+  const rowFromBottom = size - Math.floor(arr.indexOf(0) / size);
+  return (size % 2 !== 0 && invCount % 2 === 0) ||
+         (size % 2 === 0 && (rowFromBottom % 2 === 0) === (invCount % 2 !== 0));
+}
+
+function checkWin() {
+  if (board.slice(0, board.length - 1).every((val, idx) => val === idx + 1)) {
+    setTimeout(() => alert("🎉 Congratulations! You solved the puzzle!"), 100);
+  }
+}
+
+function newGame() {
+  initBoard();
+}
+
 function goBack() {
   window.location.href = "index.html";
 }
+
+function openHelp() {
+  document.getElementById("helpModal").style.display = "block";
+}
+function closeHelp() {
+  document.getElementById("helpModal").style.display = "none";
+}
+
+// Start new game when loaded
+initBoard();
 </script>
 
 </body>
 </html>
+  
