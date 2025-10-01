@@ -6,130 +6,138 @@
 <title>Sudoku</title>
 <link rel="icon" href="image/Sudoku.png">
 <style>
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: radial-gradient(circle at top left, #380098, black);
-  background-size: 200% 200%;
-  animation: gradientMove 10s infinite alternate;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  text-align: center;
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: radial-gradient(circle at top left, #380098, black);
+    background-size: 200% 200%;
+    animation: gradientMove 10s infinite alternate;
+    color: #fff;
+    overflow-x: hidden;
+  }
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
 
-header {
-  background: linear-gradient(90deg, #8a2be2, #4b0082);
-  color: white;
-  padding: 30px 20px;
-  font-size: 36px;
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-  animation: neon-flicker 2s infinite alternate;
-  position: relative;
-  z-index: 10;
-}
-
-@keyframes neon-flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+  header {
+    background: linear-gradient(90deg, #8a2be2, #4b0082);
+    color: white;
+    padding: 30px 20px;
+    font-size: 36px;
+    font-weight: bold;
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+    animation: neon-flicker 2s infinite alternate;
+    position: relative;
+    z-index: 10;
   }
-  20%, 24%, 55% {
-    text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
+
+  @keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2; }
+    20%, 24%, 55% { text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2; }
   }
-}
 
-#sudoku-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 10px;
-  gap: 15px;
-}
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+  }
 
-table {
-  border-collapse: collapse;
-}
+  table {
+    border-collapse: collapse;
+    margin: 20px auto;
+  }
 
-td {
-  width: 50px;
-  height: 50px;
-  border: 1px solid #fff;
-  position: relative;
-}
+  td {
+    width: 40px;
+    height: 40px;
+    border: 1px solid black; /* small box lines */
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
 
-td input {
-  width: 100%;
-  height: 100%;
-  font-size: 24px;
-  text-align: center;
-  border: none;
-  outline: none;
-  background: rgba(255,255,255,0.8);
-  color: #000;
-  -moz-appearance: textfield;
-}
+  td.given {
+    background: rgba(0,0,0,0.5);
+    color: white;
+  }
 
-td input::-webkit-outer-spin-button,
-td input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  td input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 18px;
+    border: none;
+    background: rgba(255,255,255,0.8);
+    color: black;
+  }
 
-td.given input {
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  font-weight: bold;
-}
+  td.wrong {
+    background: #ff0000;
+    color: #fff;
+  }
 
-td.wrong input {
-  background: #ff0000;
-  color: #fff;
-}
+  /* 3x3 thicker lines */
+  tr:nth-child(3n) td { border-bottom: 3px solid white; }
+  td:nth-child(3n) { border-right: 3px solid white; }
+  /* Outer border */
+  tr:first-child td { border-top: 3px solid black; }
+  tr:last-child td { border-bottom: 3px solid black; }
+  td:first-child { border-left: 3px solid black; }
+  td:last-child { border-right: 3px solid black; }
 
-.controls {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  .buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
 
-button, select {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
+  .buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #8a2be2;
+    color: #fff;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+    transition: all 0.3s ease;
+  }
 
-button:hover, select:hover {
-  transform: scale(1.05);
-}
+  .buttons button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
+  }
 
-button#back { background: #8a2be2; color: #fff; }
-button#reset { background: #4b0082; color: #fff; }
-button#newgame { background: #6a0dad; color: #fff; }
-button#surrender { background: #ff0000; color: #fff; }
+  .level-select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
 
-select { background: #1c1c2c; color: #fff; }
+  /* Canvases for stars & ripples */
+  #starsCanvas, #rippleCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+  }
+  #starsCanvas { z-index: 0; }
+  #rippleCanvas { z-index: 0; }
 
-#starsCanvas, #rippleCanvas {
-  position: fixed;
-  top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none;
-}
-#starsCanvas{z-index:0;} 
-#rippleCanvas{z-index:0;}
+  .developer {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #ffcc00;
+  }
 </style>
 </head>
 <body>
@@ -139,71 +147,66 @@ select { background: #1c1c2c; color: #fff; }
 
 <header>Sudoku</header>
 
-<div id="sudoku-container">
-  <div class="controls">
-    <select id="difficulty">
+<div class="container">
+  <div class="level-select">
+    Difficulty:
+    <select id="level">
       <option value="easy">Easy</option>
       <option value="medium">Medium</option>
       <option value="hard">Hard</option>
     </select>
-    <button id="newgame">New Game</button>
-    <button id="reset">Reset</button>
-    <button id="surrender">Surrender</button>
-    <button id="back" onclick="goBack()">Back to Lobby</button>
   </div>
-  <table id="sudoku-grid"></table>
+  <table id="sudokuGrid"></table>
+  <div class="buttons">
+    <button onclick="newGame()">New Game</button>
+    <button onclick="resetGame()">Reset</button>
+    <button onclick="surrenderGame()">Surrender</button>
+    <button onclick="goBack()">Back to Lobby</button>
+  </div>
+  <div class="developer">🚀 Developed by Accx Creations</div>
 </div>
 
 <script>
-function goBack(){ window.location.href="index.html"; }
+let currentPuzzle=[], solution=[];
 
-/* ===== Sudoku Logic ===== */
-let sudokuGrid = document.getElementById("sudoku-grid");
-let currentPuzzle = [];
-let solution = [];
-
-// Example puzzles per difficulty
-const puzzles = {
-  easy: [
-    [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]
-  ],
-  medium: [
-    [[0,0,0,2,6,0,7,0,1],[6,8,0,0,7,0,0,9,0],[1,9,0,0,0,4,5,0,0],[8,2,0,1,0,0,0,4,0],[0,0,4,6,0,2,9,0,0],[0,5,0,0,0,3,0,2,8],[0,0,9,3,0,0,0,7,4],[0,4,0,0,5,0,0,3,6],[7,0,3,0,1,8,0,0,0]]
-  ],
-  hard: [
-    [[0,0,0,6,0,0,4,0,0],[7,0,0,0,0,3,6,0,0],[0,0,0,0,9,1,0,8,0],[0,0,0,0,0,0,0,0,0],[0,5,0,1,8,0,0,0,3],[0,0,0,3,0,6,0,4,5],[0,4,0,2,0,0,0,6,0],[9,0,3,0,0,0,0,0,0],[0,2,0,0,0,0,1,0,0]]
-  ]
-};
-
-// Function to deep copy 2D array
-function copy2D(arr){
-  return arr.map(r => r.slice());
+// Sudoku generation
+function generatePuzzle(level){
+  let fullGrid = generateFullSudoku();
+  let squaresToRemove = level==='easy'?35: level==='medium'?45:55;
+  let puzzle = fullGrid.map(r=>r.slice());
+  while(squaresToRemove>0){
+    let r=Math.floor(Math.random()*9);
+    let c=Math.floor(Math.random()*9);
+    if(puzzle[r][c]!==0){
+      puzzle[r][c]=0;
+      squaresToRemove--;
+    }
+  }
+  currentPuzzle = puzzle;
+  solution = fullGrid;
+  renderGrid();
 }
 
-// Simple solver to store solution
-function solve(grid){
-  let g = copy2D(grid);
+// Backtracking Sudoku generator
+function generateFullSudoku(){
+  let grid = Array.from({length:9},()=>Array(9).fill(0));
   function isSafe(r,c,n){
-    for(let i=0;i<9;i++){
-      if(g[r][i]===n || g[i][c]===n) return false;
-    }
-    let sr = Math.floor(r/3)*3, sc=Math.floor(c/3)*3;
-    for(let i=0;i<3;i++){
-      for(let j=0;j<3;j++){
-        if(g[sr+i][sc+j]===n) return false;
-      }
-    }
+    for(let i=0;i<9;i++) if(grid[r][i]===n||grid[i][c]===n) return false;
+    let sr=Math.floor(r/3)*3, sc=Math.floor(c/3)*3;
+    for(let i=0;i<3;i++) for(let j=0;j<3;j++) if(grid[sr+i][sc+j]===n) return false;
     return true;
   }
-  function backtrack(){
+  function fillGrid(){
     for(let r=0;r<9;r++){
       for(let c=0;c<9;c++){
-        if(g[r][c]===0){
-          for(let n=1;n<=9;n++){
+        if(grid[r][c]===0){
+          let nums=[1,2,3,4,5,6,7,8,9];
+          nums.sort(()=>Math.random()-0.5);
+          for(let n of nums){
             if(isSafe(r,c,n)){
-              g[r][c]=n;
-              if(backtrack()) return true;
-              g[r][c]=0;
+              grid[r][c]=n;
+              if(fillGrid()) return true;
+              grid[r][c]=0;
             }
           }
           return false;
@@ -212,136 +215,92 @@ function solve(grid){
     }
     return true;
   }
-  backtrack();
-  return g;
-}
-
-function generatePuzzle(level){
-  let puzzleList = puzzles[level];
-  let idx = Math.floor(Math.random()*puzzleList.length);
-  currentPuzzle = copy2D(puzzleList[idx]);
-  solution = solve(copy2D(currentPuzzle));
-  renderGrid();
+  fillGrid();
+  return grid;
 }
 
 function renderGrid(){
-  sudokuGrid.innerHTML="";
-  for(let i=0;i<9;i++){
-    let row = sudokuGrid.insertRow();
-    for(let j=0;j<9;j++){
-      let cell = row.insertCell();
-      let input = document.createElement("input");
-      input.type="number"; input.min=1; input.max=9;
-      input.value = currentPuzzle[i][j]!==0 ? currentPuzzle[i][j] : "";
-      if(currentPuzzle[i][j]!==0){
-        input.disabled=true;
-        cell.classList.add("given");
+  const table=document.getElementById('sudokuGrid');
+  table.innerHTML='';
+  for(let r=0;r<9;r++){
+    let tr=document.createElement('tr');
+    for(let c=0;c<9;c++){
+      let td=document.createElement('td');
+      if(currentPuzzle[r][c]!==0){
+        td.classList.add('given');
+        td.textContent=currentPuzzle[r][c];
       } else {
-        input.addEventListener("input", ()=>{cell.classList.remove("wrong")});
+        let inp=document.createElement('input');
+        inp.setAttribute('type','number');
+        inp.setAttribute('min','1');
+        inp.setAttribute('max','9');
+        inp.oninput=function(){
+          if(+this.value<1 || +this.value>9) this.value='';
+        }
+        td.appendChild(inp);
       }
-      cell.appendChild(input);
-      if(j%3===2) cell.style.borderRight="3px solid #fff";
-      if(i%3===2) cell.style.borderBottom="3px solid #fff";
+      tr.appendChild(td);
     }
+    table.appendChild(tr);
   }
 }
 
-function resetGrid(){
-  let inputs = sudokuGrid.getElementsByTagName("input");
-  for(let i=0;i<9;i++){
-    for(let j=0;j<9;j++){
-      let idx = i*9+j;
-      if(!inputs[idx].disabled){
-        inputs[idx].value="";
-        inputs[idx].parentElement.classList.remove("wrong");
-      }
-    }
-  }
+function newGame(){
+  const level=document.getElementById('level').value;
+  generatePuzzle(level);
 }
 
-function surrenderGrid(){
-  let inputs = sudokuGrid.getElementsByTagName("input");
-  for(let i=0;i<9;i++){
-    for(let j=0;j<9;j++){
-      let idx = i*9+j;
-      if(inputs[idx].value==="" || parseInt(inputs[idx].value)!==solution[i][j]){
-        inputs[idx].value = solution[i][j];
-        inputs[idx].parentElement.classList.add("wrong");
+function resetGame(){
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      if(currentPuzzle[r][c]===0){
+        document.getElementById('sudokuGrid').rows[r].cells[c].querySelector('input').value='';
+        document.getElementById('sudokuGrid').rows[r].cells[c].classList.remove('wrong');
       }
     }
   }
 }
 
-// Buttons
-document.getElementById("newgame").onclick = ()=>{generatePuzzle(document.getElementById("difficulty").value)};
-document.getElementById("reset").onclick = resetGrid;
-document.getElementById("surrender").onclick = surrenderGrid;
+function surrenderGame(){
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      const td=document.getElementById('sudokuGrid').rows[r].cells[c];
+      if(currentPuzzle[r][c]===0){
+        const input=td.querySelector('input');
+        if(+input.value!==solution[r][c]){
+          td.classList.add('wrong');
+          input.value=solution[r][c];
+        }
+      }
+    }
+  }
+}
 
-// Init default
-generatePuzzle("easy");
+function goBack(){ window.location.href='index.html'; }
 
-/* ===== Stars + Meteor ===== */
+// Initialize first game
+generatePuzzle('easy');
+
+// === Stars + Meteor ===
 const starsCanvas = document.getElementById('starsCanvas');
 const starsCtx = starsCanvas.getContext('2d');
 let stars = [], meteor=null;
-function resizeStarsCanvas(){
-  starsCanvas.width=window.innerWidth;
-  starsCanvas.height=window.innerHeight;
-  generateStars();
-}
-function generateStars(){
-  stars=[];
-  for(let i=0;i<200;i++){
-    stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,flickerSpeed:Math.random()*0.05+0.02});
-  }
-}
-function drawMeteor(){
-  if(!meteor) return;
-  starsCtx.save();
-  const grad=starsCtx.createLinearGradient(meteor.x,meteor.y,meteor.x-meteor.vx*10,meteor.y-meteor.vy*10);
-  grad.addColorStop(0,`rgba(255,255,255,${meteor.alpha})`);
-  grad.addColorStop(1,`rgba(255,255,255,0)`);
-  starsCtx.strokeStyle=grad;
-  starsCtx.lineWidth=2;
-  starsCtx.beginPath();
-  starsCtx.moveTo(meteor.x,meteor.y);
-  starsCtx.lineTo(meteor.x-meteor.vx*20,meteor.y-meteor.vy*20);
-  starsCtx.stroke();
-  starsCtx.restore();
-}
-function animateStars(){
-  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
-  stars.forEach(star=>{
-    star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);
-    if(star.alpha<0.1) star.alpha=0.1;
-    if(star.alpha>1) star.alpha=1;
-    starsCtx.beginPath();
-    starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);
-    starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;
-    starsCtx.fill();
-  });
-  if(meteor){
-    meteor.x+=meteor.vx;
-    meteor.y+=meteor.vy;
-    meteor.alpha-=0.01;
-    drawMeteor();
-    if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){meteor=null;setTimeout(spawnMeteor,Math.random()*5000+3000);}
-  }
-  requestAnimationFrame(animateStars);
-}
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth; starsCanvas.height=window.innerHeight; generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,baseAlpha:Math.random()*0.7+0.3,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,flickerSpeed:Math.random()*0.05+0.02});}}
+function drawMeteor(){if(!meteor)return;starsCtx.save();const grad=starsCtx.createLinearGradient(meteor.x,meteor.y,meteor.x-meteor.vx*10,meteor.y-meteor.vy*10);grad.addColorStop(0,`rgba(255,255,255,${meteor.alpha})`);grad.addColorStop(1,`rgba(255,255,255,0)`);starsCtx.strokeStyle=grad;starsCtx.lineWidth=2;starsCtx.beginPath();starsCtx.moveTo(meteor.x,meteor.y);starsCtx.lineTo(meteor.x-meteor.vx*20,meteor.y-meteor.vy*20);starsCtx.stroke();starsCtx.restore();}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(star=>{star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);if(star.alpha<0.1)star.alpha=0.1;if(star.alpha>1)star.alpha=1;starsCtx.beginPath();starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;starsCtx.fill();});if(meteor){meteor.x+=meteor.vx;meteor.y+=meteor.vy;meteor.alpha-=0.01;drawMeteor();if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){meteor=null;setTimeout(spawnMeteor,Math.random()*5000+3000);}}requestAnimationFrame(animateStars);}
 function spawnMeteor(){meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1};}
-window.addEventListener('resize',resizeStarsCanvas);
-resizeStarsCanvas();animateStars();setTimeout(spawnMeteor,3000);
+window.addEventListener('resize',resizeStarsCanvas);resizeStarsCanvas();animateStars();setTimeout(spawnMeteor,3000);
 
-/* ===== Ripple Effect ===== */
+// Ripple
 const rippleCanvas=document.getElementById('rippleCanvas');
-const rippleCtx=rippleCanvas.getContext('2d');
-let ripples=[];
+const rippleCtx=rippleCanvas.getContext('2d');let ripples=[];
 function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
 window.addEventListener('resize',resizeRippleCanvas);resizeRippleCanvas();
 window.addEventListener('mousemove',(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20) ripples.shift();});
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
 </script>
+
 </body>
 </html>
