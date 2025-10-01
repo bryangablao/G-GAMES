@@ -134,6 +134,27 @@
     box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
   }
   #endModal button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;}
+
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: #ff0;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0.9;
+  }
+  .sadDrop {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: red;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0.9;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+  }
 </style>
 </head>
 <body>
@@ -185,13 +206,13 @@ function goBack() { window.location.href="index.html"; }
 let playerScore = 0, aiScore = 0;
 const winScore = 20;
 
-// AI chance mapping
+// Updated AI chances
 const aiChances = {
-  Azrael: 0.01,   // 1% chance of player winning
-  Mara: 0.0314,   // 3.14%
-  Bench: 0.1,     // 10%
-  Riz: 0.3,       // 30%
-  Kenneth: 0.5    // 50%
+  Azrael: 0.3,   // 30%
+  Mara: 0.5,     // 50%
+  Bench: 0.6,    // 60%
+  Riz: 0.8,      // 80%
+  Kenneth: 1.0   // 100%
 };
 
 function play(playerChoice){
@@ -214,7 +235,7 @@ function play(playerChoice){
   document.getElementById("outcome").innerText = outcomeText;
   document.getElementById("score").innerText = `Player: ${playerScore} | AI: ${aiScore}`;
 
-  checkWin();
+  checkWin(outcomeText.includes("Win"));
 }
 
 function getWinningChoice(player){
@@ -235,19 +256,74 @@ function resetScore(){
   document.getElementById("aiChoice").innerText = "AI chose: -";
 }
 
-function checkWin(){
+function checkWin(isWin=false){
   if(playerScore >= winScore || aiScore >= winScore){
     const modal = document.getElementById('endModal');
     const message = document.getElementById('modalMessage');
     message.innerText = (playerScore >= winScore) ? "🎉 Congratulations! You Win!" : "😢 You Lose! Better luck next time!";
     modal.style.display = "flex";
+
+    if(playerScore >= winScore) startConfetti();
+    else startSadDrops();
   }
 }
 
 function closeModal(){
   document.getElementById('endModal').style.display = "none";
+  removeConfetti();
+  removeSadDrops();
   resetScore();
 }
+
+// === Confetti and Sad Drop ===
+let confettiInterval=null, confettis=[];
+function startConfetti(){
+  removeConfetti();
+  confettiInterval = setInterval(()=>{
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*window.innerWidth+'px';
+    c.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    confettis.push(c);
+    animateConfetti(c);
+  },30);
+  setTimeout(()=>clearInterval(confettiInterval),3000);
+}
+function animateConfetti(c){
+  let y=0, x=parseFloat(c.style.left);
+  const fall = setInterval(()=>{
+    y+=3; x+=Math.sin(y/10)*2;
+    c.style.top=y+'px'; c.style.left=x+'px';
+    if(y>window.innerHeight){c.remove(); clearInterval(fall);}
+  },16);
+}
+function removeConfetti(){ confettis.forEach(c=>c.remove()); confettis=[]; }
+
+// Sad Drops
+let sadDrops=[];
+function startSadDrops(){
+  removeSadDrops();
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');
+    s.className='sadDrop';
+    s.innerText='✖';
+    s.style.left=Math.random()*window.innerWidth+'px';
+    s.style.top='-20px';
+    document.body.appendChild(s);
+    sadDrops.push(s);
+    animateSadDrop(s);
+  }
+}
+function animateSadDrop(s){
+  let y=0, x=parseFloat(s.style.left);
+  const fall=setInterval(()=>{
+    y+=4;
+    s.style.top=y+'px';
+    if(y>window.innerHeight){s.remove(); clearInterval(fall);}
+  },16);
+}
+function removeSadDrops(){ sadDrops.forEach(s=>s.remove()); sadDrops=[];}
 
 // === Stars + Meteor ===
 const starsCanvas = document.getElementById('starsCanvas');
