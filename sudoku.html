@@ -6,124 +6,130 @@
 <title>Sudoku</title>
 <link rel="icon" href="image/Sudoku.png">
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(circle at top left, #380098, black);
-    background-size: 200% 200%;
-    animation: gradientMove 10s infinite alternate;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    text-align: center;
-  }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at top left, #380098, black);
+  background-size: 200% 200%;
+  animation: gradientMove 10s infinite alternate;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  text-align: center;
+}
 
-  @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-  }
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-    letter-spacing: 1px;
+header {
+  background: linear-gradient(90deg, #8a2be2, #4b0082);
+  color: white;
+  padding: 30px 20px;
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    position: relative;
-    z-index: 10;
   }
+  20%, 24%, 55% {
+    text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
+  }
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+#sudoku-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 10px;
+  gap: 15px;
+}
 
-  #sudoku-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 40px 10px;
-    gap: 20px;
-  }
+table {
+  border-collapse: collapse;
+}
 
-  table {
-    border-collapse: collapse;
-  }
+td {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #fff;
+  position: relative;
+}
 
-  td {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #8a2be2;
-    text-align: center;
-    vertical-align: middle;
-  }
+td input {
+  width: 100%;
+  height: 100%;
+  font-size: 24px;
+  text-align: center;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.8);
+  color: #000;
+  -moz-appearance: textfield;
+}
 
-  td input {
-    width: 100%;
-    height: 100%;
-    font-size: 24px;
-    text-align: center;
-    border: none;
-    outline: none;
-    background: #1c1c2c;
-    color: white;
-  }
+td input::-webkit-outer-spin-button,
+td input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
-  td input:disabled {
-    color: #ccc;
-    font-weight: bold;
-  }
+td.given input {
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-weight: bold;
+}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+td.wrong input {
+  background: #ff0000;
+  color: #fff;
+}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 
-  button#check-btn {
-    margin-top: 20px;
-    background: #4b0082;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2;
-  }
+button, select {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-  button#check-btn:hover {
-    box-shadow: 0 0 20px #9b30ff;
-  }
+button:hover, select:hover {
+  transform: scale(1.05);
+}
 
-  /* Canvases */
-  #starsCanvas, #rippleCanvas {
-    position: fixed;
-    top:0; left:0;
-    width:100vw; height:100vh;
-    pointer-events:none;
-  }
-  #starsCanvas{z-index:0;} 
-  #rippleCanvas{z-index:0;}
+button#back { background: #8a2be2; color: #fff; }
+button#reset { background: #4b0082; color: #fff; }
+button#newgame { background: #6a0dad; color: #fff; }
+button#surrender { background: #ff0000; color: #fff; }
+
+select { background: #1c1c2c; color: #fff; }
+
+#starsCanvas, #rippleCanvas {
+  position: fixed;
+  top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none;
+}
+#starsCanvas{z-index:0;} 
+#rippleCanvas{z-index:0;}
 </style>
 </head>
 <body>
@@ -134,97 +140,150 @@
 <header>Sudoku</header>
 
 <div id="sudoku-container">
+  <div class="controls">
+    <select id="difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <button id="newgame">New Game</button>
+    <button id="reset">Reset</button>
+    <button id="surrender">Surrender</button>
+    <button id="back" onclick="goBack()">Back to Lobby</button>
+  </div>
   <table id="sudoku-grid"></table>
-  <button id="check-btn" onclick="checkSudoku()">Check Solution</button>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
 <script>
 function goBack(){ window.location.href="index.html"; }
 
-/* ===== Sudoku Game Logic ===== */
-const sudokuGrid = document.getElementById("sudoku-grid");
+/* ===== Sudoku Logic ===== */
+let sudokuGrid = document.getElementById("sudoku-grid");
+let currentPuzzle = [];
+let solution = [];
 
-// Example easy puzzle (0 = empty)
-let puzzle = [
-  [5,3,0,0,7,0,0,0,0],
-  [6,0,0,1,9,5,0,0,0],
-  [0,9,8,0,0,0,0,6,0],
-  [8,0,0,0,6,0,0,0,3],
-  [4,0,0,8,0,3,0,0,1],
-  [7,0,0,0,2,0,0,0,6],
-  [0,6,0,0,0,0,2,8,0],
-  [0,0,0,4,1,9,0,0,5],
-  [0,0,0,0,8,0,0,7,9]
-];
+// Example puzzles per difficulty
+const puzzles = {
+  easy: [
+    [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]
+  ],
+  medium: [
+    [[0,0,0,2,6,0,7,0,1],[6,8,0,0,7,0,0,9,0],[1,9,0,0,0,4,5,0,0],[8,2,0,1,0,0,0,4,0],[0,0,4,6,0,2,9,0,0],[0,5,0,0,0,3,0,2,8],[0,0,9,3,0,0,0,7,4],[0,4,0,0,5,0,0,3,6],[7,0,3,0,1,8,0,0,0]]
+  ],
+  hard: [
+    [[0,0,0,6,0,0,4,0,0],[7,0,0,0,0,3,6,0,0],[0,0,0,0,9,1,0,8,0],[0,0,0,0,0,0,0,0,0],[0,5,0,1,8,0,0,0,3],[0,0,0,3,0,6,0,4,5],[0,4,0,2,0,0,0,6,0],[9,0,3,0,0,0,0,0,0],[0,2,0,0,0,0,1,0,0]]
+  ]
+};
 
-// Create table
-for(let i=0;i<9;i++){
-  let row = sudokuGrid.insertRow();
-  for(let j=0;j<9;j++){
-    let cell = row.insertCell();
-    let input = document.createElement("input");
-    input.type="number";
-    input.min="1";
-    input.max="9";
-    if(puzzle[i][j]!==0){
-      input.value = puzzle[i][j];
-      input.disabled = true;
+// Function to deep copy 2D array
+function copy2D(arr){
+  return arr.map(r => r.slice());
+}
+
+// Simple solver to store solution
+function solve(grid){
+  let g = copy2D(grid);
+  function isSafe(r,c,n){
+    for(let i=0;i<9;i++){
+      if(g[r][i]===n || g[i][c]===n) return false;
     }
-    cell.appendChild(input);
+    let sr = Math.floor(r/3)*3, sc=Math.floor(c/3)*3;
+    for(let i=0;i<3;i++){
+      for(let j=0;j<3;j++){
+        if(g[sr+i][sc+j]===n) return false;
+      }
+    }
+    return true;
+  }
+  function backtrack(){
+    for(let r=0;r<9;r++){
+      for(let c=0;c<9;c++){
+        if(g[r][c]===0){
+          for(let n=1;n<=9;n++){
+            if(isSafe(r,c,n)){
+              g[r][c]=n;
+              if(backtrack()) return true;
+              g[r][c]=0;
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  backtrack();
+  return g;
+}
 
-    // Add thicker border for 3x3 sections
-    if(j%3===2) cell.style.borderRight="4px solid #ff00ff";
-    if(i%3===2) cell.style.borderBottom="4px solid #ff00ff";
+function generatePuzzle(level){
+  let puzzleList = puzzles[level];
+  let idx = Math.floor(Math.random()*puzzleList.length);
+  currentPuzzle = copy2D(puzzleList[idx]);
+  solution = solve(copy2D(currentPuzzle));
+  renderGrid();
+}
+
+function renderGrid(){
+  sudokuGrid.innerHTML="";
+  for(let i=0;i<9;i++){
+    let row = sudokuGrid.insertRow();
+    for(let j=0;j<9;j++){
+      let cell = row.insertCell();
+      let input = document.createElement("input");
+      input.type="number"; input.min=1; input.max=9;
+      input.value = currentPuzzle[i][j]!==0 ? currentPuzzle[i][j] : "";
+      if(currentPuzzle[i][j]!==0){
+        input.disabled=true;
+        cell.classList.add("given");
+      } else {
+        input.addEventListener("input", ()=>{cell.classList.remove("wrong")});
+      }
+      cell.appendChild(input);
+      if(j%3===2) cell.style.borderRight="3px solid #fff";
+      if(i%3===2) cell.style.borderBottom="3px solid #fff";
+    }
   }
 }
 
-// Check Sudoku solution
-function checkSudoku(){
+function resetGrid(){
   let inputs = sudokuGrid.getElementsByTagName("input");
-  let valid = true;
   for(let i=0;i<9;i++){
     for(let j=0;j<9;j++){
-      let val = parseInt(inputs[i*9+j].value);
-      if(isNaN(val) || val<1 || val>9 || !isValid(i,j,val)){
-        valid = false;
-        inputs[i*9+j].style.background="#800000";
-      } else {
-        inputs[i*9+j].style.background="#1c1c2c";
+      let idx = i*9+j;
+      if(!inputs[idx].disabled){
+        inputs[idx].value="";
+        inputs[idx].parentElement.classList.remove("wrong");
       }
     }
   }
-  if(valid) alert("Congratulations! You solved the Sudoku!");
 }
 
-// Check row, col, box
-function isValid(row,col,num){
+function surrenderGrid(){
   let inputs = sudokuGrid.getElementsByTagName("input");
-
-  // Row
-  for(let c=0;c<9;c++){
-    if(c!==col && parseInt(inputs[row*9+c].value)===num) return false;
-  }
-  // Column
-  for(let r=0;r<9;r++){
-    if(r!==row && parseInt(inputs[r*9+col].value)===num) return false;
-  }
-  // 3x3 Box
-  let startRow = Math.floor(row/3)*3;
-  let startCol = Math.floor(col/3)*3;
-  for(let r=startRow;r<startRow+3;r++){
-    for(let c=startCol;c<startCol+3;c++){
-      if((r!==row || c!==col) && parseInt(inputs[r*9+c].value)===num) return false;
+  for(let i=0;i<9;i++){
+    for(let j=0;j<9;j++){
+      let idx = i*9+j;
+      if(inputs[idx].value==="" || parseInt(inputs[idx].value)!==solution[i][j]){
+        inputs[idx].value = solution[i][j];
+        inputs[idx].parentElement.classList.add("wrong");
+      }
     }
   }
-  return true;
 }
+
+// Buttons
+document.getElementById("newgame").onclick = ()=>{generatePuzzle(document.getElementById("difficulty").value)};
+document.getElementById("reset").onclick = resetGrid;
+document.getElementById("surrender").onclick = surrenderGrid;
+
+// Init default
+generatePuzzle("easy");
 
 /* ===== Stars + Meteor ===== */
 const starsCanvas = document.getElementById('starsCanvas');
 const starsCtx = starsCanvas.getContext('2d');
 let stars = [], meteor=null;
-
 function resizeStarsCanvas(){
   starsCanvas.width=window.innerWidth;
   starsCanvas.height=window.innerHeight;
@@ -233,14 +292,7 @@ function resizeStarsCanvas(){
 function generateStars(){
   stars=[];
   for(let i=0;i<200;i++){
-    stars.push({
-      x:Math.random()*starsCanvas.width,
-      y:Math.random()*starsCanvas.height,
-      baseAlpha:Math.random()*0.7+0.3,
-      alpha:Math.random()*0.7+0.3,
-      radius:Math.random()*1.5+0.5,
-      flickerSpeed:Math.random()*0.05+0.02
-    });
+    stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,flickerSpeed:Math.random()*0.05+0.02});
   }
 }
 function drawMeteor(){
@@ -273,51 +325,23 @@ function animateStars(){
     meteor.y+=meteor.vy;
     meteor.alpha-=0.01;
     drawMeteor();
-    if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){
-      meteor=null;
-      setTimeout(spawnMeteor,Math.random()*5000+3000);
-    }
+    if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){meteor=null;setTimeout(spawnMeteor,Math.random()*5000+3000);}
   }
   requestAnimationFrame(animateStars);
 }
-function spawnMeteor(){
-  meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1};
-}
+function spawnMeteor(){meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1};}
 window.addEventListener('resize',resizeStarsCanvas);
-resizeStarsCanvas();
-animateStars();
-setTimeout(spawnMeteor,3000);
+resizeStarsCanvas();animateStars();setTimeout(spawnMeteor,3000);
 
 /* ===== Ripple Effect ===== */
 const rippleCanvas=document.getElementById('rippleCanvas');
 const rippleCtx=rippleCanvas.getContext('2d');
 let ripples=[];
-function resizeRippleCanvas(){
-  rippleCanvas.width=window.innerWidth;
-  rippleCanvas.height=window.innerHeight;
-}
-window.addEventListener('resize',resizeRippleCanvas);
-resizeRippleCanvas();
-window.addEventListener('mousemove',(e)=>{
-  ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});
-  if(ripples.length>20) ripples.shift();
-});
-function animateRipples(){
-  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
-  ripples.forEach((r,i)=>{
-    r.radius+=1.5;
-    r.alpha-=0.007;
-    if(r.alpha<=0){ripples.splice(i,1);return;}
-    rippleCtx.beginPath();
-    rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);
-    rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;
-    rippleCtx.lineWidth=r.lineWidth;
-    rippleCtx.stroke();
-  });
-  requestAnimationFrame(animateRipples);
-}
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener('resize',resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener('mousemove',(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20) ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
 </script>
-
 </body>
 </html>
