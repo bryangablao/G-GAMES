@@ -52,13 +52,13 @@
     gap: 15px;
     padding: 20px;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 0 auto 30px auto;
     position: relative;
     z-index: 1;
   }
 
   .game-card {
-    aspect-ratio: 1 / 1; /* perfect square */
+    aspect-ratio: 1 / 1;
     background-color: #1c1c2c;
     border-radius: 12px;
     box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
@@ -67,7 +67,7 @@
     align-items: center;
     cursor: pointer;
     text-align: center;
-    font-size: 14px;
+    font-size: clamp(12px, 2vw, 16px);
     font-weight: bold;
     color: #fff;
     transition: all 0.4s ease;
@@ -90,15 +90,21 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* responsive adjustments */
+  .footer-text {
+    font-size: clamp(12px, 1.5vw, 16px);
+    margin-bottom: 30px;
+    color: #ffd700;
+  }
+
   @media (max-width: 600px) {
     .lobby {
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      gap: 8px;
       padding: 15px;
     }
     .game-card {
-      font-size: 12px;
+      font-size: clamp(10px, 3vw, 14px);
+      padding: 3px;
     }
   }
 
@@ -143,6 +149,8 @@
   <div class="game-card" onclick="openGame('flappy-bird.html')">Flappy Bird</div>
   <div class="game-card" onclick="openGame('2048.html')">2048</div>
 </div>
+
+<div class="footer-text">🚀 Developed by Accx Creations</div>
 
 <script>
 function openGame(gameFile) {
