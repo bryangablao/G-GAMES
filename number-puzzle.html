@@ -5,280 +5,245 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Number Puzzle</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+/* === Global Body & Background === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; padding: 0;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at top left, #380098, black);
+  background-size: 200% 200%;
+  animation: gradientMove 10s infinite alternate;
+  overflow-x: hidden;
+}
+@keyframes gradientMove {
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 20px;
-    position: relative;
-  }
+/* === Header === */
+header {
+  background: linear-gradient(90deg, #8a2be2, #4b0082);
+  padding: 30px 20px;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+  position: relative;
+  z-index: 10;
+}
+@keyframes neon-flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
+  20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+/* === Help Icon like Color Game === */
+#helpIcon {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  width: 35px; height: 35px;
+  line-height: 35px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  cursor: pointer; user-select: none;
+  z-index: 20;
+}
+#helpText {
+  display: none;
+  position: absolute;
+  top: 70px; right: 15px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 0 10px #8a2be2;
+  z-index: 20;
+}
 
-  /* Help Button */
-  .help-btn {
-    position: absolute;
-    right: 20px;
-    top: 25px;
-    background: #4b0082;
-    border: none;
-    color: white;
-    font-size: 20px;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-  }
+/* === Game Layout === */
+.container {
+  max-width: 500px; 
+  margin: 40px auto; 
+  position: relative; 
+  z-index: 10;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(4, 80px);
+  gap: 5px;
+  margin-bottom: 20px;
+}
 
-  .board {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    grid-template-rows: repeat(4, 80px);
-    gap: 5px;
-    margin-bottom: 20px;
-  }
+.tile {
+  background: #8a2be2;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tile:hover { transform: scale(1.05); }
+.empty { background: transparent; box-shadow: none; cursor: default; }
 
-  .tile {
-    background: #8a2be2;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+.controls button,
+.back-button {
+  background: #8a2be2; border: none; 
+  padding: 12px 25px; color: white; font-size: 16px; 
+  border-radius: 10px; cursor: pointer; 
+  margin-top: 10px; margin-right: 10px;
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+  transition: all 0.3s ease;
+}
+.controls button:hover,
+.back-button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad; }
 
-  .tile:hover {
-    transform: scale(1.05);
-  }
-
-  .empty {
-    background: transparent;
-    box-shadow: none;
-    cursor: default;
-  }
-
-  .controls {
-    margin-bottom: 20px;
-  }
-
-  .control-button {
-    background: #8a2be2;
-    border: none;
-    padding: 12px 25px;
-    color: white;
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 0 10px;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
-
-  .control-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
-
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 12px 25px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 15px;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
-
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
-
-  /* Help Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.7);
-  }
-  .modal-content {
-    background: #1e1e2f;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 400px;
-    color: #fff;
-    text-align: left;
-    box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
-  }
-  .close {
-    float: right;
-    font-size: 22px;
-    cursor: pointer;
-  }
+/* === Background Canvases === */
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
+}
 </style>
 </head>
 <body>
 
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+
 <header>
   Number Puzzle
-  <button class="help-btn" onclick="openHelp()">?</button>
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
+
+<div id="helpText">
+  <strong>How to Play Number Puzzle:</strong><br>
+  Arrange numbers 1–15 in order by sliding tiles into the empty space.<br>
+  Click a tile next to the empty space to move it.<br>
+  Goal: Solve the puzzle!
+</div>
 
 <div class="container">
   <div class="controls">
-    <button class="control-button" onclick="newGame()">New Game</button>
+    <button onclick="newGame()">New Game</button>
   </div>
   <div id="board" class="board"></div>
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
-<!-- Help Modal -->
-<div id="helpModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeHelp()">&times;</span>
-    <h2>How to Play</h2>
-    <p>Arrange the numbers in order from 1 to 15 by sliding tiles into the empty space.</p>
-    <ul>
-      <li>Click a tile next to the empty space to move it.</li>
-      <li>Keep sliding until all numbers are in order.</li>
-      <li>Goal: Reach the solved state (1–15 in sequence).</li>
-    </ul>
-    <p><b>Tip:</b> Start solving row by row.</p>
-  </div>
-</div>
-
 <script>
+/* === Help Toggle === */
+function toggleHelp(){
+  const help = document.getElementById('helpText');
+  help.style.display = (help.style.display==='block')?'none':'block';
+}
+
+/* === Go Back === */
+function goBack(){ window.location.href="index.html"; }
+
+/* === Number Puzzle Logic === */
 let board = [];
-const size = 4; // 4x4 puzzle
+const size = 4;
 const boardElement = document.getElementById("board");
 
 function initBoard() {
-  board = Array.from({length: size * size}, (_, i) => i);
+  board = Array.from({length: size*size}, (_,i)=>i);
   shuffleBoard();
   renderBoard();
 }
 
-function shuffleBoard() {
-  for (let i = board.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [board[i], board[j]] = [board[j], board[i]];
+function shuffleBoard(){
+  for(let i=board.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [board[i],board[j]]=[board[j],board[i]];
   }
-  if (!isSolvable(board)) shuffleBoard();
+  if(!isSolvable(board)) shuffleBoard();
 }
 
-function renderBoard() {
-  boardElement.innerHTML = "";
-  board.forEach((num, idx) => {
-    const tile = document.createElement("div");
+function renderBoard(){
+  boardElement.innerHTML="";
+  board.forEach((num,idx)=>{
+    const tile=document.createElement("div");
     tile.classList.add("tile");
-    if (num === 0) {
-      tile.classList.add("empty");
-    } else {
-      tile.textContent = num;
-      tile.onclick = () => moveTile(idx);
-    }
+    if(num===0) tile.classList.add("empty");
+    else { tile.textContent=num; tile.onclick=()=>moveTile(idx); }
     boardElement.appendChild(tile);
   });
 }
 
-function moveTile(index) {
-  const emptyIndex = board.indexOf(0);
-  const validMoves = getValidMoves(emptyIndex);
-  if (validMoves.includes(index)) {
-    [board[emptyIndex], board[index]] = [board[index], board[emptyIndex]];
-    renderBoard();
-    checkWin();
+function moveTile(index){
+  const emptyIndex=board.indexOf(0);
+  const validMoves=getValidMoves(emptyIndex);
+  if(validMoves.includes(index)){
+    [board[emptyIndex],board[index]]=[board[index],board[emptyIndex]];
+    renderBoard(); checkWin();
   }
 }
 
-function getValidMoves(emptyIndex) {
-  const moves = [];
-  const row = Math.floor(emptyIndex / size);
-  const col = emptyIndex % size;
-  if (row > 0) moves.push(emptyIndex - size);
-  if (row < size - 1) moves.push(emptyIndex + size);
-  if (col > 0) moves.push(emptyIndex - 1);
-  if (col < size - 1) moves.push(emptyIndex + 1);
+function getValidMoves(emptyIndex){
+  const moves=[];
+  const row=Math.floor(emptyIndex/size);
+  const col=emptyIndex%size;
+  if(row>0) moves.push(emptyIndex-size);
+  if(row<size-1) moves.push(emptyIndex+size);
+  if(col>0) moves.push(emptyIndex-1);
+  if(col<size-1) moves.push(emptyIndex+1);
   return moves;
 }
 
-function isSolvable(arr) {
-  let invCount = 0;
-  for (let i = 0; i < arr.length - 1; i++) {
-    for (let j = i + 1; j < arr.length; j++) {
-      if (arr[i] && arr[j] && arr[i] > arr[j]) invCount++;
+function isSolvable(arr){
+  let invCount=0;
+  for(let i=0;i<arr.length-1;i++){
+    for(let j=i+1;j<arr.length;j++){
+      if(arr[i]&&arr[j]&&arr[i]>arr[j]) invCount++;
     }
   }
-  const rowFromBottom = size - Math.floor(arr.indexOf(0) / size);
-  return (size % 2 !== 0 && invCount % 2 === 0) ||
-         (size % 2 === 0 && (rowFromBottom % 2 === 0) === (invCount % 2 !== 0));
+  const rowFromBottom = size - Math.floor(arr.indexOf(0)/size);
+  return (size%2!==0 && invCount%2===0) || (size%2===0 && (rowFromBottom%2===0)==(invCount%2!==0));
 }
 
-function checkWin() {
-  if (board.slice(0, board.length - 1).every((val, idx) => val === idx + 1)) {
-    setTimeout(() => alert("🎉 Congratulations! You solved the puzzle!"), 100);
+function checkWin(){
+  if(board.slice(0,board.length-1).every((val,idx)=>val===idx+1)){
+    setTimeout(()=>alert("🎉 Congratulations! You solved the puzzle!"),100);
   }
 }
 
-function newGame() {
-  initBoard();
-}
+function newGame(){ initBoard(); }
 
-function goBack() {
-  window.location.href = "index.html";
-}
+/* === Stars Background === */
+const starsCanvas=document.getElementById("starsCanvas");
+const starsCtx=starsCanvas.getContext("2d");
+let stars=[];
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
 
-function openHelp() {
-  document.getElementById("helpModal").style.display = "block";
-}
-function closeHelp() {
-  document.getElementById("helpModal").style.display = "none";
-}
+/* === Ripple Trail === */
+const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCtx=rippleCanvas.getContext("2d");
+let ripples=[];
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
+animateRipples();
 
-// Start new game when loaded
+/* Start new game */
 initBoard();
 </script>
 
 </body>
 </html>
-  
