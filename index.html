@@ -46,6 +46,72 @@
     }
   }
 
+  /* === About Button === */
+  #aboutBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 0 8px #8a2be2, 0 0 12px #4b0082;
+    user-select: none;
+    transition: transform 0.3s ease;
+    z-index: 20;
+  }
+  #aboutBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #9b30ff, 0 0 25px #6a0dad;
+  }
+
+  /* === Modal === */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  .modal-content {
+    background: rgba(25,25,35,0.95);
+    padding: 25px 35px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #8a2be2;
+    max-width: 400px;
+    text-align: center;
+  }
+  .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  .modal-content p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .close-btn {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: #8a2be2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  }
+  .close-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #9b30ff, 0 0 30px #6a0dad;
+  }
+
   .lobby {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -125,7 +191,10 @@
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>Mini Games Lobby</header>
+<header>
+  Mini Games Lobby
+  <div id="aboutBtn" onclick="openAbout()">!</div>
+</header>
 
 <div class="lobby">
   <div class="game-card" onclick="openGame('sudoku.html')">Sudoku</div>
@@ -152,15 +221,38 @@
 
 <div class="footer-text">🚀 Developed by Accx Creations</div>
 
+<!-- About Modal -->
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <h2>About G-GAMES</h2>
+    <p>
+      G-GAMES is an interactive online mini-games lobby featuring a 5x5 grid of square game cards.
+      Each card is a single-player mini-game, like Sudoku, Tic-Tac-Toe, Snake, Flappy Bird, Rock-Paper-Scissors, and more.<br><br>
+      The site is fully responsive, playable on desktop, tablet, and mobile, with a starry night background and flickering stars to create a lively atmosphere.<br><br>
+      This platform is open to the public, allowing anyone to play, but each game is designed for one player at a time. The site is created for fun, casual gaming, accessible to all.<br><br>
+      🚀 Developed by Accx Creations
+    </p>
+    <button class="close-btn" onclick="closeAbout()">Close</button>
+  </div>
+</div>
+
 <script>
 function openGame(gameFile) {
   window.location.href = gameFile;
 }
 
+// === About Modal ===
+function openAbout() {
+  document.getElementById('aboutModal').style.display = 'flex';
+}
+function closeAbout() {
+  document.getElementById('aboutModal').style.display = 'none';
+}
+
 // === Stars + Meteor ===
 const starsCanvas = document.getElementById('starsCanvas');
 const starsCtx = starsCanvas.getContext('2d');
-let stars = [], meteor=null;
+let stars = [], meteor = null;
 
 function resizeStarsCanvas(){
   starsCanvas.width=window.innerWidth;
@@ -254,6 +346,5 @@ function animateRipples(){
 }
 animateRipples();
 </script>
-
 </body>
 </html>
