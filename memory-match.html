@@ -4,81 +4,373 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Memory Match</title>
+<link rel="icon" type="image/png" href="image/memory.png">
+
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+/* ---------- Global look ---------- */
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin:0;
+  color:#fff;
+  background: radial-gradient(circle at top left,#380098,black);
+  animation: gradientMove 10s infinite alternate;
+  overflow-x:hidden;
+  text-align:center;
+}
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
+header{
+  background:linear-gradient(90deg,#8a2be2,#4b0082);
+  padding:30px 20px;
+  font-size:36px;
+  font-weight:bold;
+  letter-spacing:1px;
+  text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+  position:relative;
+  z-index:5;
+}
+@keyframes neon-flicker{
+  0%,19%,21%,23%,25%,54%,56%,100%{
+    text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
   }
+  20%,24%,55%{
+    text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;
+  }
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
-  }
+/* help button */
+#helpIcon{
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:24px;
+  background:rgba(255,255,255,0.1);
+  border-radius:50%;
+  width:35px;height:35px;
+  line-height:35px;
+  cursor:pointer;user-select:none;
+}
+#helpText{
+  display:none;
+  position:absolute;
+  top:70px;right:15px;
+  background:rgba(0,0,0,0.8);
+  padding:15px;
+  border-radius:10px;
+  width:250px;
+  text-align:left;
+  font-size:14px;
+  color:#fff;
+  box-shadow:0 0 10px #8a2be2;
+  z-index:6;
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+/* container */
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:rgba(0,0,0,0.4);
+  padding:20px;
+  border:2px solid #8a2be2;
+  border-radius:15px;
+  box-shadow:0 0 15px #8a2be2,0 0 30px #4b0082;
+}
+.controls{
+  margin-bottom:15px;
+}
+select,button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+}
+select{
+  background:#222;
+  color:#fff;
+}
+.new-game-btn{
+  background:#8a2be2;color:white;
+  cursor:pointer;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+}
+.new-game-btn:hover{transform:scale(1.05);}
+.back-button{
+  background:#8a2be2;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+  margin-top:15px;
+}
+.back-button:hover{transform:scale(1.05);}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* grid of cards */
+.grid{
+  display:grid;
+  gap:10px;
+  justify-content:center;
+}
+.card{
+  width:80px;
+  height:100px;
+  background:#444;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  cursor:pointer;
+  perspective:600px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.5s;
+}
+.card.flipped{
+  background:#8a2be2;
+}
+.card.matched{
+  background:limegreen;
+  cursor:default;
+}
+.status{
+  margin:10px 0;
+  font-size:18px;
+  color:#ccc;
+}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+footer{
+  margin:20px 0;
+  font-size:16px;
+  color:#ccc;
+}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+/* canvases */
+#starsCanvas,#rippleCanvas{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  pointer-events:none;
+}
+#starsCanvas{z-index:0;}
+#rippleCanvas{z-index:0;}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+/* modal for win message */
+#endModal{
+  display:none;
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;align-items:center;
+  flex-direction:column;
+  color:#fff;
+  z-index:10;
+}
+#endModal h2{font-size:32px;margin-bottom:20px;}
+#endModal button{
+  padding:12px 25px;
+  font-size:18px;
+  border-radius:10px;
+  background:#8a2be2;color:white;border:none;
+  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+  cursor:pointer;
+}
+#endModal button:hover{transform:scale(1.05);}
 </style>
 </head>
-<body>
 
-<header>Memory Match</header>
+<body>
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+
+<header>
+  Memory Match
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
+</header>
+
+<div id="helpText">
+  <strong>How to Play Memory Match:</strong><br>
+  1. Choose a difficulty (more cards = harder).<br>
+  2. Click “New Game” to start.<br>
+  3. Flip two cards at a time to find matching pairs.<br>
+  4. Match all cards to win.<br>
+  5. Try to remember card positions and finish fast!
+</div>
 
 <div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Memory Match here.</div>
+  <div class="controls">
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty">
+      <option value="easy">Easy (4×3)</option>
+      <option value="medium">Medium (4×4)</option>
+      <option value="hard">Hard (5×4)</option>
+      <option value="veryhard">Very Hard (6×5)</option>
+    </select>
+    <button class="new-game-btn" onclick="startGame()">New Game</button>
+  </div>
+
+  <div class="status" id="status">Select difficulty and start a new game!</div>
+  <div class="grid" id="grid"></div>
+
   <button class="back-button" onclick="goBack()">Back to Lobby</button>
 </div>
 
-<script>
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+<footer>© 2025 All Rights Reserved | 🚀 Developed by Accx Creations</footer>
 
+<!-- win modal -->
+<div id="endModal">
+  <h2 id="modalMessage">You Win!</h2>
+  <button onclick="closeModal()">Close</button>
+</div>
+
+<script>
+/* ---------- Help toggle ---------- */
+function toggleHelp(){
+  const h=document.getElementById('helpText');
+  h.style.display=h.style.display==='block'?'none':'block';
+}
+
+/* ---------- Back button ---------- */
+function goBack(){ window.location.href="index.html"; }
+
+/* ---------- Memory Match logic ---------- */
+const gridEl=document.getElementById('grid');
+const statusEl=document.getElementById('status');
+let firstCard=null,secondCard=null,lockBoard=false,matchedPairs=0,totalPairs=0;
+
+function startGame(){
+  const diff=document.getElementById('difficulty').value;
+  let rows,cols;
+  if(diff==='easy'){rows=3;cols=4;}
+  else if(diff==='medium'){rows=4;cols=4;}
+  else if(diff==='hard'){rows=4;cols=5;}
+  else{rows=5;cols=6;}
+  totalPairs=(rows*cols)/2;
+  matchedPairs=0;
+  statusEl.textContent="Game Started! Find all "+totalPairs+" pairs.";
+  generateCards(rows,cols);
+}
+
+function generateCards(r,c){
+  gridEl.innerHTML='';
+  gridEl.style.gridTemplateColumns=`repeat(${c},80px)`;
+  const symbols='🍎🍌🍇🍉🍓🥕🍒🥑🥦🥬🍋🍊🥝🍍🥥🍆🌽🫛🧄🥔🧅🥒🥨🍪🍫🍩🍰🧁🍔🍟🍕🌭🥪🥗🍿🍗🥩🍖🍣🍤🍱🥟🥠🍜🍝🥞🧇';
+  let chosen=[...symbols].sort(()=>0.5-Math.random()).slice(0,totalPairs);
+  let deck=[...chosen,...chosen];
+  deck.sort(()=>0.5-Math.random());
+  deck.forEach(sym=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.dataset.symbol=sym;
+    card.onclick=()=>flipCard(card);
+    gridEl.appendChild(card);
+  });
+}
+
+function flipCard(card){
+  if(lockBoard||card===firstCard||card.classList.contains('matched'))return;
+  card.textContent=card.dataset.symbol;
+  card.classList.add('flipped');
+  if(!firstCard){
+    firstCard=card;return;
+  }
+  secondCard=card;
+  lockBoard=true;
+  checkMatch();
+}
+
+function checkMatch(){
+  if(firstCard.dataset.symbol===secondCard.dataset.symbol){
+    firstCard.classList.add('matched');
+    secondCard.classList.add('matched');
+    matchedPairs++;
+    statusEl.textContent=`Pairs matched: ${matchedPairs}/${totalPairs}`;
+    resetTurn();
+    if(matchedPairs===totalPairs) showWinModal();
+  }else{
+    setTimeout(()=>{
+      firstCard.textContent='';
+      secondCard.textContent='';
+      firstCard.classList.remove('flipped');
+      secondCard.classList.remove('flipped');
+      resetTurn();
+    },800);
+  }
+}
+function resetTurn(){[firstCard,secondCard,lockBoard]=[null,null,false];}
+
+function showWinModal(){
+  document.getElementById('modalMessage').textContent="🎉 You matched all pairs!";
+  document.getElementById('endModal').style.display='flex';
+}
+function closeModal(){
+  document.getElementById('endModal').style.display='none';
+  statusEl.textContent="Great job! Start a new game or change difficulty.";
+}
+
+/* ---------- Stars background ---------- */
+const starsCanvas=document.getElementById('starsCanvas');
+const starsCtx=starsCanvas.getContext('2d');
+let stars=[];
+function resizeStarsCanvas(){
+  starsCanvas.width=window.innerWidth;
+  starsCanvas.height=window.innerHeight;
+  generateStars();
+}
+function generateStars(){
+  stars=[];
+  for(let i=0;i<200;i++){
+    stars.push({x:Math.random()*starsCanvas.width,
+                y:Math.random()*starsCanvas.height,
+                alpha:Math.random()*0.7+0.3,
+                radius:Math.random()*1.5+0.5,
+                flickerSpeed:Math.random()*0.05+0.02});
+  }
+}
+function animateStars(){
+  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
+  stars.forEach(star=>{
+    star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);
+    if(star.alpha<0.1) star.alpha=0.1;
+    if(star.alpha>1) star.alpha=1;
+    starsCtx.beginPath();
+    starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);
+    starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;
+    starsCtx.fill();
+  });
+  requestAnimationFrame(animateStars);
+}
+window.addEventListener('resize',resizeStarsCanvas);
+resizeStarsCanvas();animateStars();
+
+/* ---------- Ripple effect ---------- */
+const rippleCanvas=document.getElementById('rippleCanvas');
+const rippleCtx=rippleCanvas.getContext('2d');
+let ripples=[];
+function resizeRippleCanvas(){
+  rippleCanvas.width=window.innerWidth;
+  rippleCanvas.height=window.innerHeight;
+}
+window.addEventListener('resize',resizeRippleCanvas);
+resizeRippleCanvas();
+window.addEventListener('mousemove',e=>{
+  ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});
+  if(ripples.length>20) ripples.shift();
+});
+function animateRipples(){
+  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
+  ripples.forEach((r,i)=>{
+    r.radius+=1.5;
+    r.alpha-=0.007;
+    if(r.alpha<=0){ripples.splice(i,1);return;}
+    rippleCtx.beginPath();
+    rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);
+    rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;
+    rippleCtx.lineWidth=r.lineWidth;
+    rippleCtx.stroke();
+  });
+  requestAnimationFrame(animateRipples);
+}
+animateRipples();
+</script>
 </body>
 </html>
