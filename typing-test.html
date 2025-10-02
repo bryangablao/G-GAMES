@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Typing Test</title>
 <style>
-/* === Global Body & Background === */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0; padding: 0;
@@ -23,8 +22,6 @@ body {
   0%{background-position:0% 50%;}
   100%{background-position:100% 50%;}
 }
-
-/* === Header === */
 header {
   background: linear-gradient(90deg, #8a2be2, #4b0082);
   padding: 30px 20px;
@@ -32,7 +29,7 @@ header {
   font-weight: bold;
   letter-spacing: 1px;
   color: white;
-  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+  text-shadow: 0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
   animation: neon-flicker 2s infinite alternate;
   position: relative;
   z-index: 10;
@@ -41,13 +38,9 @@ header {
   0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
-
-/* === Help Icon === */
 #helpIcon {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 24px;
-  width: 35px; height: 35px;
+  position: absolute; top: 10px; right: 15px;
+  font-size: 24px; width: 35px; height: 35px;
   line-height: 35px;
   background: rgba(255,255,255,0.1);
   border-radius: 50%;
@@ -56,11 +49,9 @@ header {
 }
 #helpText {
   display: none;
-  position: absolute;
-  top: 70px; right: 15px;
+  position: absolute; top: 70px; right: 15px;
   background: rgba(0,0,0,0.8);
-  padding: 15px;
-  border-radius: 10px;
+  padding: 15px; border-radius: 10px;
   width: 250px;
   text-align: left;
   font-size: 14px;
@@ -68,19 +59,10 @@ header {
   box-shadow: 0 0 10px #8a2be2;
   z-index: 20;
 }
-
-/* === Container & Controls === */
 .container {
-  max-width: 800px; 
-  margin: 20px auto; 
-  position: relative; 
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
+  max-width: 800px; margin: 20px auto; position: relative; z-index: 10;
+  display: flex; flex-direction: column; align-items: center; flex-grow: 1;
 }
-
 .controls {
   margin-bottom: 10px;
   display: flex;
@@ -88,16 +70,11 @@ header {
   justify-content: center;
   gap: 10px;
 }
-
 .controls button,
 .back-button {
   background: linear-gradient(135deg,#8a2be2,#4b0082);
-  border: none; 
-  padding: 12px 25px; 
-  color: white; 
-  font-size: 16px; 
-  border-radius: 10px; 
-  cursor: pointer; 
+  border: none; padding: 12px 25px; color: white; font-size: 16px; 
+  border-radius: 10px; cursor: pointer; 
   box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
   transition: all 0.3s ease;
 }
@@ -106,8 +83,6 @@ header {
   transform: scale(1.05); 
   box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
 }
-
-/* === Typing Area === */
 #testText {
   font-size: 18px;
   padding: 20px;
@@ -120,7 +95,6 @@ header {
   line-height: 1.6;
   overflow-wrap: break-word;
 }
-
 #inputArea {
   font-size: 18px;
   padding: 12px;
@@ -129,26 +103,19 @@ header {
   border: none;
   outline: none;
 }
-
-/* === Stats Display === */
 #stats {
   margin-top: 15px;
   font-size: 18px;
   color: #ffd700;
   text-shadow: 0 0 5px #fff, 0 0 10px #ffea00;
 }
-
-/* === Modal === */
 #gameOverModal {
   display: none;
-  position: fixed;
-  top: 0; left:0; width:100%; height:100%;
+  position: fixed; top: 0; left:0; width:100%; height:100%;
   background: rgba(0,0,0,0.8);
   z-index: 100;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; align-items: center;
 }
-
 #gameOverModal .modal-content {
   background: linear-gradient(135deg,#8a2be2,#4b0082);
   padding: 30px 40px;
@@ -156,12 +123,7 @@ header {
   text-align: center;
   box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
 }
-
-#gameOverModal button {
-  margin-top: 15px;
-}
-
-/* === Footer === */
+#gameOverModal button { margin-top: 15px; }
 footer {
   padding: 15px 20px;
   font-size: 14px;
@@ -170,13 +132,7 @@ footer {
   background: linear-gradient(90deg, #4b0082, #8a2be2);
   box-shadow: 0 -2px 10px #8a2be2;
 }
-
-/* === Background Canvases === */
-#starsCanvas,#rippleCanvas{
-  position:fixed; top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none; z-index:0;
-}
+#starsCanvas,#rippleCanvas{position:fixed; top:0; left:0;width:100vw; height:100vh; pointer-events:none; z-index:0;}
 </style>
 </head>
 <body>
@@ -185,15 +141,15 @@ footer {
 <canvas id="rippleCanvas"></canvas>
 
 <header>
-  Typing Test
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
+Typing Test
+<div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
 
 <div id="helpText">
-  <strong>How to Play Typing Test:</strong><br>
-  Type the text as fast and accurately as possible.<br>
-  The test will start automatically when you start typing.<br>
-  Press "Reset" to start a new test.
+<strong>How to Play Typing Test:</strong><br>
+Type the text as fast and accurately as possible.<br>
+Sentences will scroll automatically as you type.<br>
+Press "Reset" to start a new test.
 </div>
 
 <div class="container">
@@ -206,7 +162,6 @@ footer {
   <div id="stats">WPM: 0 | Accuracy: 100%</div>
 </div>
 
-<!-- Game Over Modal -->
 <div id="gameOverModal">
   <div class="modal-content">
     <h2>Test Completed!</h2>
@@ -218,82 +173,111 @@ footer {
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
-/* === Help Toggle === */
-function toggleHelp(){
-  const help = document.getElementById('helpText');
-  help.style.display = (help.style.display==='block')?'none':'block';
-}
+function toggleHelp(){const help=document.getElementById('helpText');help.style.display=(help.style.display==='block')?'none':'block';}
+function goBack(){window.location.href="index.html";}
 
-/* === Go Back === */
-function goBack(){ window.location.href = "index.html"; }
-
-/* === Typing Test Logic === */
 const inputArea = document.getElementById('inputArea');
 const testTextDiv = document.getElementById('testText');
 const stats = document.getElementById('stats');
 const modal = document.getElementById('gameOverModal');
 const finalStats = document.getElementById('finalStats');
 
-let startTime;
-let timer;
-let testText;
-let testStarted = false;
+let startTime, timer, sentences=[], visibleSentences=[], typedSentence='', testStarted=false;
 
-// Word pool for random sentences
-const words = ["the","quick","brown","fox","jumps","over","lazy","dog","and","runs","fast","on","green","grass","sun","bright","sky","blue","clouds","white","cat","sat","under","tree","birds","singing","beautiful","day","happy","smile","rain","drops","water","flow","mountain","river","forest","wind","blow","butterfly","colorful","flower","garden","child","play","laugh","music","dance","strong","light","dark","moon","night","star","shine","fire","warm","cool","peace","friend","family","love","dream","hope","brave","smart","fun","game","ball","run","jump","write","read","learn","teach","walk","talk","listen","see","watch","feel","think","build","create","make","cook","eat","drink","sleep","rest","clean","help","share","grow","change","move","stop","start","fast","slow","high","low","happy","sad","angry","kind","rich","poor","open","close","give","take","catch","throw"];
+// Example sentences
+const sentencePool = [
+"The quick brown fox jumps over the lazy dog.",
+"Learning new skills improves your mind and body.",
+"Technology is advancing faster than ever before.",
+"Exercise regularly to stay healthy and strong.",
+"Reading books expands your imagination and knowledge.",
+"Music has the power to evoke deep emotions.",
+"Traveling opens your eyes to new cultures and people.",
+"Creativity is key to solving complex problems.",
+"Practice makes perfect, never give up.",
+"The sun rises every morning bringing light to the world.",
+"Friendship is one of life's greatest treasures.",
+"Education is the foundation of a bright future.",
+"Patience is a virtue that everyone should learn.",
+"Honesty is always the best policy.",
+"Time management is crucial for success.",
+"Nature provides beauty and peace for the soul.",
+"Hard work beats talent when talent does not work hard.",
+"A healthy diet leads to a happier life.",
+"Kindness is contagious and spreads quickly.",
+"Challenges help us grow and become stronger.",
+"Dream big and set achievable goals.",
+"Curiosity drives innovation and learning.",
+"Good communication is essential in relationships.",
+"Failure is a stepping stone to success.",
+"Self-discipline helps achieve long-term goals.",
+"Confidence comes from preparation and experience.",
+"Mindfulness improves mental and emotional well-being.",
+"Volunteering makes a positive impact on society.",
+"Adaptability is vital in a changing world.",
+"Teamwork often leads to better outcomes."
+];
 
-function generateRandomText(){
-  let text = "";
-  for(let i=0;i<100;i++){
-    const sentenceLength = Math.floor(Math.random()*8)+3;
-    for(let j=0;j<sentenceLength;j++){
-      text += words[Math.floor(Math.random()*words.length)] + " ";
-    }
-    text = text.trim() + ". ";
-  }
-  return text;
+function generateSentence() {
+  return sentencePool[Math.floor(Math.random()*sentencePool.length)];
 }
 
-function resetTest(){
-  inputArea.value = "";
-  testText = generateRandomText();
-  testTextDiv.textContent = testText;
+function resetTest() {
+  sentences = [];
+  visibleSentences = [];
+  for(let i=0;i<100;i++) sentences.push(generateSentence());
+  visibleSentences = sentences.splice(0,2);
+  testTextDiv.textContent = visibleSentences.join(" ");
+  inputArea.value='';
+  typedSentence='';
   stats.textContent = "WPM: 0 | Accuracy: 100%";
   startTime = null;
-  testStarted = false;
+  testStarted=false;
+  inputArea.disabled=false;
+  inputArea.focus();
 }
 
 inputArea.addEventListener("input",()=>{
-  if(!testStarted){
-    startTime = new Date();
-    testStarted = true;
-    if(timer) clearInterval(timer);
-    timer = setInterval(updateStats, 500);
+  if(!testStarted){startTime=new Date();testStarted=true;timer=setInterval(updateStats,500);}
+  const currentTyped = inputArea.value;
+  const firstSentence = visibleSentences[0];
+  if(currentTyped === firstSentence){
+    typedSentence += firstSentence + " ";
+    inputArea.value='';
+    if(sentences.length>0){
+      visibleSentences.shift();
+      visibleSentences.push(sentences.shift());
+      testTextDiv.textContent = visibleSentences.join(" ");
+    } else {
+      // Test finished
+      clearInterval(timer);
+      const elapsed = (new Date()-startTime)/60000;
+      const wordsTyped = typedSentence.trim().split(/\s+/).length;
+      const wpm = Math.round(wordsTyped/elapsed);
+      finalStats.textContent = `Your WPM: ${wpm} | Accuracy: 100%`;
+      modal.style.display="flex";
+      inputArea.disabled=true;
+    }
   }
 });
 
 function updateStats(){
-  const typed = inputArea.value;
+  const typed = typedSentence + inputArea.value;
   const wordsTyped = typed.trim().split(/\s+/).length;
-  const elapsed = (new Date() - startTime)/60000;
-  const wpm = elapsed>0 ? Math.round(wordsTyped / elapsed) : 0;
-  const correctChars = typed.split('').filter((c,i)=>c===testText[i]).length;
-  const accuracy = typed.length>0 ? Math.round(correctChars/typed.length*100) : 100;
-  stats.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
-
-  if(typed === testText){
-    clearInterval(timer);
-    finalStats.textContent = `Your WPM: ${wpm} | Accuracy: ${accuracy}%`;
-    modal.style.display = "flex";
-    inputArea.disabled = true;
+  const elapsed = (startTime ? (new Date()-startTime)/60000 : 0);
+  const wpm = elapsed>0?Math.round(wordsTyped/elapsed):0;
+  const currentText = visibleSentences.join(" ");
+  let correctChars=0;
+  for(let i=0;i<inputArea.value.length;i++){
+    if(inputArea.value[i]===currentText[i]) correctChars++;
   }
+  const accuracy = inputArea.value.length>0 ? Math.round(correctChars/inputArea.value.length*100):100;
+  stats.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
 }
 
-function closeModal() {
-  modal.style.display = "none";
-}
+function closeModal(){modal.style.display="none";}
 
-/* === Stars Background === */
+// === Background stars/ripples ===
 const starsCanvas=document.getElementById("starsCanvas");
 const starsCtx=starsCanvas.getContext("2d");
 let stars=[];
@@ -302,7 +286,6 @@ function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.rand
 function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
 window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
 
-/* === Ripple Trail === */
 const rippleCanvas=document.getElementById("rippleCanvas");
 const rippleCtx=rippleCanvas.getContext("2d");
 let ripples=[];
@@ -312,7 +295,6 @@ window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
 
-// Initialize first test
 resetTest();
 </script>
 </body>
