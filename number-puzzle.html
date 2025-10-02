@@ -72,10 +72,17 @@ header {
   margin: 40px auto; 
   position: relative; 
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center board and buttons */
 }
 
 .controls {
   margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .controls button,
@@ -87,7 +94,6 @@ header {
   font-size: 16px; 
   border-radius: 10px; 
   cursor: pointer; 
-  margin-right: 10px; 
   box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
   transition: all 0.3s ease;
 }
@@ -103,11 +109,11 @@ header {
   grid-template-columns: repeat(4, 80px);
   grid-template-rows: repeat(4, 80px);
   gap: 5px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px; /* center grid */
 }
 
 .tile {
-  background: linear-gradient(135deg,#4b0082,#6a0dad); /* darker than buttons */
+  background: linear-gradient(135deg,#4b0082,#6a0dad); /* distinct from buttons */
   color: #fff;
   font-size: 24px;
   font-weight: bold;
@@ -263,7 +269,9 @@ function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.hei
 window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
 
 /* === Ripple Trail === */
-const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCanvas=document.createElement("canvas");
+rippleCanvas.id="rippleCanvas";
+document.body.appendChild(rippleCanvas);
 const rippleCtx=rippleCanvas.getContext("2d");
 let ripples=[];
 function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
