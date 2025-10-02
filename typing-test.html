@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Typing Test</title>
 <style>
+/* === Global Body & Background === */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0; padding: 0;
@@ -13,15 +14,14 @@ body {
   background: radial-gradient(circle at top left, #380098, black);
   background-size: 200% 200%;
   animation: gradientMove 10s infinite alternate;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 @keyframes gradientMove {
   0%{background-position:0% 50%;}
   100%{background-position:100% 50%;}
 }
+
+/* === Header === */
 header {
   background: linear-gradient(90deg, #8a2be2, #4b0082);
   padding: 30px 20px;
@@ -38,9 +38,13 @@ header {
   0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
+
+/* === Help Icon === */
 #helpIcon {
-  position: absolute; top: 10px; right: 15px;
-  font-size: 24px; width: 35px; height: 35px;
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  width: 35px; height: 35px;
   line-height: 35px;
   background: rgba(255,255,255,0.1);
   border-radius: 50%;
@@ -49,9 +53,11 @@ header {
 }
 #helpText {
   display: none;
-  position: absolute; top: 70px; right: 15px;
+  position: absolute;
+  top: 70px; right: 15px;
   background: rgba(0,0,0,0.8);
-  padding: 15px; border-radius: 10px;
+  padding: 15px;
+  border-radius: 10px;
   width: 250px;
   text-align: left;
   font-size: 14px;
@@ -59,22 +65,35 @@ header {
   box-shadow: 0 0 10px #8a2be2;
   z-index: 20;
 }
+
+/* === Container & Buttons === */
 .container {
-  max-width: 800px; margin: 20px auto; position: relative; z-index: 10;
-  display: flex; flex-direction: column; align-items: center; flex-grow: 1;
-}
-.controls {
-  margin-bottom: 10px;
+  max-width: 800px; 
+  margin: 20px auto; 
+  position: relative; 
+  z-index: 10;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0 20px; /* spacing from sides */
+  box-sizing: border-box;
 }
+
+.controls {
+  margin-bottom: 20px;
+}
+
 .controls button,
 .back-button {
   background: linear-gradient(135deg,#8a2be2,#4b0082);
-  border: none; padding: 12px 25px; color: white; font-size: 16px; 
-  border-radius: 10px; cursor: pointer; 
+  border: none; 
+  padding: 12px 25px; 
+  color: white; 
+  font-size: 16px; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  margin-right: 10px; 
   box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
   transition: all 0.3s ease;
 }
@@ -83,6 +102,8 @@ header {
   transform: scale(1.05); 
   box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
 }
+
+/* === Typing Area === */
 #testText {
   font-size: 18px;
   padding: 20px;
@@ -90,49 +111,44 @@ header {
   background: rgba(255,255,255,0.05);
   border-radius: 10px;
   width: 100%;
-  min-height: 120px;
+  min-height: 150px;
   text-align: left;
   line-height: 1.6;
   overflow-wrap: break-word;
+  box-sizing: border-box;
 }
+
 #inputArea {
   font-size: 18px;
   padding: 12px;
   width: 100%;
+  max-width: 100%;
   border-radius: 10px;
   border: none;
   outline: none;
+  box-sizing: border-box;
 }
-#stats {
-  margin-top: 15px;
-  font-size: 18px;
-  color: #ffd700;
-  text-shadow: 0 0 5px #fff, 0 0 10px #ffea00;
+
+/* === Background Canvases === */
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
 }
-#gameOverModal {
-  display: none;
-  position: fixed; top: 0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.8);
-  z-index: 100;
-  justify-content: center; align-items: center;
+
+/* === Footer === */
+footer{
+  margin-top: 30px;
+  font-size: 16px;
+  color: #ccc;
 }
-#gameOverModal .modal-content {
-  background: linear-gradient(135deg,#8a2be2,#4b0082);
-  padding: 30px 40px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
+
+/* === Responsive === */
+@media screen and (max-width: 500px){
+  .container { padding: 0 10px; }
+  #testText { font-size: 16px; }
+  #inputArea { font-size: 16px; padding: 10px; }
 }
-#gameOverModal button { margin-top: 15px; }
-footer {
-  padding: 15px 20px;
-  font-size: 14px;
-  color: #fff;
-  text-align: center;
-  background: linear-gradient(90deg, #4b0082, #8a2be2);
-  box-shadow: 0 -2px 10px #8a2be2;
-}
-#starsCanvas,#rippleCanvas{position:fixed; top:0; left:0;width:100vw; height:100vh; pointer-events:none; z-index:0;}
 </style>
 </head>
 <body>
@@ -141,15 +157,16 @@ footer {
 <canvas id="rippleCanvas"></canvas>
 
 <header>
-Typing Test
-<div id="helpIcon" onclick="toggleHelp()">?</div>
+  Typing Test
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
 
 <div id="helpText">
-<strong>How to Play Typing Test:</strong><br>
-Type the text as fast and accurately as possible.<br>
-Sentences will scroll automatically as you type.<br>
-Press "Reset" to start a new test.
+  <strong>How to Play Typing Test:</strong><br>
+  1. Type the sentences as fast and accurately as you can.<br>
+  2. The test starts automatically when you type.<br>
+  3. Press Reset to start over.<br>
+  4. Your WPM and accuracy are displayed live.
 </div>
 
 <div class="container">
@@ -158,34 +175,24 @@ Press "Reset" to start a new test.
     <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
   <div id="testText"></div>
-  <input id="inputArea" type="text" placeholder="Start typing here...">
-  <div id="stats">WPM: 0 | Accuracy: 100%</div>
-</div>
-
-<div id="gameOverModal">
-  <div class="modal-content">
-    <h2>Test Completed!</h2>
-    <p id="finalStats"></p>
-    <button onclick="closeModal()">Close</button>
-  </div>
+  <input type="text" id="inputArea" placeholder="Start typing..." autofocus>
+  <div id="status"></div>
 </div>
 
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
-function toggleHelp(){const help=document.getElementById('helpText');help.style.display=(help.style.display==='block')?'none':'block';}
-function goBack(){window.location.href="index.html";}
+/* === Help Toggle === */
+function toggleHelp(){
+  const help = document.getElementById('helpText');
+  help.style.display = (help.style.display==='block')?'none':'block';
+}
 
-const inputArea = document.getElementById('inputArea');
-const testTextDiv = document.getElementById('testText');
-const stats = document.getElementById('stats');
-const modal = document.getElementById('gameOverModal');
-const finalStats = document.getElementById('finalStats');
+/* === Go Back === */
+function goBack(){ window.location.href="index.html"; }
 
-let startTime, timer, sentences=[], visibleSentences=[], typedSentence='', testStarted=false;
-
-// Example sentences
-const sentencePool = [
+/* === Typing Test Logic === */
+const sentences = [
 "The quick brown fox jumps over the lazy dog.",
 "Learning new skills improves your mind and body.",
 "Technology is advancing faster than ever before.",
@@ -205,79 +212,71 @@ const sentencePool = [
 "Hard work beats talent when talent does not work hard.",
 "A healthy diet leads to a happier life.",
 "Kindness is contagious and spreads quickly.",
-"Challenges help us grow and become stronger.",
-"Dream big and set achievable goals.",
-"Curiosity drives innovation and learning.",
-"Good communication is essential in relationships.",
-"Failure is a stepping stone to success.",
-"Self-discipline helps achieve long-term goals.",
-"Confidence comes from preparation and experience.",
-"Mindfulness improves mental and emotional well-being.",
-"Volunteering makes a positive impact on society.",
-"Adaptability is vital in a changing world.",
-"Teamwork often leads to better outcomes."
+"Challenges help us grow and become stronger."
 ];
 
-function generateSentence() {
-  return sentencePool[Math.floor(Math.random()*sentencePool.length)];
+let testSentences = [];
+for(let i=0;i<100;i++) testSentences.push(sentences[Math.floor(Math.random()*sentences.length)]);
+
+const testTextDiv = document.getElementById('testText');
+const inputArea = document.getElementById('inputArea');
+const statusDiv = document.getElementById('status');
+
+let currentIndex = 0;
+let startTime = null;
+let totalTyped = 0;
+let correctTyped = 0;
+
+function loadSentence() {
+  testTextDiv.innerHTML = "";
+  const nextSentences = testSentences.slice(currentIndex, currentIndex+2); // show 2 sentences
+  nextSentences.forEach(s=>{
+    const p = document.createElement('p');
+    p.textContent = s;
+    testTextDiv.appendChild(p);
+  });
+}
+
+function updateStats() {
+  const elapsed = (Date.now() - startTime)/1000/60; // minutes
+  const wpm = Math.round((correctTyped/5)/elapsed);
+  const accuracy = Math.round((correctTyped/totalTyped)*100) || 0;
+  statusDiv.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
 }
 
 function resetTest() {
-  sentences = [];
-  visibleSentences = [];
-  for(let i=0;i<100;i++) sentences.push(generateSentence());
-  visibleSentences = sentences.splice(0,2);
-  testTextDiv.textContent = visibleSentences.join(" ");
-  inputArea.value='';
-  typedSentence='';
-  stats.textContent = "WPM: 0 | Accuracy: 100%";
+  currentIndex = 0;
   startTime = null;
-  testStarted=false;
-  inputArea.disabled=false;
-  inputArea.focus();
+  totalTyped = 0;
+  correctTyped = 0;
+  inputArea.value = "";
+  loadSentence();
+  statusDiv.textContent = "";
 }
 
-inputArea.addEventListener("input",()=>{
-  if(!testStarted){startTime=new Date();testStarted=true;timer=setInterval(updateStats,500);}
-  const currentTyped = inputArea.value;
-  const firstSentence = visibleSentences[0];
-  if(currentTyped === firstSentence){
-    typedSentence += firstSentence + " ";
-    inputArea.value='';
-    if(sentences.length>0){
-      visibleSentences.shift();
-      visibleSentences.push(sentences.shift());
-      testTextDiv.textContent = visibleSentences.join(" ");
-    } else {
-      // Test finished
-      clearInterval(timer);
-      const elapsed = (new Date()-startTime)/60000;
-      const wordsTyped = typedSentence.trim().split(/\s+/).length;
-      const wpm = Math.round(wordsTyped/elapsed);
-      finalStats.textContent = `Your WPM: ${wpm} | Accuracy: 100%`;
-      modal.style.display="flex";
-      inputArea.disabled=true;
-    }
+inputArea.addEventListener('input', ()=>{
+  if(!startTime) startTime = Date.now();
+  const currentSentence = testSentences[currentIndex];
+  const typed = inputArea.value;
+  totalTyped = typed.length;
+  let correct = 0;
+  for(let i=0;i<typed.length;i++){
+    if(typed[i]===currentSentence[i]) correct++;
+  }
+  correctTyped = correct;
+  updateStats();
+  if(typed===currentSentence) {
+    inputArea.value = "";
+    currentIndex++;
+    loadSentence();
   }
 });
 
-function updateStats(){
-  const typed = typedSentence + inputArea.value;
-  const wordsTyped = typed.trim().split(/\s+/).length;
-  const elapsed = (startTime ? (new Date()-startTime)/60000 : 0);
-  const wpm = elapsed>0?Math.round(wordsTyped/elapsed):0;
-  const currentText = visibleSentences.join(" ");
-  let correctChars=0;
-  for(let i=0;i<inputArea.value.length;i++){
-    if(inputArea.value[i]===currentText[i]) correctChars++;
-  }
-  const accuracy = inputArea.value.length>0 ? Math.round(correctChars/inputArea.value.length*100):100;
-  stats.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
-}
+resetTest();
+</script>
 
-function closeModal(){modal.style.display="none";}
-
-// === Background stars/ripples ===
+<script>
+/* === Stars Background === */
 const starsCanvas=document.getElementById("starsCanvas");
 const starsCtx=starsCanvas.getContext("2d");
 let stars=[];
@@ -286,6 +285,7 @@ function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.rand
 function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
 window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
 
+/* === Ripple Trail === */
 const rippleCanvas=document.getElementById("rippleCanvas");
 const rippleCtx=rippleCanvas.getContext("2d");
 let ripples=[];
@@ -294,8 +294,7 @@ window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
 window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
-
-resetTest();
 </script>
+
 </body>
 </html>
