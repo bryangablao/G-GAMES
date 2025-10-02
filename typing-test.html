@@ -16,7 +16,10 @@ body {
   animation: gradientMove 10s infinite alternate;
   overflow-x: hidden;
 }
-@keyframes gradientMove {0%{background-position:0% 50%;}100%{background-position:100% 50%;}}
+@keyframes gradientMove {
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
 
 /* === Header === */
 header {
@@ -37,32 +40,145 @@ header {
 }
 
 /* === Help Icon === */
-#helpIcon { position: absolute; top: 10px; right: 15px; font-size: 24px; width: 35px; height: 35px; line-height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; cursor: pointer; user-select: none; z-index: 20;}
-#helpText { display: none; position: absolute; top: 70px; right: 15px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; width: 250px; text-align: left; font-size: 14px; color: #fff; box-shadow: 0 0 10px #8a2be2; z-index: 20;}
+#helpIcon {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  width: 35px; height: 35px;
+  line-height: 35px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  cursor: pointer; user-select: none;
+  z-index: 20;
+}
+#helpText {
+  display: none;
+  position: absolute;
+  top: 70px; right: 15px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 0 10px #8a2be2;
+  z-index: 20;
+}
 
 /* === Container & Buttons === */
-.container { max-width: 800px; margin: 20px auto; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; flex-grow: 1; padding: 0 20px; box-sizing: border-box;}
-.controls { margin-bottom: 20px; }
-.controls button, .back-button {
-  background: linear-gradient(135deg,#8a2be2,#4b0082); border: none; padding: 12px 25px; color: white; font-size: 16px; border-radius: 10px; cursor: pointer; margin-right: 10px; box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082; transition: all 0.3s ease;
+.container {
+  max-width: 800px; 
+  margin: 20px auto; 
+  position: relative; 
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0 20px; /* spacing from sides */
+  box-sizing: border-box;
 }
-.controls button:hover, .back-button:hover { transform: scale(1.05); box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; }
+
+.controls {
+  margin-bottom: 20px;
+}
+
+.controls button,
+.back-button {
+  background: linear-gradient(135deg,#8a2be2,#4b0082);
+  border: none; 
+  padding: 12px 25px; 
+  color: white; 
+  font-size: 16px; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  margin-right: 10px; 
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+  transition: all 0.3s ease;
+}
+.controls button:hover,
+.back-button:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+}
+
+/* === Timer === */
+#timerContainer {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 18px;
+}
+
+#timerSelect {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+}
+
+#timerValue {
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 15px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+}
 
 /* === Typing Area === */
-#testText { font-size: 18px; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; width: 100%; min-height: 150px; text-align: left; line-height: 1.6; overflow-wrap: break-word; box-sizing: border-box;}
-#inputArea { font-size: 18px; padding: 12px; width: 100%; max-width: 100%; border-radius: 10px; border: none; outline: none; box-sizing: border-box;}
+#testText {
+  font-size: 18px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  width: 100%;
+  min-height: 150px;
+  text-align: left;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
 
-/* === Timer & Status === */
-#timer { font-size: 18px; margin-bottom: 10px; }
+#inputArea {
+  font-size: 18px;
+  padding: 12px;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
 
 /* === Background Canvases === */
-#starsCanvas,#rippleCanvas{ position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0;}
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
+}
 
 /* === Footer === */
-footer{ margin-top: 30px; font-size: 16px; color: #ccc; }
+footer{
+  margin-top: 30px;
+  font-size: 16px;
+  color: #ccc;
+}
 
 /* === Responsive === */
-@media screen and (max-width: 500px){ .container { padding: 0 10px; } #testText { font-size: 16px; } #inputArea { font-size: 16px; padding: 10px; } }
+@media screen and (max-width: 500px){
+  .container { padding: 0 10px; }
+  #testText { font-size: 16px; }
+  #inputArea { font-size: 16px; padding: 10px; }
+  #timerContainer { gap: 10px; font-size: 16px; }
+}
 </style>
 </head>
 <body>
@@ -85,19 +201,22 @@ footer{ margin-top: 30px; font-size: 16px; color: #ccc; }
 
 <div class="container">
   <div class="controls">
-    <label for="timeSelect">Select Time:</label>
-    <select id="timeSelect">
-      <option value="30">30 Seconds</option>
-      <option value="60" selected>1 Minute</option>
-      <option value="120">2 Minutes</option>
-      <option value="300">5 Minutes</option>
-      <option value="600">10 Minutes</option>
-    </select>
     <button onclick="resetTest()">Reset</button>
     <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
 
-  <div id="timer">Time: 0s</div>
+  <!-- Timer -->
+  <div id="timerContainer">
+    <select id="timerSelect">
+      <option value="30">30s</option>
+      <option value="60" selected>1 min</option>
+      <option value="120">2 min</option>
+      <option value="300">5 min</option>
+      <option value="600">10 min</option>
+    </select>
+    <span id="timerValue">60s</span>
+  </div>
+
   <div id="testText"></div>
   <input type="text" id="inputArea" placeholder="Start typing..." autofocus>
   <div id="status"></div>
@@ -107,7 +226,10 @@ footer{ margin-top: 30px; font-size: 16px; color: #ccc; }
 
 <script>
 /* === Help Toggle === */
-function toggleHelp(){ const help = document.getElementById('helpText'); help.style.display = (help.style.display==='block')?'none':'block'; }
+function toggleHelp(){
+  const help = document.getElementById('helpText');
+  help.style.display = (help.style.display==='block')?'none':'block';
+}
 
 /* === Go Back === */
 function goBack(){ window.location.href="index.html"; }
@@ -142,19 +264,20 @@ for(let i=0;i<100;i++) testSentences.push(sentences[Math.floor(Math.random()*sen
 const testTextDiv = document.getElementById('testText');
 const inputArea = document.getElementById('inputArea');
 const statusDiv = document.getElementById('status');
-const timerDiv = document.getElementById('timer');
-const timeSelect = document.getElementById('timeSelect');
+const timerSelect = document.getElementById('timerSelect');
+const timerValue = document.getElementById('timerValue');
 
 let currentIndex = 0;
 let startTime = null;
 let totalTyped = 0;
 let correctTyped = 0;
-let timer = null;
-let timeLeft = 60;
+let timerStarted = false;
+let timeLeft = parseInt(timerSelect.value);
+let timerInterval;
 
 function loadSentence() {
   testTextDiv.innerHTML = "";
-  const nextSentences = testSentences.slice(currentIndex, currentIndex+2);
+  const nextSentences = testSentences.slice(currentIndex, currentIndex+2); // show 2 sentences
   nextSentences.forEach(s=>{
     const p = document.createElement('p');
     p.textContent = s;
@@ -163,36 +286,47 @@ function loadSentence() {
 }
 
 function updateStats() {
-  const elapsed = ((Date.now() - startTime)/1000/60) || 1/60;
+  const elapsed = (Date.now() - startTime)/1000/60; // minutes
   const wpm = Math.round((correctTyped/5)/elapsed);
   const accuracy = Math.round((correctTyped/totalTyped)*100) || 0;
   statusDiv.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
 }
 
-function startTimer() {
-  clearInterval(timer);
-  timeLeft = parseInt(timeSelect.value);
-  timerDiv.textContent = `Time: ${timeLeft}s`;
-  timer = setInterval(()=>{
-    timeLeft--;
-    timerDiv.textContent = `Time: ${timeLeft}s`;
-    if(timeLeft<=0){
-      clearInterval(timer);
-      inputArea.disabled = true;
-      alert(`Time's up!\nFinal WPM: ${Math.round((correctTyped/5)/(parseInt(timeSelect.value)/60))}\nAccuracy: ${Math.round((correctTyped/totalTyped)*100) || 0}%`);
-    }
-  },1000);
+function resetTest() {
+  currentIndex = 0;
+  startTime = null;
+  totalTyped = 0;
+  correctTyped = 0;
+  inputArea.value = "";
+  loadSentence();
+  statusDiv.textContent = "";
+  timerStarted = false;
+  clearInterval(timerInterval);
+  timeLeft = parseInt(timerSelect.value);
+  timerValue.textContent = timeLeft + "s";
 }
 
-function resetTest() {
-  currentIndex = 0; startTime = null; totalTyped = 0; correctTyped = 0;
-  inputArea.value = ""; inputArea.disabled = false;
-  loadSentence(); statusDiv.textContent = "";
-  startTimer();
+/* === Timer === */
+function startTimer() {
+  if(timerStarted) return;
+  timerStarted = true;
+  timeLeft = parseInt(timerSelect.value);
+  timerValue.textContent = timeLeft + "s";
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerValue.textContent = timeLeft + "s";
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      inputArea.disabled = true;
+      alert("Time's up!");
+    }
+  }, 1000);
 }
 
 inputArea.addEventListener('input', ()=>{
   if(!startTime) startTime = Date.now();
+  startTimer();
+
   const currentSentence = testSentences[currentIndex];
   const typed = inputArea.value;
   totalTyped = typed.length;
@@ -202,11 +336,17 @@ inputArea.addEventListener('input', ()=>{
   }
   correctTyped = correct;
   updateStats();
-  if(typed===currentSentence){
+  if(typed===currentSentence) {
     inputArea.value = "";
     currentIndex++;
     loadSentence();
   }
+});
+
+/* Update timer if selection changes */
+timerSelect.addEventListener('change', ()=>{
+  timeLeft = parseInt(timerSelect.value);
+  timerValue.textContent = timeLeft + "s";
 });
 
 resetTest();
@@ -230,5 +370,6 @@ window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
 </script>
+
 </body>
 </html>
