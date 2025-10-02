@@ -71,7 +71,7 @@ header {
 
 /* === Container & Controls === */
 .container {
-  max-width: 600px; 
+  max-width: 800px; 
   margin: 20px auto; 
   position: relative; 
   z-index: 10;
@@ -109,15 +109,16 @@ header {
 
 /* === Typing Area === */
 #testText {
-  font-size: 20px;
+  font-size: 18px;
   padding: 20px;
   margin-bottom: 20px;
   background: rgba(255,255,255,0.05);
   border-radius: 10px;
   width: 100%;
-  min-height: 80px;
+  min-height: 120px;
   text-align: left;
   line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
 #inputArea {
@@ -190,18 +191,18 @@ footer {
 
 <div id="helpText">
   <strong>How to Play Typing Test:</strong><br>
-  Type the text shown below as fast and accurately as possible.<br>
-  Your WPM and accuracy will be calculated.<br>
-  Press "Start Test" to begin.
+  Type the text as fast and accurately as possible.<br>
+  The test will start automatically when you start typing.<br>
+  Press "Reset" to start a new test.
 </div>
 
 <div class="container">
   <div class="controls">
-    <button onclick="startTest()">Start Test</button>
+    <button onclick="resetTest()">Reset</button>
     <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
-  <div id="testText">The quick brown fox jumps over the lazy dog.</div>
-  <input id="inputArea" type="text" placeholder="Start typing here..." disabled>
+  <div id="testText"></div>
+  <input id="inputArea" type="text" placeholder="Start typing here...">
   <div id="stats">WPM: 0 | Accuracy: 100%</div>
 </div>
 
@@ -227,23 +228,49 @@ function toggleHelp(){
 function goBack(){ window.location.href = "index.html"; }
 
 /* === Typing Test Logic === */
-let startTime;
-let timer;
 const inputArea = document.getElementById('inputArea');
-const testText = document.getElementById('testText').innerText;
+const testTextDiv = document.getElementById('testText');
 const stats = document.getElementById('stats');
 const modal = document.getElementById('gameOverModal');
 const finalStats = document.getElementById('finalStats');
 
-function startTest(){
-  inputArea.value = "";
-  inputArea.disabled = false;
-  inputArea.focus();
-  startTime = new Date();
-  stats.textContent = "WPM: 0 | Accuracy: 100%";
-  if(timer) clearInterval(timer);
-  timer = setInterval(updateStats, 500);
+let startTime;
+let timer;
+let testText;
+let testStarted = false;
+
+// Word pool for random sentences
+const words = ["the","quick","brown","fox","jumps","over","lazy","dog","and","runs","fast","on","green","grass","sun","bright","sky","blue","clouds","white","cat","sat","under","tree","birds","singing","beautiful","day","happy","smile","rain","drops","water","flow","mountain","river","forest","wind","blow","butterfly","colorful","flower","garden","child","play","laugh","music","dance","strong","light","dark","moon","night","star","shine","fire","warm","cool","peace","friend","family","love","dream","hope","brave","smart","fun","game","ball","run","jump","write","read","learn","teach","walk","talk","listen","see","watch","feel","think","build","create","make","cook","eat","drink","sleep","rest","clean","help","share","grow","change","move","stop","start","fast","slow","high","low","happy","sad","angry","kind","rich","poor","open","close","give","take","catch","throw"];
+
+function generateRandomText(){
+  let text = "";
+  for(let i=0;i<100;i++){
+    const sentenceLength = Math.floor(Math.random()*8)+3;
+    for(let j=0;j<sentenceLength;j++){
+      text += words[Math.floor(Math.random()*words.length)] + " ";
+    }
+    text = text.trim() + ". ";
+  }
+  return text;
 }
+
+function resetTest(){
+  inputArea.value = "";
+  testText = generateRandomText();
+  testTextDiv.textContent = testText;
+  stats.textContent = "WPM: 0 | Accuracy: 100%";
+  startTime = null;
+  testStarted = false;
+}
+
+inputArea.addEventListener("input",()=>{
+  if(!testStarted){
+    startTime = new Date();
+    testStarted = true;
+    if(timer) clearInterval(timer);
+    timer = setInterval(updateStats, 500);
+  }
+});
 
 function updateStats(){
   const typed = inputArea.value;
@@ -284,6 +311,9 @@ window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
 window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
+
+// Initialize first test
+resetTest();
 </script>
 </body>
 </html>
