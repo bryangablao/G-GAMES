@@ -5,80 +5,212 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Snake</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+/* === Global Body & Background === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; padding: 0;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at top left, #380098, black);
+  background-size: 200% 200%;
+  animation: gradientMove 10s infinite alternate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+@keyframes gradientMove {
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
-  }
+/* === Header === */
+header {
+  background: linear-gradient(90deg, #8a2be2, #4b0082);
+  padding: 30px 20px;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+  position: relative;
+  z-index: 10;
+}
+@keyframes neon-flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
+  20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+/* === Container & Controls === */
+.container {
+  max-width: 500px; 
+  margin: 20px auto; 
+  position: relative; 
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.controls {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+.controls button,
+.back-button {
+  background: linear-gradient(135deg,#8a2be2,#4b0082);
+  border: none; 
+  padding: 12px 25px; 
+  color: white; 
+  font-size: 16px; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+  transition: all 0.3s ease;
+}
+.controls button:hover,
+.back-button:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+/* === Canvas === */
+#gameCanvas {
+  background: linear-gradient(135deg,#4b0082,#6a0dad);
+  border-radius: 10px;
+  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+/* === Footer === */
+footer {
+  padding: 15px 20px;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(90deg, #4b0082, #8a2be2);
+  box-shadow: 0 -2px 10px #8a2be2;
+}
+
+/* === Background Canvases === */
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
+}
 </style>
 </head>
 <body>
 
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+
 <header>Snake</header>
 
 <div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Snake game here.</div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+  <div class="controls">
+    <button onclick="startGame()">New Game</button>
+    <button class="back-button" onclick="goBack()">Back to Lobby</button>
+  </div>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
 </div>
 
-<script>
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+<footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
+<script>
+/* === Go Back === */
+function goBack(){ window.location.href="index.html"; }
+
+/* === Snake Game Logic === */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const grid = 20;
+let snake = [];
+let snakeDir = {x: 0, y: 0};
+let food = {};
+let gameInterval;
+let score = 0;
+
+function startGame() {
+  snake = [{x: 9*grid, y: 9*grid}];
+  snakeDir = {x: grid, y: 0};
+  spawnFood();
+  score = 0;
+  clearInterval(gameInterval);
+  gameInterval = setInterval(gameLoop, 100);
+}
+
+function spawnFood() {
+  food.x = Math.floor(Math.random() * 20) * grid;
+  food.y = Math.floor(Math.random() * 20) * grid;
+}
+
+function gameLoop() {
+  // Move snake
+  let head = {...snake[0]};
+  head.x += snakeDir.x;
+  head.y += snakeDir.y;
+  
+  // Wall collision
+  if(head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(s => s.x === head.x && s.y === head.y)) {
+    clearInterval(gameInterval);
+    alert("Game Over! Score: " + score);
+    return;
+  }
+  
+  snake.unshift(head);
+
+  // Food collision
+  if(head.x === food.x && head.y === food.y) {
+    score++;
+    spawnFood();
+  } else {
+    snake.pop();
+  }
+
+  // Draw
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#ffd700";
+  ctx.fillRect(food.x, food.y, grid, grid);
+
+  ctx.fillStyle = "#00ffcc";
+  snake.forEach(s => ctx.fillRect(s.x, s.y, grid, grid));
+}
+
+// Controls
+window.addEventListener('keydown', e => {
+  switch(e.key) {
+    case 'ArrowUp': if(snakeDir.y === 0) snakeDir = {x:0, y:-grid}; break;
+    case 'ArrowDown': if(snakeDir.y === 0) snakeDir = {x:0, y:grid}; break;
+    case 'ArrowLeft': if(snakeDir.x === 0) snakeDir = {x:-grid, y:0}; break;
+    case 'ArrowRight': if(snakeDir.x === 0) snakeDir = {x:grid, y:0}; break;
+  }
+});
+
+/* === Stars Background === */
+const starsCanvas=document.getElementById("starsCanvas");
+const starsCtx=starsCanvas.getContext("2d");
+let stars=[];
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
+
+/* === Ripple Trail === */
+const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCtx=rippleCanvas.getContext("2d");
+let ripples=[];
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
+animateRipples();
+
+</script>
 </body>
 </html>
