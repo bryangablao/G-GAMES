@@ -120,7 +120,42 @@ header {
 #gameCanvas {
   background: linear-gradient(135deg,#4b0082,#6a0dad);
   border-radius: 10px;
-  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+}
+
+/* === Mobile Controls === */
+#mobileControls {
+  display: none;
+  margin-top: 20px;
+}
+#mobileControls button {
+  width: 60px; height: 60px;
+  font-size: 24px;
+  margin: 5px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg,#8a2be2,#4b0082);
+  color: white;
+  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+}
+#mobileControls .up { grid-area: up; }
+#mobileControls .down { grid-area: down; }
+#mobileControls .left { grid-area: left; }
+#mobileControls .right { grid-area: right; }
+
+#mobileControlsGrid {
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  justify-content: center;
+  align-items: center;
+}
+
+/* Show on small screens */
+@media screen and (max-width: 768px) {
+  #mobileControls { display: block; }
 }
 
 /* === Modal === */
@@ -133,7 +168,6 @@ header {
   justify-content: center;
   align-items: center;
 }
-
 #gameOverModal .modal-content {
   background: linear-gradient(135deg,#8a2be2,#4b0082);
   padding: 30px 40px;
@@ -141,7 +175,6 @@ header {
   text-align: center;
   box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
 }
-
 #gameOverModal button {
   margin-top: 15px;
 }
@@ -176,7 +209,7 @@ footer {
 
 <div id="helpText">
   <strong>How to Play Snake:</strong><br>
-  Use arrow keys to move the snake.<br>
+  Use arrow keys or touch controls to move the snake.<br>
   Eat the golden food to grow.<br>
   Avoid hitting walls or yourself.<br>
   Try to get the highest score!
@@ -189,6 +222,16 @@ footer {
   </div>
   <div id="scoreDisplay">Score: 0</div>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+  <!-- Mobile Controls -->
+  <div id="mobileControls">
+    <div id="mobileControlsGrid">
+      <button class="up" onclick="setDirection('up')">⬆️</button>
+      <button class="left" onclick="setDirection('left')">⬅️</button>
+      <button class="right" onclick="setDirection('right')">➡️</button>
+      <button class="down" onclick="setDirection('down')">⬇️</button>
+    </div>
+  </div>
 </div>
 
 <!-- Game Over Modal -->
@@ -285,7 +328,7 @@ function closeModal() {
   modal.style.display = "none";
 }
 
-/* === Controls === */
+/* === Keyboard Controls === */
 window.addEventListener('keydown', e => {
   switch(e.key) {
     case 'ArrowUp': if(snakeDir.y === 0) snakeDir = {x:0, y:-grid}; break;
@@ -294,6 +337,16 @@ window.addEventListener('keydown', e => {
     case 'ArrowRight': if(snakeDir.x === 0) snakeDir = {x:grid, y:0}; break;
   }
 });
+
+/* === Mobile Touch Controls === */
+function setDirection(dir) {
+  switch(dir) {
+    case 'up': if(snakeDir.y === 0) snakeDir = {x:0, y:-grid}; break;
+    case 'down': if(snakeDir.y === 0) snakeDir = {x:0, y:grid}; break;
+    case 'left': if(snakeDir.x === 0) snakeDir = {x:-grid, y:0}; break;
+    case 'right': if(snakeDir.x === 0) snakeDir = {x:grid, y:0}; break;
+  }
+}
 
 /* === Stars Background === */
 const starsCanvas=document.getElementById("starsCanvas");
