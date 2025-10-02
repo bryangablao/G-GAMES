@@ -14,7 +14,7 @@ body {
   background: radial-gradient(circle at top left, #380098, black);
   background-size: 200% 200%;
   animation: gradientMove 10s infinite alternate;
-  overflow: hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -71,9 +71,10 @@ header {
 
 /* === Container & Controls === */
 .container {
-  max-width: 500px; 
-  margin: 20px auto; 
-  position: relative; 
+  max-width: 500px;
+  width: 95%;
+  margin: 20px auto;
+  position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -121,20 +122,31 @@ header {
   background: linear-gradient(135deg,#4b0082,#6a0dad);
   border-radius: 10px;
   box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  max-width: 100%;
 }
 
 /* === Mobile Controls === */
 #mobileControls {
   display: none; /* hidden by default, will show for touch devices */
   margin-top: 15px;
+  display: grid;
+  grid-template-areas: 
+    ". up ."
+    "left down right";
+  grid-gap: 5px;
+  justify-content: center;
+  width: 200px;
 }
 #mobileControls button {
   font-size: 24px;
   width: 60px;
   height: 60px;
-  margin: 5px;
   border-radius: 10px;
 }
+#up { grid-area: up; }
+#down { grid-area: down; }
+#left { grid-area: left; }
+#right { grid-area: right; }
 
 /* === Modal === */
 #gameOverModal {
@@ -175,6 +187,13 @@ footer {
   width:100vw; height:100vh;
   pointer-events:none; z-index:0;
 }
+
+/* === Responsive for mobile spacing === */
+@media screen and (max-width: 500px){
+  .container { padding: 0 10px; }
+  #mobileControls { width: 150px; grid-gap: 3px; }
+  #mobileControls button { width: 50px; height: 50px; font-size: 20px; }
+}
 </style>
 </head>
 <body>
@@ -205,10 +224,10 @@ footer {
 
   <!-- Mobile Controls -->
   <div id="mobileControls">
-    <button onclick="setDirection('up')">⬆️</button><br>
-    <button onclick="setDirection('left')">⬅️</button>
-    <button onclick="setDirection('down')">⬇️</button>
-    <button onclick="setDirection('right')">➡️</button>
+    <button id="up" onclick="setDirection('up')">⬆️</button>
+    <button id="left" onclick="setDirection('left')">⬅️</button>
+    <button id="down" onclick="setDirection('down')">⬇️</button>
+    <button id="right" onclick="setDirection('right')">➡️</button>
   </div>
 </div>
 
@@ -331,7 +350,7 @@ function isTouchDevice() {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 if(isTouchDevice()) {
-  document.getElementById('mobileControls').style.display = 'block';
+  document.getElementById('mobileControls').style.display = 'grid';
 } else {
   document.getElementById('mobileControls').style.display = 'none';
 }
