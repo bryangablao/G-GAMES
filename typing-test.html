@@ -117,11 +117,10 @@ header {
   border-radius: 10px;
   border: none;
   font-size: 16px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   color: #fff;
   cursor: pointer;
   box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
-  appearance: auto; /* force dropdown arrow */
 }
 
 #timerValue {
@@ -148,6 +147,13 @@ header {
   box-sizing: border-box;
 }
 
+#testText p {
+  margin: 5px 0;
+}
+
+.correct { color: #00ff00; }
+.incorrect { color: #ff4d4d; }
+
 #inputArea {
   font-size: 18px;
   padding: 12px;
@@ -157,41 +163,6 @@ header {
   border: none;
   outline: none;
   box-sizing: border-box;
-}
-
-/* === Modal === */
-#resultModal {
-  display: none;
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 100;
-  justify-content: center;
-  align-items: center;
-}
-#resultContent {
-  background: #1a1a2e;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px #8a2be2,0 0 40px #4b0082;
-  color: white;
-  text-align: center;
-  max-width: 400px;
-}
-#resultContent h2 {
-  margin-top: 0;
-  font-size: 24px;
-}
-#resultContent button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: linear-gradient(135deg,#8a2be2,#4b0082);
-  color: white;
-  font-size: 16px;
 }
 
 /* === Background Canvases === */
@@ -206,6 +177,38 @@ footer{
   margin-top: 30px;
   font-size: 16px;
   color: #ccc;
+}
+
+/* === Modal === */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background: #1e1e2f;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
+}
+.modal-content h2 { margin-bottom: 20px; color: #fff; }
+.close-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #8a2be2;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 /* === Responsive === */
@@ -232,7 +235,6 @@ footer{
   1. Type the sentences as fast and accurately as you can.<br>
   2. The test starts automatically when you type.<br>
   3. Press Reset to start over.<br>
-  4. When time ends, your results will pop up.
 </div>
 
 <div class="container">
@@ -260,12 +262,11 @@ footer{
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <!-- Modal -->
-<div id="resultModal">
-  <div id="resultContent">
-    <h2>Results</h2>
+<div id="resultModal" class="modal">
+  <div class="modal-content">
+    <h2>⏱ Time’s Up!</h2>
     <p id="resultStats"></p>
-    <button onclick="resetTest();closeModal()">Reset</button>
-    <button onclick="closeModal()">Close</button>
+    <button class="close-btn" onclick="closeModal()">Close</button>
   </div>
 </div>
 
@@ -275,8 +276,6 @@ function toggleHelp(){
   const help = document.getElementById('helpText');
   help.style.display = (help.style.display==='block')?'none':'block';
 }
-
-/* === Go Back === */
 function goBack(){ window.location.href="index.html"; }
 
 /* === Typing Test Logic === */
@@ -285,112 +284,147 @@ const sentences = [
 "Learning new skills improves your mind and body.",
 "Technology is advancing faster than ever before.",
 "Exercise regularly to stay healthy and strong.",
-"Reading books expands your imagination and knowledge."
+"Reading books expands your imagination and knowledge.",
+"Music has the power to evoke deep emotions.",
+"Traveling opens your eyes to new cultures and people.",
+"Creativity is key to solving complex problems.",
+"Practice makes perfect, never give up.",
+"The sun rises every morning bringing light to the world.",
+"Friendship is one of life's greatest treasures.",
+"Education is the foundation of a bright future.",
+"Patience is a virtue that everyone should learn.",
+"Honesty is always the best policy.",
+"Time management is crucial for success.",
+"Nature provides beauty and peace for the soul.",
+"Hard work beats talent when talent does not work hard.",
+"A healthy diet leads to a happier life.",
+"Kindness is contagious and spreads quickly.",
+"Challenges help us grow and become stronger."
 ];
 
 let testSentences = [];
-for(let i=0;i<50;i++) testSentences.push(sentences[Math.floor(Math.random()*sentences.length)]);
+for(let i=0;i<100;i++) testSentences.push(sentences[Math.floor(Math.random()*sentences.length)]);
 
-const testTextDiv = document.getElementById('testText');
-const inputArea = document.getElementById('inputArea');
-const timerSelect = document.getElementById('timerSelect');
-const timerValue = document.getElementById('timerValue');
-const resultModal = document.getElementById('resultModal');
-const resultStats = document.getElementById('resultStats');
+const testTextDiv=document.getElementById('testText');
+const inputArea=document.getElementById('inputArea');
+const timerSelect=document.getElementById('timerSelect');
+const timerValue=document.getElementById('timerValue');
 
-let currentIndex = 0;
-let startTime = null;
-let totalTyped = 0;
-let correctTyped = 0;
-let timerStarted = false;
-let timeLeft = parseInt(timerSelect.value);
+let currentIndex=0;
+let startTime=null;
+let correctTyped=0;
+let totalTyped=0;
+let timerStarted=false;
+let timeLeft=parseInt(timerSelect.value);
 let timerInterval;
 
-function loadSentence() {
-  testTextDiv.innerHTML = "";
-  const currentSentence = testSentences[currentIndex];
-  currentSentence.split("").forEach(ch=>{
-    const span = document.createElement("span");
-    span.textContent = ch;
+function loadSentence(){
+  testTextDiv.innerHTML="";
+  const sentence=testSentences[currentIndex];
+  sentence.split("").forEach(ch=>{
+    const span=document.createElement("span");
+    span.textContent=ch;
     testTextDiv.appendChild(span);
   });
 }
 
-function highlightTyping() {
-  const currentSentence = testSentences[currentIndex];
-  const typed = inputArea.value;
-  totalTyped = typed.length;
-  correctTyped = 0;
+function resetTest(){
+  currentIndex=0; startTime=null;
+  correctTyped=0; totalTyped=0;
+  inputArea.value="";
+  loadSentence();
+  timerStarted=false;
+  clearInterval(timerInterval);
+  timeLeft=parseInt(timerSelect.value);
+  timerValue.textContent=timeLeft+"s";
+  inputArea.disabled=false;
+}
 
-  const spans = testTextDiv.querySelectorAll("span");
-  spans.forEach((span,i)=>{
-    if(typed[i]==null){
-      span.style.color = "white";
-    } else if(typed[i]===currentSentence[i]){
-      span.style.color = "lime";
+function startTimer(){
+  if(timerStarted) return;
+  timerStarted=true;
+  timeLeft=parseInt(timerSelect.value);
+  timerValue.textContent=timeLeft+"s";
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    timerValue.textContent=timeLeft+"s";
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      inputArea.disabled=true;
+      endTest();
+    }
+  },1000);
+}
+
+inputArea.addEventListener("input",()=>{
+  if(!startTime) startTime=Date.now();
+  startTimer();
+
+  const sentenceSpans=testTextDiv.querySelectorAll("span");
+  const typed=inputArea.value.split("");
+
+  totalTyped=typed.length;
+  correctTyped=0;
+
+  sentenceSpans.forEach((span,i)=>{
+    const char=typed[i];
+    if(char==null){
+      span.classList.remove("correct","incorrect");
+    } else if(char===span.textContent){
+      span.classList.add("correct");
+      span.classList.remove("incorrect");
       correctTyped++;
     } else {
-      span.style.color = "red";
+      span.classList.add("incorrect");
+      span.classList.remove("correct");
     }
   });
-}
 
-function resetTest() {
-  currentIndex = 0;
-  startTime = null;
-  totalTyped = 0;
-  correctTyped = 0;
-  inputArea.value = "";
-  loadSentence();
-  timerStarted = false;
-  clearInterval(timerInterval);
-  timeLeft = parseInt(timerSelect.value);
-  timerValue.textContent = timeLeft + "s";
-  inputArea.disabled = false;
-}
+  if(inputArea.value===testSentences[currentIndex]){
+    inputArea.value="";
+    currentIndex++;
+    loadSentence();
+  }
+});
 
-function startTimer() {
-  if(timerStarted) return;
-  timerStarted = true;
-  timeLeft = parseInt(timerSelect.value);
-  timerValue.textContent = timeLeft + "s";
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    timerValue.textContent = timeLeft + "s";
-    if(timeLeft <= 0){
-      clearInterval(timerInterval);
-      inputArea.disabled = true;
-      showResults();
-    }
-  }, 1000);
-}
+timerSelect.addEventListener("change",()=>{
+  timeLeft=parseInt(timerSelect.value);
+  timerValue.textContent=timeLeft+"s";
+});
 
-function showResults(){
-  const elapsed = (Date.now()-startTime)/1000/60;
-  const wpm = Math.round((correctTyped/5)/elapsed);
-  const accuracy = Math.round((correctTyped/totalTyped)*100) || 0;
-  resultStats.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
-  resultModal.style.display = "flex";
+/* === Modal handling === */
+function endTest(){
+  const elapsed=(Date.now()-startTime)/1000/60;
+  const wpm=Math.round((correctTyped/5)/elapsed);
+  const accuracy=Math.round((correctTyped/totalTyped)*100)||0;
+  document.getElementById("resultStats").textContent=`Your WPM: ${wpm} | Accuracy: ${accuracy}%`;
+  document.getElementById("resultModal").style.display="flex";
 }
-
 function closeModal(){
-  resultModal.style.display = "none";
+  document.getElementById("resultModal").style.display="none";
+  resetTest();
 }
-
-inputArea.addEventListener('input', ()=>{
-  if(!startTime) startTime = Date.now();
-  startTimer();
-  highlightTyping();
-});
-
-timerSelect.addEventListener('change', ()=>{
-  timeLeft = parseInt(timerSelect.value);
-  timerValue.textContent = timeLeft + "s";
-});
 
 resetTest();
 
-/* === Background Effects (stars & ripples) omitted for brevity but same as before === */
+/* === Stars Background === */
+const starsCanvas=document.getElementById("starsCanvas");
+const starsCtx=starsCanvas.getContext("2d");
+let stars=[];
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
+
+/* === Ripple Trail === */
+const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCtx=rippleCanvas.getContext("2d");
+let ripples=[];
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
+animateRipples();
 </script>
 
 </body>
