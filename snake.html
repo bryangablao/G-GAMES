@@ -42,6 +42,33 @@ header {
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
 
+/* === Help Icon === */
+#helpIcon {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  width: 35px; height: 35px;
+  line-height: 35px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  cursor: pointer; user-select: none;
+  z-index: 20;
+}
+#helpText {
+  display: none;
+  position: absolute;
+  top: 70px; right: 15px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 0 10px #8a2be2;
+  z-index: 20;
+}
+
 /* === Container & Controls === */
 .container {
   max-width: 500px; 
@@ -55,7 +82,7 @@ header {
 }
 
 .controls {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -78,6 +105,15 @@ header {
 .back-button:hover { 
   transform: scale(1.05); 
   box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+}
+
+/* === Score Display === */
+#scoreDisplay {
+  margin: 10px 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 5px #fff, 0 0 10px #ffea00;
 }
 
 /* === Canvas === */
@@ -110,19 +146,37 @@ footer {
 <canvas id="starsCanvas"></canvas>
 <canvas id="rippleCanvas"></canvas>
 
-<header>Snake</header>
+<header>
+  Snake
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
+</header>
+
+<div id="helpText">
+  <strong>How to Play Snake:</strong><br>
+  Use arrow keys to move the snake.<br>
+  Eat the golden food to grow.<br>
+  Avoid hitting walls or yourself.<br>
+  Try to get the highest score!
+</div>
 
 <div class="container">
   <div class="controls">
     <button onclick="startGame()">New Game</button>
     <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
+  <div id="scoreDisplay">Score: 0</div>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
 </div>
 
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
+/* === Help Toggle === */
+function toggleHelp(){
+  const help = document.getElementById('helpText');
+  help.style.display = (help.style.display==='block')?'none':'block';
+}
+
 /* === Go Back === */
 function goBack(){ window.location.href="index.html"; }
 
@@ -135,12 +189,14 @@ let snakeDir = {x: 0, y: 0};
 let food = {};
 let gameInterval;
 let score = 0;
+const scoreDisplay = document.getElementById('scoreDisplay');
 
 function startGame() {
   snake = [{x: 9*grid, y: 9*grid}];
   snakeDir = {x: grid, y: 0};
   spawnFood();
   score = 0;
+  updateScore();
   clearInterval(gameInterval);
   gameInterval = setInterval(gameLoop, 100);
 }
@@ -150,13 +206,17 @@ function spawnFood() {
   food.y = Math.floor(Math.random() * 20) * grid;
 }
 
+function updateScore() {
+  scoreDisplay.textContent = "Score: " + score;
+}
+
 function gameLoop() {
   // Move snake
   let head = {...snake[0]};
   head.x += snakeDir.x;
   head.y += snakeDir.y;
   
-  // Wall collision
+  // Wall or self collision
   if(head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(s => s.x === head.x && s.y === head.y)) {
     clearInterval(gameInterval);
     alert("Game Over! Score: " + score);
@@ -168,6 +228,7 @@ function gameLoop() {
   // Food collision
   if(head.x === food.x && head.y === food.y) {
     score++;
+    updateScore();
     spawnFood();
   } else {
     snake.pop();
@@ -210,7 +271,6 @@ window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
 window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
 function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
 animateRipples();
-
 </script>
 </body>
 </html>
