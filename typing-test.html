@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Typing Test</title>
 <style>
-/* === Global Body & Background === */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0; padding: 0;
@@ -16,12 +15,7 @@ body {
   animation: gradientMove 10s infinite alternate;
   overflow-x: hidden;
 }
-@keyframes gradientMove {
-  0%{background-position:0% 50%;}
-  100%{background-position:100% 50%;}
-}
-
-/* === Header === */
+@keyframes gradientMove {0%{background-position:0% 50%;}100%{background-position:100% 50%;}}
 header {
   background: linear-gradient(90deg, #8a2be2, #4b0082);
   padding: 30px 20px;
@@ -38,117 +32,15 @@ header {
   0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
   20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
 }
-
-/* === Help Icon === */
-#helpIcon {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 24px;
-  width: 35px; height: 35px;
-  line-height: 35px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  cursor: pointer; user-select: none;
-  z-index: 20;
-}
-#helpText {
-  display: none;
-  position: absolute;
-  top: 70px; right: 15px;
-  background: rgba(0,0,0,0.8);
-  padding: 15px;
-  border-radius: 10px;
-  width: 250px;
-  text-align: left;
-  font-size: 14px;
-  color: #fff;
-  box-shadow: 0 0 10px #8a2be2;
-  z-index: 20;
-}
-
-/* === Container & Buttons === */
-.container {
-  max-width: 800px; 
-  margin: 20px auto; 
-  position: relative; 
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-  padding: 0 20px; /* spacing from sides */
-  box-sizing: border-box;
-}
-
-.controls {
-  margin-bottom: 20px;
-}
-
-.controls button,
-.back-button {
-  background: linear-gradient(135deg,#8a2be2,#4b0082);
-  border: none; 
-  padding: 12px 25px; 
-  color: white; 
-  font-size: 16px; 
-  border-radius: 10px; 
-  cursor: pointer; 
-  margin-right: 10px; 
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
-  transition: all 0.3s ease;
-}
-.controls button:hover,
-.back-button:hover { 
-  transform: scale(1.05); 
-  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
-}
-
-/* === Typing Area === */
-#testText {
-  font-size: 18px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  width: 100%;
-  min-height: 150px;
-  text-align: left;
-  line-height: 1.6;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
-}
-
-#inputArea {
-  font-size: 18px;
-  padding: 12px;
-  width: 100%;
-  max-width: 100%;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-}
-
-/* === Background Canvases === */
-#starsCanvas,#rippleCanvas{
-  position:fixed; top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none; z-index:0;
-}
-
-/* === Footer === */
-footer{
-  margin-top: 30px;
-  font-size: 16px;
-  color: #ccc;
-}
-
-/* === Responsive === */
-@media screen and (max-width: 500px){
-  .container { padding: 0 10px; }
-  #testText { font-size: 16px; }
-  #inputArea { font-size: 16px; padding: 10px; }
-}
+#helpIcon { position: absolute; top: 10px; right: 15px; font-size: 24px; width: 35px; height: 35px; line-height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; cursor: pointer; user-select: none; z-index: 20;}
+#helpText { display: none; position: absolute; top: 70px; right: 15px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; width: 250px; text-align: left; font-size: 14px; color: #fff; box-shadow: 0 0 10px #8a2be2; z-index: 20;}
+.container { max-width: 800px; margin: 20px auto; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; flex-grow: 1; padding: 0 20px; box-sizing: border-box;}
+.controls { margin-bottom: 20px; }
+.controls button, .back-button { background: linear-gradient(135deg,#8a2be2,#4b0082); border: none; padding: 12px 25px; color: white; font-size: 16px; border-radius: 10px; cursor: pointer; margin-right: 10px; box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082; transition: all 0.3s ease;}
+.controls button:hover, .back-button:hover { transform: scale(1.05); box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; }
+#testText { font-size: 18px; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; width: 100%; min-height: 150px; text-align: left; line-height: 1.6; overflow-wrap: break-word; box-sizing: border-box;}
+#inputArea { font-size: 18px; padding: 12px; width: 100%; max-width: 100%; border-radius: 10px; border: none; outline: none; box-sizing: border-box;}
+footer{margin-top: 30px; font-size: 16px; color: #ccc;}
 </style>
 </head>
 <body>
@@ -163,14 +55,22 @@ footer{
 
 <div id="helpText">
   <strong>How to Play Typing Test:</strong><br>
-  1. Type the sentences as fast and accurately as you can.<br>
-  2. The test starts automatically when you type.<br>
-  3. Press Reset to start over.<br>
-  4. Your WPM and accuracy are displayed live.
+  1. Select a timer and start typing.<br>
+  2. The test stops automatically when time ends.<br>
+  3. WPM and accuracy are displayed at the end.<br>
+  4. Press Reset to try again.
 </div>
 
 <div class="container">
   <div class="controls">
+    Time: 
+    <select id="timeSelect">
+      <option value="30">30s</option>
+      <option value="60">1m</option>
+      <option value="120">2m</option>
+      <option value="300">5m</option>
+      <option value="600">10m</option>
+    </select>
     <button onclick="resetTest()">Reset</button>
     <button class="back-button" onclick="goBack()">Back to Lobby</button>
   </div>
@@ -182,16 +82,11 @@ footer{
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
-/* === Help Toggle === */
-function toggleHelp(){
-  const help = document.getElementById('helpText');
-  help.style.display = (help.style.display==='block')?'none':'block';
-}
-
-/* === Go Back === */
+// === Help Toggle ===
+function toggleHelp(){ const help = document.getElementById('helpText'); help.style.display = (help.style.display==='block')?'none':'block'; }
 function goBack(){ window.location.href="index.html"; }
 
-/* === Typing Test Logic === */
+// === Typing Test Logic ===
 const sentences = [
 "The quick brown fox jumps over the lazy dog.",
 "Learning new skills improves your mind and body.",
@@ -214,44 +109,56 @@ const sentences = [
 "Kindness is contagious and spreads quickly.",
 "Challenges help us grow and become stronger."
 ];
-
+  
 let testSentences = [];
 for(let i=0;i<100;i++) testSentences.push(sentences[Math.floor(Math.random()*sentences.length)]);
 
 const testTextDiv = document.getElementById('testText');
 const inputArea = document.getElementById('inputArea');
 const statusDiv = document.getElementById('status');
+const timeSelect = document.getElementById('timeSelect');
 
 let currentIndex = 0;
 let startTime = null;
 let totalTyped = 0;
 let correctTyped = 0;
+let timer = null;
+let timeLeft = 60;
 
 function loadSentence() {
   testTextDiv.innerHTML = "";
-  const nextSentences = testSentences.slice(currentIndex, currentIndex+2); // show 2 sentences
+  const nextSentences = testSentences.slice(currentIndex, currentIndex+2);
   nextSentences.forEach(s=>{
-    const p = document.createElement('p');
-    p.textContent = s;
-    testTextDiv.appendChild(p);
+    const p = document.createElement('p'); p.textContent = s; testTextDiv.appendChild(p);
   });
 }
 
 function updateStats() {
-  const elapsed = (Date.now() - startTime)/1000/60; // minutes
+  const elapsed = (Date.now() - startTime)/1000/60;
   const wpm = Math.round((correctTyped/5)/elapsed);
   const accuracy = Math.round((correctTyped/totalTyped)*100) || 0;
-  statusDiv.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
+  statusDiv.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}% | Time Left: ${timeLeft}s`;
 }
 
 function resetTest() {
-  currentIndex = 0;
-  startTime = null;
-  totalTyped = 0;
-  correctTyped = 0;
-  inputArea.value = "";
-  loadSentence();
-  statusDiv.textContent = "";
+  clearInterval(timer);
+  currentIndex = 0; startTime = null; totalTyped = 0; correctTyped = 0;
+  inputArea.value = ""; inputArea.disabled = false;
+  timeLeft = parseInt(timeSelect.value);
+  loadSentence(); updateStats();
+  timer = setInterval(()=>{ 
+    if(timeLeft>0){ timeLeft--; updateStats(); } 
+    else { endTest(); } 
+  },1000);
+}
+
+function endTest() {
+  clearInterval(timer);
+  inputArea.disabled = true;
+  const elapsed = (parseInt(timeSelect.value)-timeLeft)/60;
+  const wpm = Math.round((correctTyped/5)/elapsed);
+  const accuracy = Math.round((correctTyped/totalTyped)*100) || 0;
+  alert(`⏰ Time's up!\nWPM: ${wpm}\nAccuracy: ${accuracy}%`);
 }
 
 inputArea.addEventListener('input', ()=>{
@@ -260,40 +167,13 @@ inputArea.addEventListener('input', ()=>{
   const typed = inputArea.value;
   totalTyped = typed.length;
   let correct = 0;
-  for(let i=0;i<typed.length;i++){
-    if(typed[i]===currentSentence[i]) correct++;
-  }
+  for(let i=0;i<typed.length;i++){ if(typed[i]===currentSentence[i]) correct++; }
   correctTyped = correct;
   updateStats();
-  if(typed===currentSentence) {
-    inputArea.value = "";
-    currentIndex++;
-    loadSentence();
-  }
+  if(typed===currentSentence){ inputArea.value = ""; currentIndex++; loadSentence(); }
 });
 
 resetTest();
-</script>
-
-<script>
-/* === Stars Background === */
-const starsCanvas=document.getElementById("starsCanvas");
-const starsCtx=starsCanvas.getContext("2d");
-let stars=[];
-function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
-function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
-function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
-window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
-
-/* === Ripple Trail === */
-const rippleCanvas=document.getElementById("rippleCanvas");
-const rippleCtx=rippleCanvas.getContext("2d");
-let ripples=[];
-function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
-window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
-window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
-function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
-animateRipples();
 </script>
 
 </body>
