@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G-GAMES</title>
 <link rel="icon" href="image/G-GAMES.png" type="image/png">
 <style>
+  /* ========== YOUR ORIGINAL STYLES (kept intact) ========== */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: radial-gradient(circle at top left, #380098, black);
@@ -16,7 +16,11 @@
     padding: 0;
     overflow-x: hidden;
     text-align: center;
-  }
+
+    display: flex;           /* added for footer alignment */
+    flex-direction: column;  /* stack content vertically */
+    min-height: 100vh;       /* ensures body at least fills screen */
+}
 
   @keyframes gradientMove {
     0% { background-position: 0% 50%; }
@@ -112,15 +116,28 @@
     box-shadow: 0 0 15px #9b30ff, 0 0 30px #6a0dad;
   }
 
+  /* ========== ADDED WRAPPER (keeps grid 5x5 centered & scales) ========== */
+  /* wrapper centers and scales the grid so 5x5 always visible and centered */
+  .lobby-wrapper {
+    display:flex;
+    justify-content:center;
+    width:100%;
+    box-sizing:border-box;
+    padding: 10px 0 20px 0;
+  }
+
   .lobby {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 15px;
     padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto 30px auto;
+    /* keep max-width similar to your original but allow JS scaling */
+    max-width: calc(160px * 5 + 15px * 4); /* natural width */
+    margin: 0 auto auto;
     position: relative;
     z-index: 1;
+    transform-origin: top center;
+    transition: transform 160ms linear;
   }
 
   .game-card {
@@ -140,6 +157,9 @@
     background: linear-gradient(145deg, #1c1c2c, #2a2a3a);
     word-wrap: break-word;
     padding: 5px;
+    user-select: none;
+    -webkit-user-select:none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .game-card:hover {
@@ -158,12 +178,14 @@
 
   .footer-text {
     font-size: clamp(12px, 1.5vw, 16px);
-    margin-bottom: 30px;
+    margin-bottom: 0;  /* remove extra space below */
     color: #ffd700;
-  }
+    padding: 10px 0;   /* optional: keep some internal spacing if needed */
+}
 
   @media (max-width: 600px) {
     .lobby {
+      /* still 5 columns; scaling will handle fit */
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
       padding: 15px;
@@ -184,44 +206,207 @@
   #starsCanvas { z-index: 0; }
   #rippleCanvas { z-index: 0; }
 
+  /* ========== ADDITIONAL STYLES FOR PORTRAIT LOADER, COIN AND ANIMATIONS ========== */
+
+  /* overlay shown while portrait loader active */
+  .gg-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px) saturate(1.05);
+    z-index: 999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* portrait card that appears in center */
+  .gg-portrait {
+    width: 360px;
+    max-width: 92vw;
+    height: 520px;
+    max-height: 92vh;
+    border-radius: 14px;
+    padding: 18px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    box-shadow: 0 12px 50px rgba(0,0,0,0.65), 0 0 40px rgba(155,48,255,0.06);
+    color: #fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    position:relative;
+    transform-origin:center center;
+  }
+
+  .gg-portrait h2 { margin: 6px 6px 2px 6px; font-size: clamp(18px, 3vw, 26px); }
+  .gg-portrait p { margin: 0 10px; font-size: clamp(12px, 2vw, 15px); text-align:center; opacity:0.95; }
+
+  /* cancel button top-right of portrait */
+  .gg-cancel {
+    position:absolute;
+    right:10px;
+    top:10px;
+    width:34px;
+    height:34px;
+    border-radius:8px;
+    background: rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 0 8px rgba(155,48,255,0.12);
+    font-weight:700;
+    color:#fff;
+    z-index:1010;
+  }
+  .gg-cancel:active { transform:scale(0.98); }
+
+  /* 3D gold coin */
+  .gg-coin {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 6px 18px rgba(155,48,255,0.08);
+  }
+
+  .gg-coin .face {
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:18px;
+    color:#5b3200;
+    backface-visibility:hidden;
+    background: linear-gradient(180deg,#ffd86b,#ffb84d);
+    box-shadow: inset 0 -6px 14px rgba(0,0,0,0.25);
+  }
+  .gg-coin .back {
+    transform: rotateY(180deg);
+    background: linear-gradient(180deg,#ffcf66,#ffb84d);
+  }
+
+  /* coin rim for 3d shading */
+  .gg-coin:before {
+    content:'';
+    position:absolute;
+    inset:6px;
+    border-radius:50%;
+    box-shadow: 0 0 18px rgba(155,48,255,0.12);
+    pointer-events:none;
+  }
+
+  /* spin animation: multiple flips */
+  @keyframes gg-coin-flip {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-1440deg); /* 4 full turns */ }
+  }
+  .gg-coin.spin { animation: gg-coin-flip 1.0s linear infinite; }
+
+  /* progress bar */
+  .gg-progress-wrap {
+    width: 82%;
+    height: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 999px;
+    overflow:hidden;
+    margin-top: 6px;
+  }
+  .gg-progress {
+    width: 0%;
+    height:100%;
+    background: linear-gradient(90deg,#ffd86b,#9b30ff);
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(155,48,255,0.08);
+    transition: width 120ms linear;
+  }
+  .gg-progress-text { font-size:12px; margin-top:6px; opacity:0.9; }
+
+  /* clone (used during movement) */
+  .gg-clone {
+    position: fixed;
+    z-index: 1005;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:6px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    background: linear-gradient(145deg, #1c1c2c, #222235);
+    color:#fff;
+    font-weight:700;
+    transform-origin:center center;
+    will-change: left, top, width, height, transform;
+  }
+
+  /* small responsive tweak: ensure portrait not too big on tiny screens */
+  @media (max-height:600px){
+    .gg-portrait { height: 85vh; max-height:85vh; }
+  }
+
 </style>
 </head>
 <body>
 
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
+<canvas id="starsCanvas" width="969" height="2232"></canvas>
+<canvas id="rippleCanvas" width="969" height="2232"></canvas>
 
 <header>
   Mini Games Lobby
   <div id="aboutBtn" onclick="openAbout()">!</div>
 </header>
 
-<div class="lobby">
-  <div class="game-card" onclick="openGame('sudoku.html')">Sudoku</div>
-  <div class="game-card" onclick="openGame('rock-paper-scissors.html')">Rock Paper Scissors</div>
-  <div class="game-card" onclick="openGame('scramble.html')">Scramble</div>
-  <div class="game-card" onclick="openGame('color-game.html')">Color Game</div>
-  <div class="game-card" onclick="openGame('guess-game.html')">Guess Game</div>
-  <div class="game-card" onclick="openGame('tic-tac-toe.html')">Tic Tac Toe</div>
-  <div class="game-card" onclick="openGame('memory-match.html')">Memory Match</div>
-  <div class="game-card" onclick="openGame('number-puzzle.html')">Number Puzzle</div>
-  <div class="game-card" onclick="openGame('snake.html')">Snake</div>
-  <div class="game-card" onclick="openGame('typing-test.html')">Typing Test</div>
-  <div class="game-card" onclick="openGame('reaction-speed.html')">Reaction Speed</div>
-  <div class="game-card" onclick="openGame('hangman.html')">Hangman</div>
-  <div class="game-card" onclick="openGame('whack-a-mole.html')">Whack-a-Mole</div>
-  <div class="game-card" onclick="openGame('connect-four.html')">Connect Four</div>
-  <div class="game-card" onclick="openGame('tetris.html')">Tetris</div>
-  <div class="game-card" onclick="openGame('math-quiz.html')">Math Quiz</div>
-  <div class="game-card" onclick="openGame('word-search.html')">Word Search</div>
-  <div class="game-card" onclick="openGame('color-match.html')">Color Match</div>
-  <div class="game-card" onclick="openGame('flappy-bird.html')">Flappy Bird</div>
-  <div class="game-card" onclick="openGame('2048.html')">2048</div>
+<!-- ========== LOBBY WRAPPER (added) ========== -->
+<div class="lobby-wrapper">
+  <div class="lobby" id="lobby">
+    <!-- ORIGINAL 20 cards (kept same text content) -->
+    <div class="game-card" data-file="sudoku.html" data-title="Sudoku" data-desc="Logic puzzle — fill the numbers 1–9 so each row, column and box has all digits.">Sudoku</div>
+    <div class="game-card" data-file="rock-paper-scissors.html" data-title="Rock Paper Scissors" data-desc="Classic hand game: rock beats scissors, scissors beat paper, paper beats rock.">Rock Paper Scissors</div>
+    <div class="game-card" data-file="scramble.html" data-title="Scramble" data-desc="Unscramble letters to form words. Quick thinking wins!">Scramble</div>
+    <div class="game-card" data-file="color-game.html" data-title="Color Game" data-desc="Match or remember colors to score points.">Color Game</div>
+    <div class="game-card" data-file="guess-game.html" data-title="Guess Game" data-desc="Try to guess the secret number — logic and luck combined.">Guess Game</div>
+    <div class="game-card" data-file="tic-tac-toe.html" data-title="Tic Tac Toe" data-desc="Classic X vs O grid battle.">Tic Tac Toe</div>
+    <div class="game-card" data-file="memory-match.html" data-title="Memory Match" data-desc="Flip tiles and remember matching pairs.">Memory Match</div>
+    <div class="game-card" data-file="number-puzzle.html" data-title="Number Puzzle" data-desc="Reorder tiles to solve the sliding puzzle.">Number Puzzle</div>
+    <div class="game-card" data-file="snake.html" data-title="Snake" data-desc="Grow the snake by eating — avoid running into yourself.">Snake</div>
+    <div class="game-card" data-file="typing-test.html" data-title="Typing Test" data-desc="How fast and accurate can you type?">Typing Test</div>
+    <div class="game-card" data-file="reaction-speed.html" data-title="Reaction Speed" data-desc="Test your reflexes — tap quickly when prompted.">Reaction Speed</div>
+    <div class="game-card" data-file="hangman.html" data-title="Hangman" daata-desc="Guess the word before the hangman is complete.">Hangman</div>
+    <div class="game-card" data-file="whack-a-mole.html" data-title="Whack-a-Mole" data-desc="Tap the moles as they pop up — score as many as you can.">Whack-a-Mole</div>
+    <div class="game-card" data-file="connect-four.html" data-title="Connect Four" data-desc="Drop discs to connect 4 in a row before your opponent.">Connect Four</div>
+    <div class="game-card" data-file="tetris.html" data-title="Tetris" data-desc="Rotate and place tetrominoes to complete lines.">Tetris</div>
+    <div class="game-card" data-file="math-quiz.html" data-title="Math Quiz" data-desc="Quick arithmetic questions to test your brain.">Math Quiz</div>
+    <div class="game-card" data-file="word-search.html" data-title="Word Search" data-desc="Find listed words in the letter grid.">Word Search</div>
+    <div class="game-card" data-file="color-match.html" data-title="Color Match" data-desc="Match tiles by color under time pressure.">Color Match</div>
+    <div class="game-card" data-file="flappy-bird.html" data-title="Flappy Bird" data-desc="Tap to fly the bird and dodge obstacles.">Flappy Bird</div>
+    <div class="game-card" data-file="2048.html" data-title="2048" data-desc="Combine tiles to reach 2048.">2048</div>
+
+    <!-- 5 NEW games to complete 5x5 -->
+    <div class="game-card" data-file="minesweeper.html" data-title="Minesweeper" data-desc="Reveal tiles — avoid mines. Use numbers as clues.">Minesweeper</div>
+    <div class="game-card" data-file="space-invaders.html" data-title="Space Invaders" data-desc="Retro shooter: move, aim and defeat waves of invaders.">Space Invaders</div>
+    <div class="game-card" data-file="brick-breaker.html" data-title="Brick Breaker" data-desc="Bounce the ball, break bricks and clear levels.">Brick Breaker</div>
+    <div class="game-card" data-file="pong.html" data-title="Pong" data-desc="Retro paddle vs ball — simple and addictive.">Pong</div>
+    <div class="game-card" data-file="maze-runner.html" data-title="Maze Runner" data-desc="Find your way through the maze as fast as you can.">Maze Runner</div>
+  </div>
 </div>
 
 <div class="footer-text">🚀 Developed by Accx Creations</div>
 
-<!-- About Modal -->
+<!-- About Modal (kept) -->
 <div id="aboutModal" class="modal">
   <div class="modal-content">
     <h2>About G-GAMES</h2>
@@ -236,12 +421,12 @@
   </div>
 </div>
 
+<!-- ========== SCRIPTS ========== -->
 <script>
+/* ===== keep your openGame & modal functions (unchanged) ===== */
 function openGame(gameFile) {
   window.location.href = gameFile;
 }
-
-// === About Modal ===
 function openAbout() {
   document.getElementById('aboutModal').style.display = 'flex';
 }
@@ -249,102 +434,156 @@ function closeAbout() {
   document.getElementById('aboutModal').style.display = 'none';
 }
 
-// === Stars + Meteor ===
+/* ===== your stars + meteor code (kept, only minor formatting) ===== */
 const starsCanvas = document.getElementById('starsCanvas');
 const starsCtx = starsCanvas.getContext('2d');
 let stars = [], meteor = null;
-
-function resizeStarsCanvas(){
-  starsCanvas.width=window.innerWidth;
-  starsCanvas.height=window.innerHeight;
-  generateStars();
-}
-function generateStars(){
-  stars=[];
-  for(let i=0;i<200;i++){
-    stars.push({
-      x:Math.random()*starsCanvas.width,
-      y:Math.random()*starsCanvas.height,
-      baseAlpha:Math.random()*0.7+0.3,
-      alpha:Math.random()*0.7+0.3,
-      radius:Math.random()*1.5+0.5,
-      flickerSpeed:Math.random()*0.05+0.02
-    });
-  }
-}
-function drawMeteor(){
-  if(!meteor) return;
-  starsCtx.save();
-  const grad=starsCtx.createLinearGradient(meteor.x,meteor.y,meteor.x-meteor.vx*10,meteor.y-meteor.vy*10);
-  grad.addColorStop(0,`rgba(255,255,255,${meteor.alpha})`);
-  grad.addColorStop(1,`rgba(255,255,255,0)`);
-  starsCtx.strokeStyle=grad;
-  starsCtx.lineWidth=2;
-  starsCtx.beginPath();
-  starsCtx.moveTo(meteor.x,meteor.y);
-  starsCtx.lineTo(meteor.x-meteor.vx*20,meteor.y-meteor.vy*20);
-  starsCtx.stroke();
-  starsCtx.restore();
-}
-function animateStars(){
-  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
-  stars.forEach(star=>{
-    star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);
-    if(star.alpha<0.1) star.alpha=0.1;
-    if(star.alpha>1) star.alpha=1;
-    starsCtx.beginPath();
-    starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);
-    starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;
-    starsCtx.fill();
-  });
-  if(meteor){
-    meteor.x+=meteor.vx;
-    meteor.y+=meteor.vy;
-    meteor.alpha-=0.01;
-    drawMeteor();
-    if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){
-      meteor=null;
-      setTimeout(spawnMeteor,Math.random()*5000+3000);
-    }
-  }
-  requestAnimationFrame(animateStars);
-}
-function spawnMeteor(){
-  meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1};
-}
+function resizeStarsCanvas(){ starsCanvas.width=window.innerWidth; starsCanvas.height=window.innerHeight; generateStars(); }
+function generateStars(){ stars=[]; for(let i=0;i<200;i++){ stars.push({ x:Math.random()*starsCanvas.width, y:Math.random()*starsCanvas.height, baseAlpha:Math.random()*0.7+0.3, alpha:Math.random()*0.7+0.3, radius:Math.random()*1.5+0.5, flickerSpeed:Math.random()*0.05+0.02 }); } }
+function drawMeteor(){ if(!meteor) return; starsCtx.save(); const grad=starsCtx.createLinearGradient(meteor.x,meteor.y,meteor.x-meteor.vx*10,meteor.y-meteor.vy*10); grad.addColorStop(0,`rgba(255,255,255,${meteor.alpha})`); grad.addColorStop(1,`rgba(255,255,255,0)`); starsCtx.strokeStyle=grad; starsCtx.lineWidth=2; starsCtx.beginPath(); starsCtx.moveTo(meteor.x,meteor.y); starsCtx.lineTo(meteor.x-meteor.vx*20,meteor.y-meteor.vy*20); starsCtx.stroke(); starsCtx.restore(); }
+function animateStars(){ starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height); stars.forEach(star=>{ star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1); if(star.alpha<0.1) star.alpha=0.1; if(star.alpha>1) star.alpha=1; starsCtx.beginPath(); starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2); starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`; starsCtx.fill(); }); if(meteor){ meteor.x+=meteor.vx; meteor.y+=meteor.vy; meteor.alpha-=0.01; drawMeteor(); if(meteor.alpha<=0||meteor.x<-50||meteor.y>starsCanvas.height+50){ meteor=null; setTimeout(spawnMeteor,Math.random()*5000+3000); } } requestAnimationFrame(animateStars); }
+function spawnMeteor(){ meteor={x:Math.random()*starsCanvas.width,y:-20,vx:-(Math.random()*4+2),vy:Math.random()*2+2,alpha:1}; }
 window.addEventListener('resize',resizeStarsCanvas);
 resizeStarsCanvas();
 animateStars();
 
-// === Ripple Effect ===
+/* ===== ripple effect (kept) ===== */
 const rippleCanvas=document.getElementById('rippleCanvas');
 const rippleCtx=rippleCanvas.getContext('2d');
 let ripples=[];
-function resizeRippleCanvas(){
-  rippleCanvas.width=window.innerWidth;
-  rippleCanvas.height=window.innerHeight;
-}
+function resizeRippleCanvas(){ rippleCanvas.width=window.innerWidth; rippleCanvas.height=window.innerHeight; }
 window.addEventListener('resize',resizeRippleCanvas);
 resizeRippleCanvas();
-window.addEventListener('mousemove',(e)=>{
-  ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});
-  if(ripples.length>20) ripples.shift();
-});
-function animateRipples(){
-  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
-  ripples.forEach((r,i)=>{
-    r.radius+=1.5;
-    r.alpha-=0.007;
-    if(r.alpha<=0){ripples.splice(i,1);return;}
-    rippleCtx.beginPath();
-    rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);
-    rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;
-    rippleCtx.lineWidth=r.lineWidth;
-    rippleCtx.stroke();
-  });
-  requestAnimationFrame(animateRipples);
-}
+window.addEventListener('mousemove',(e)=>{ ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()}); if(ripples.length>20) ripples.shift(); });
+function animateRipples(){ rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height); ripples.forEach((r,i)=>{ r.radius+=1.5; r.alpha-=0.007; if(r.alpha<=0){ ripples.splice(i,1); return; } rippleCtx.beginPath(); rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2); rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`; rippleCtx.lineWidth=r.lineWidth; rippleCtx.stroke(); }); requestAnimationFrame(animateRipples); }
 animateRipples();
+
+/* ======= NEW: Ensure 5x5 ALWAYS fits (scale down while keeping center) ======= */
+(function setupScaling(){
+  const wrapper = document.querySelector('.lobby-wrapper');
+  const lobby = document.getElementById('lobby');
+  function scaleToFit(){
+    // compute natural width of the grid based on CSS calculation: each card ~160px and gaps 15
+    // But better to measure lobby's scrollWidth vs available width
+    const avail = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - 16; // small padding
+    const natural = lobby.scrollWidth;
+    const scale = Math.min(1, avail / natural);
+    lobby.style.transform = `scale(${scale})`;
+    // vertically center on very tall screens - wrapper already centers horizontally
+  }
+  window.addEventListener('resize', scaleToFit);
+  // also recalc after fonts load or images
+  requestAnimationFrame(scaleToFit);
+  setTimeout(scaleToFit,250);
+})();
+
+/* ======= NEW: click -> flip -> center portrait -> coin + progress + cancel ======= */
+
+(function cardFlow(){
+  const lobby = document.getElementById('lobby');
+  let busy = false;
+
+  lobby.addEventListener('click', async (e) => {
+    const card = e.target.closest('.game-card');
+    if(!card || busy) return;
+    busy = true;
+
+    const file = card.dataset.file || '#';
+    const title = card.dataset.title || card.textContent.trim();
+    const desc = card.dataset.desc || '';
+
+    // create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'gg-overlay';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    document.body.appendChild(overlay);
+
+    // create modal container
+    const modal = document.createElement('div');
+    modal.className = 'gg-portrait';
+    overlay.appendChild(modal);
+
+    // cancel button
+    const cancel = document.createElement('div');
+    cancel.className = 'gg-cancel';
+    cancel.innerHTML = '&#10005;';
+    modal.appendChild(cancel);
+
+    // title
+    const h = document.createElement('h2');
+    h.textContent = title;
+    modal.appendChild(h);
+
+    // description
+    const p = document.createElement('p');
+    p.textContent = desc;
+    modal.appendChild(p);
+
+    // coin
+    const coin = document.createElement('div');
+    coin.className = 'gg-coin spin';
+    const face = document.createElement('div');
+    face.className = 'face front';
+    face.textContent = 'G';
+    const backFace = document.createElement('div');
+    backFace.className = 'face back';
+    backFace.textContent = 'G';
+    coin.appendChild(face);
+    coin.appendChild(backFace);
+    modal.appendChild(coin);
+
+    // progress bar
+    const progressWrap = document.createElement('div');
+    progressWrap.className = 'gg-progress-wrap';
+    const progressBar = document.createElement('div');
+    progressBar.className = 'gg-progress';
+    progressWrap.appendChild(progressBar);
+    modal.appendChild(progressWrap);
+
+    const progText = document.createElement('div');
+    progText.className = 'gg-progress-text';
+    progText.textContent = 'Loading... 0%';
+    modal.appendChild(progText);
+
+    // flip animation
+    modal.animate([
+      { transform: 'rotateY(0deg)', opacity: 0 },
+      { transform: 'rotateY(360deg)', opacity: 1 }
+    ], { duration: 600, easing: 'ease-out', fill: 'forwards' });
+
+    let cancelled = false;
+    cancel.addEventListener('click', () => {
+      cancelled = true;
+      overlay.remove();
+    });
+
+    overlay.addEventListener('click', e => e.stopPropagation());
+
+    const totalMs = 10000;
+    const start = performance.now();
+
+    function tick(now){
+      if(cancelled) return;
+      const pct = Math.min(1, (now - start)/totalMs);
+      progressBar.style.width = pct*100 + '%';
+      progText.textContent = 'Loading... ' + Math.floor(pct*100) + '%';
+      if(pct < 1){
+        requestAnimationFrame(tick);
+      } else {
+        // finish: fade out and navigate
+        modal.animate([{opacity:1},{opacity:0}],{duration:250,fill:'forwards'});
+        overlay.animate([{opacity:1},{opacity:0}],{duration:250,fill:'forwards'});
+        setTimeout(()=> window.location.href = file, 260);
+      }
+    }
+    requestAnimationFrame(tick);
+
+    // allow next action after modal opened
+    setTimeout(()=>{ busy=false; }, 400);
+  });
+})();
+
 </script>
-</body>
-</html>
+
+</body></html>
