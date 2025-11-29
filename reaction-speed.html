@@ -1,68 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reaction Speed</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reaction Speed Game</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+/* --- Global Theme Matching Color Game --- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at top left, #380098, black);
+  background-size: 200% 200%;
+  animation: gradientMove 10s infinite alternate;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
+header {
+  background: linear-gradient(90deg, #8a2be2, #4b0082);
+  padding: 30px 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
+  animation: neon-flicker 2s infinite alternate;
+}
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
     text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
   }
+  20%, 24%, 55% {
+    text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
+  }
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #8a2be2;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+#info {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+#gameBox {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  background: #111;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 0 20px #4b0082;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+.scoreboard {
+  font-size: 22px;
+  margin: 20px 0;
+  color: gold;
+}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+button {
+  background: #8a2be2;
+  border: none;
+  padding: 12px 25px;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
+}
+
+footer {
+  margin-top: 30px;
+  font-size: 16px;
+  color: #ccc;
+}
 </style>
 </head>
 <body>
@@ -70,11 +103,64 @@
 <header>Reaction Speed</header>
 
 <div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Reaction Speed game here.</div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+  <div id="info">Click START, then wait until the box turns GREEN. Click as fast as you can!</div>
+
+  <div id="gameBox">WAIT</div>
+
+  <div class="scoreboard">
+    Best Reaction: <span id="bestScore">0</span> ms
+  </div>
+
+  <button onclick="startGame()">Start</button>
+  <button onclick="goBack()">Back to Lobby</button>
 </div>
 
+<footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
+
 <script>
+let timer;
+let startTime;
+let canClick = false;
+let best = 99999;
+
+function startGame() {
+  const box = document.getElementById("gameBox");
+  box.style.background = "#111";
+  box.textContent = "WAIT";
+  canClick = false;
+
+  const delay = Math.random() * 3000 + 2000; // 2–5 seconds
+
+  timer = setTimeout(() => {
+    box.style.background = "#00cc44";
+    box.textContent = "CLICK!";
+    canClick = true;
+    startTime = Date.now();
+  }, delay);
+}
+
+// When player clicks the box
+const box = document.getElementById("gameBox");
+box.addEventListener("click", () => {
+  if (!canClick) {
+    box.textContent = "Too Early!";
+    box.style.background = "#cc0000";
+    clearTimeout(timer);
+    return;
+  }
+
+  const reaction = Date.now() - startTime;
+  box.textContent = reaction + " ms";
+  box.style.background = "#1e90ff";
+
+  if (reaction < best) {
+    best = reaction;
+    document.getElementById("bestScore").textContent = best;
+  }
+
+  canClick = false;
+});
+
 function goBack() {
   window.location.href = "index.html";
 }
