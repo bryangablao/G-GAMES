@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reaction Speed Game</title>
+<title>Reaction Speed</title>
 <style>
-/* --- Global Theme Matching Color Game --- */
+/* === Global Body & Background (Copied from Color Game) === */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -15,20 +15,25 @@ body {
   background: radial-gradient(circle at top left, #380098, black);
   background-size: 200% 200%;
   animation: gradientMove 10s infinite alternate;
+  overflow-x: hidden;
 }
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
 
+/* === Header (Neon style from Color Game) === */
 header {
   background: linear-gradient(90deg, #8a2be2, #4b0082);
   padding: 30px 20px;
   font-size: 36px;
   font-weight: bold;
   color: white;
+  letter-spacing: 1px;
   text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
   animation: neon-flicker 2s infinite alternate;
+  position: relative;
+  z-index: 10;
 }
 @keyframes neon-flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
@@ -39,6 +44,38 @@ header {
   }
 }
 
+/* === Help Icon (Copied Theme) === */
+#helpIcon {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  z-index: 20;
+}
+#helpText {
+  display: none;
+  position: absolute;
+  top: 70px;
+  right: 15px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border-radius: 10px;
+  width: 260px;
+  text-align: left;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 0 10px #8a2be2;
+  z-index: 20;
+}
+
+/* === Container === */
 .container {
   max-width: 600px;
   margin: 50px auto;
@@ -46,6 +83,8 @@ header {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 0 15px #8a2be2;
+  position: relative;
+  z-index: 10;
 }
 
 #info {
@@ -54,6 +93,7 @@ header {
   color: #ccc;
 }
 
+/* === Game Box === */
 #gameBox {
   width: 300px;
   height: 300px;
@@ -95,12 +135,38 @@ footer {
   margin-top: 30px;
   font-size: 16px;
   color: #ccc;
+  z-index: 10;
+}
+
+/* === Background Canvases === */
+#starsCanvas, #rippleCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
 }
 </style>
 </head>
 <body>
 
-<header>Reaction Speed</header>
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+
+<header>
+  Reaction Speed
+  <div id="helpIcon" onclick="toggleHelp()">?</div>
+</header>
+
+<div id="helpText">
+  <strong>How to Play Reaction Speed:</strong><br>
+  1. Click START.<br>
+  2. Wait until the box turns GREEN.<br>
+  3. Once green, click as fast as you can.<br>
+  4. Try to beat your best record!
+</div>
 
 <div class="container">
   <div id="info">Click START, then wait until the box turns GREEN. Click as fast as you can!</div>
@@ -118,6 +184,18 @@ footer {
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
+/* Help Toggle */
+function toggleHelp() {
+  const help = document.getElementById("helpText");
+  help.style.display = help.style.display === "block" ? "none" : "block";
+}
+
+/* Back */
+function goBack() {
+  window.location.href = "index.html";
+}
+
+/* Reaction Speed Game Logic */
 let timer;
 let startTime;
 let canClick = false;
@@ -129,7 +207,7 @@ function startGame() {
   box.textContent = "WAIT";
   canClick = false;
 
-  const delay = Math.random() * 3000 + 2000; // 2–5 seconds
+  const delay = Math.random() * 3000 + 2000;
 
   timer = setTimeout(() => {
     box.style.background = "#00cc44";
@@ -139,7 +217,6 @@ function startGame() {
   }, delay);
 }
 
-// When player clicks the box
 const box = document.getElementById("gameBox");
 box.addEventListener("click", () => {
   if (!canClick) {
@@ -161,10 +238,22 @@ box.addEventListener("click", () => {
   canClick = false;
 });
 
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+/* === Stars Background === */
+const starsCanvas = document.getElementById("starsCanvas");
+const starsCtx = starsCanvas.getContext("2d");
+let stars = [];
 
-</body>
-</html>
+function resizeStarsCanvas() {
+  starsCanvas.width = window.innerWidth;
+  starsCanvas.height = window.innerHeight;
+  generateStars();
+}
+
+function generateStars() {
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * starsCanvas.width,
+      y: Math.random() * starsCanvas.height,
+      alpha: Math.random() * 0.7 + 0.3,
+      radius: Math.random() * 1.5
