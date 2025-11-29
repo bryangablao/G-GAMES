@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Reaction Speed</title>
 <style>
-/* === Global Body & Background (Copied from Color Game) === */
+/* --- Global Theme Matching Color Game --- */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -22,18 +22,19 @@ body {
   100% { background-position: 100% 50%; }
 }
 
-/* === Header (Neon style from Color Game) === */
 header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   background: linear-gradient(90deg, #8a2be2, #4b0082);
-  padding: 30px 20px;
-  font-size: 36px;
+  padding: 20px;
+  font-size: 28px;
   font-weight: bold;
   color: white;
-  letter-spacing: 1px;
   text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
   animation: neon-flicker 2s infinite alternate;
-  position: relative;
-  z-index: 10;
+  flex-wrap: wrap;
 }
 @keyframes neon-flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
@@ -44,87 +45,60 @@ header {
   }
 }
 
-/* === Help Icon (Copied Theme) === */
-#helpIcon {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  width: 35px;
-  height: 35px;
-  line-height: 35px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  cursor: pointer;
-  user-select: none;
-  z-index: 20;
-}
-#helpText {
-  display: none;
-  position: absolute;
-  top: 70px;
-  right: 15px;
-  background: rgba(0,0,0,0.8);
-  padding: 15px;
-  border-radius: 10px;
-  width: 260px;
-  text-align: left;
-  font-size: 14px;
-  color: #fff;
-  box-shadow: 0 0 10px #8a2be2;
-  z-index: 20;
+header img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
-/* === Container === */
 .container {
-  max-width: 600px;
-  margin: 50px auto;
-  background: rgba(255,255,255,0.05);
-  padding: 30px;
+  max-width: 95%;
+  margin: 20px auto;
+  padding: 20px;
   border-radius: 15px;
   box-shadow: 0 0 15px #8a2be2;
-  position: relative;
-  z-index: 10;
+  background: rgba(255,255,255,0.05);
 }
 
 #info {
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 20px;
   color: #ccc;
 }
 
-/* === Game Box === */
 #gameBox {
-  width: 300px;
-  height: 300px;
+  width: 80%;
+  max-width: 300px;
+  height: 200px;
   margin: 20px auto;
   background: #111;
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 24px;
   box-shadow: 0 0 20px #4b0082;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .scoreboard {
-  font-size: 22px;
-  margin: 20px 0;
+  font-size: 20px;
+  margin: 15px 0;
   color: gold;
 }
 
 button {
   background: #8a2be2;
   border: none;
-  padding: 12px 25px;
+  padding: 10px 20px;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
   transition: 0.3s;
+  margin: 5px;
 }
 button:hover {
   transform: scale(1.05);
@@ -132,21 +106,16 @@ button:hover {
 }
 
 footer {
-  margin-top: 30px;
-  font-size: 16px;
+  margin-top: 20px;
+  font-size: 14px;
   color: #ccc;
-  z-index: 10;
 }
 
 /* === Background Canvases === */
-#starsCanvas, #rippleCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
+#starsCanvas,#rippleCanvas{
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none; z-index:0;
 }
 </style>
 </head>
@@ -156,17 +125,9 @@ footer {
 <canvas id="rippleCanvas"></canvas>
 
 <header>
+  <img src="image/G-GAMES.png" alt="G-GAMES Logo" />
   Reaction Speed
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
-
-<div id="helpText">
-  <strong>How to Play Reaction Speed:</strong><br>
-  1. Click START.<br>
-  2. Wait until the box turns GREEN.<br>
-  3. Once green, click as fast as you can.<br>
-  4. Try to beat your best record!
-</div>
 
 <div class="container">
   <div id="info">Click START, then wait until the box turns GREEN. Click as fast as you can!</div>
@@ -184,18 +145,6 @@ footer {
 <footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
 
 <script>
-/* Help Toggle */
-function toggleHelp() {
-  const help = document.getElementById("helpText");
-  help.style.display = help.style.display === "block" ? "none" : "block";
-}
-
-/* Back */
-function goBack() {
-  window.location.href = "index.html";
-}
-
-/* Reaction Speed Game Logic */
 let timer;
 let startTime;
 let canClick = false;
@@ -238,22 +187,29 @@ box.addEventListener("click", () => {
   canClick = false;
 });
 
-/* === Stars Background === */
-const starsCanvas = document.getElementById("starsCanvas");
-const starsCtx = starsCanvas.getContext("2d");
-let stars = [];
-
-function resizeStarsCanvas() {
-  starsCanvas.width = window.innerWidth;
-  starsCanvas.height = window.innerHeight;
-  generateStars();
+function goBack() {
+  window.location.href = "index.html";
 }
 
-function generateStars() {
-  stars = [];
-  for (let i = 0; i < 200; i++) {
-    stars.push({
-      x: Math.random() * starsCanvas.width,
-      y: Math.random() * starsCanvas.height,
-      alpha: Math.random() * 0.7 + 0.3,
-      radius: Math.random() * 1.5
+/* ==== Stars Background ==== */
+const starsCanvas=document.getElementById("starsCanvas");
+const starsCtx=starsCanvas.getContext("2d");
+let stars=[];
+function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
+function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
+function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
+window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
+
+/* ==== Ripple Trail ==== */
+const rippleCanvas=document.getElementById("rippleCanvas");
+const rippleCtx=rippleCanvas.getContext("2d");
+let ripples=[];
+function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
+window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
+window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
+function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
+animateRipples();
+</script>
+
+</body>
+</html>
