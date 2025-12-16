@@ -90,7 +90,7 @@ footer:hover {
   - Type your guess in the input box.<br>
   - Press <b>Spacebar</b> to submit your guess (Check).<br>
   - Press <b>Enter</b> to get the next scrambled word (Next Word).<br>
-  - Click <b>Hint</b> or press <b>+</b> (Numpad) to reveal the first letter.<br>
+  - Click <b>Hint</b> or press <b>~</b> to reveal the first letter.<br>
   - Click <b>Surrender</b> or press <b>Delete</b> to reveal the correct word.<br>
   - Press <b>Tab</b> to toggle the help text.<br>
   - Press <b>Esc</b> to go back to the lobby.<br>
@@ -250,12 +250,10 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
       surrenderWord();
       break;
-    case "KeyH": // Shift + H → Hint
-  if (e.shiftKey) {
-    e.preventDefault();
-    useHint();
-  }
-  break;
+    case "Backquote": // ` key → Hint
+      e.preventDefault();
+      useHint();
+      break;
    }
 });
 
