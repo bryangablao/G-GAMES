@@ -250,10 +250,12 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
       surrenderWord();
       break;
-    case "KeyH": // H → Hint
-      e.preventDefault();
-      useHint();
-      break;
+    case "KeyH": // Shift + H → Hint
+  if (e.shiftKey) {
+    e.preventDefault();
+    useHint();
+  }
+  break;
    }
 });
 
