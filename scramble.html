@@ -1,5 +1,4 @@
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scramble</title>
@@ -47,38 +46,71 @@ footer { font-size:16px; color:#ccc; margin-top:30px; }
 .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:50; }
 .modal-content { background: #1a0a3a; padding:30px 40px; border-radius:15px; color:#fff; font-size:20px; text-align:center; box-shadow:0 0 20px #8a2be2; }
 .modal-content button { margin-top:20px; }
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+.button-row button {
+  margin-top: 0;
+}
+footer {
+  font-size: 16px;
+  color: #ccc;
+  margin-top: 30px;
+  text-align: center;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+footer:hover {
+  opacity: 1;
+  color: #ffeb3b; /* soft yellow glow */
+  text-shadow: 0 0 8px #ffeb3b, 0 0 12px #ffffff;
+}
+
 </style>
 </head>
 <body>
-
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
-<canvas id="confettiCanvas"></canvas>
+<canvas id="starsCanvas" width="450" height="870"></canvas>
+<canvas id="rippleCanvas" width="450" height="870"></canvas>
+<canvas id="confettiCanvas" width="450" height="870"></canvas>
 
 <header>
   Scramble
   <div id="helpIcon" onclick="toggleHelp()">?</div>
 </header>
 <div id="helpText">
-  Welcome to Scramble!<br>
-  - A scrambled word appears.<br>
-  - Type your guess and hit Submit.<br>
-  - Correct guesses increase your score.<br>
-  - Incorrect guesses are counted.<br>
-  - Click Reset to start fresh.<br>
-  - Achievements unlock when you guess correctly without errors!
+  🚀 Welcome to Scramble!<br>
+  How to Play:<br>
+  - A scrambled word appears in the center.<br>
+  - Type your guess in the input box.<br>
+  - Press <b>Spacebar</b> to submit your guess (Check).<br>
+  - Press <b>Enter</b> to get the next scrambled word (Next Word).<br>
+  - Click <b>Hint</b> or press <b>+</b> (Numpad) to reveal the first letter.<br>
+  - Click <b>Surrender</b> or press <b>Delete</b> to reveal the correct word.<br>
+  - Press <b>Tab</b> to toggle the help text.<br>
+  - Press <b>Esc</b> to go back to the lobby.<br>
+  - The game shows helpful messages on the scoreboard instead of counters.<br>
+  - Achievements unlock automatically when you guess words correctly in a streak!
 </div>
 
 <div class="container">
   <div class="statusMessage" id="statusMessage"></div>
-  <div class="scoreboard" id="scoreboard">Correct: 0 | Incorrect: 0</div>
-  <div id="scrambledWord" style="font-size:28px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;">SCRAMBLED</div>
-  <input type="text" id="guessInput" placeholder="Type your guess" />
-  <button onclick="submitGuess()">Submit</button>
-  <button onclick="newWord()">Next Word</button>
-  <button onclick="resetGame()">Reset</button>
+  <div class="scoreboard" id="scoreboard">🎯 New scrambled word appeared! Please enter your guess!</div>
+  <div id="scrambledWord" style="font-size:28px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;"></div>
+  <input type="text" id="guessInput" placeholder="Type your guess">
+</div>
+
+<div class="button-row">
+  <button onclick="checkGuess()">Check</button>
+  <button onclick="useHint()">Hint (2)</button>
+  <button onclick="surrenderWord()">Surrender</button>
+  <button onclick="nextWord()">Next Word</button>
   <button onclick="goBack()">Back to Lobby</button>
-  <div class="developer">🚀 Developed by Accx Creations</div>
 </div>
 
 <!-- Achievement Modal -->
@@ -89,9 +121,10 @@ footer { font-size:16px; color:#ccc; margin-top:30px; }
   </div>
 </div>
 
-<footer>© 2025 All rights reserved</footer>
+<footer>© 2025 All rights reserved || <strong>🚀 Developed by Accx Creations</strong></footer>
 
 <script>
+
 // Words array with 100 words
 let words = ["NEON","COSMIC","GALAXY","STARS","RIPPLE","SOLUTION","ASTEROID","PLANET","COMET","METEOR",
 "TEACHER","KING","SPOON","SWIMMING","PYRAMID","MOUNTAIN","OCEAN","JUPITER","SATURN","URANUS",
@@ -105,6 +138,9 @@ let words = ["NEON","COSMIC","GALAXY","STARS","RIPPLE","SOLUTION","ASTEROID","PL
 "ARMOR","SHIELD","BOW","ARROW","CROWN","THRONE","PRINCESS","PRINCE","KINGDOM","TREASURE"];
 
 let currentWord="", scrambled="", correct=0, incorrect=0, perfectStreak=0;
+let hintUses = 0;
+const maxHints = 2;
+
 
 function shuffleWord(word){
   let arr = word.split('');
@@ -119,42 +155,121 @@ function shuffleWord(word){
   return shuffled.join('');
 }
 
-function newWord(){
-  currentWord = words[Math.floor(Math.random()*words.length)];
+// Initialize scoreboard with start message
+document.getElementById('scoreboard').innerText = "🎯 Please enter your guess word";
+
+// Update functions
+
+function newWord() {
+  currentWord = words[Math.floor(Math.random() * words.length)];
   scrambled = shuffleWord(currentWord);
   document.getElementById('scrambledWord').innerText = scrambled;
   document.getElementById('guessInput').value = '';
   document.getElementById('statusMessage').innerText = '';
+  hintUses = 0;
+  revealedIndexes = []; // reset revealed letters
+  document.querySelector('.button-row button:nth-child(2)').innerText = `Hint (${maxHints})`;
 }
 
-function submitGuess(){
+function checkGuess(){
   let guess = document.getElementById('guessInput').value.toUpperCase();
   if(!guess) return;
+
   if(guess === currentWord){
-    correct++;
     perfectStreak++;
-    document.getElementById('statusMessage').innerText = "✅ Correct!";
+    document.getElementById('scoreboard').innerText = `✅ Correct! Click "Next Word" for another. 🎉`;
     checkAchievements();
-    newWord();
   } else {
-    incorrect++;
     perfectStreak = 0;
-    document.getElementById('statusMessage').innerText = "❌ Wrong! Try again.";
-    document.getElementById('guessInput').value = '';
+    document.getElementById('scoreboard').innerText = `❌ Wrong! Try again.`;
   }
-  updateScoreboard();
+  document.getElementById('statusMessage').innerText = '';
 }
 
-function updateScoreboard(){
-  document.getElementById('scoreboard').innerText = `Correct: ${correct} | Incorrect: ${incorrect}`;
+let revealedIndexes = []; // store which letters are revealed
+
+function useHint() {
+  if (hintUses >= maxHints) {
+    document.getElementById('statusMessage').innerText = `⚠️ You used all hints!`;
+    return;
+  }
+
+  hintUses++;
+
+  let letters = currentWord.split('');
+  let unrevealed = [];
+  for (let i = 0; i < letters.length; i++) {
+    if (!revealedIndexes.includes(i)) unrevealed.push(i);
+  }
+
+  if (unrevealed.length > 0) {
+    let randomIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
+    revealedIndexes.push(randomIndex);
+  }
+
+  let hintDisplay = '';
+  for (let i = 0; i < letters.length; i++) {
+    if (revealedIndexes.includes(i)) {
+      hintDisplay += letters[i] + ' ';
+    } else {
+      hintDisplay += '_ ';
+    }
+  }
+  hintDisplay = hintDisplay.trim();
+
+  document.getElementById('scoreboard').innerText =
+    `💡 You used ${hintUses} hint${hintUses > 1 ? 's' : ''}. ${maxHints - hintUses} hint${maxHints - hintUses !== 1 ? 's' : ''} left. || ${hintDisplay}`;
+
+  document.querySelector('.button-row button:nth-child(2)').innerText = `Hint (${maxHints - hintUses})`;
 }
 
-function resetGame(){
-  correct = 0;
-  incorrect = 0;
-  perfectStreak = 0;
-  updateScoreboard();
+document.addEventListener('keydown', (e) => {
+  switch(e.code) {
+    case "Space": // Spacebar → Check
+      e.preventDefault();
+      checkGuess();
+      break;
+    case "Enter": // Enter → Next Word
+      e.preventDefault();
+      nextWord();
+      break;
+    case "Escape": // Esc → Back to Lobby
+      e.preventDefault();
+      goBack();
+      break;
+    case "NumpadAdd": // Numpad + → Hint
+    case "Equal": // For regular '+' key
+      e.preventDefault();
+      useHint();
+      break;
+    case "Tab": // Tab → Toggle help text
+      e.preventDefault();
+      toggleHelp();
+      break;
+    case "Delete": // Delete → Surrender
+      e.preventDefault();
+      surrenderWord();
+      break;
+    case "KeyH": // H → Hint
+      e.preventDefault();
+      useHint();
+      break;
+   }
+});
+
+function surrenderWord(){
+  let letters = currentWord.split('');
+  let displayHTML = letters.map(l => `<span style="color:red">${l}</span>`).join('');
+  document.getElementById('scrambledWord').innerHTML = displayHTML;
+  document.getElementById('scoreboard').innerText = `💔 The word was: "${currentWord}"`;
+}
+
+function nextWord(){
+  hintUses = 0; // reset hint counter
+  document.querySelector('.button-row button:nth-child(2)').innerText = `Hint (${maxHints})`;
   newWord();
+  document.getElementById('scoreboard').innerText = "🎯 New word displayed!";
+  document.getElementById('statusMessage').innerText = '';
 }
 
 function toggleHelp(){
@@ -251,5 +366,6 @@ animateRipples();
 newWord();
 </script>
 
-</body>
-</html>
+
+
+</body></html>
