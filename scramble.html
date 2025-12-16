@@ -1,9 +1,11 @@
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scramble</title>
 <link rel="icon" href="image/G-GAMES.png">
 <style>
+/* --- BASE STYLES --- */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin:0; padding:0;
@@ -19,8 +21,8 @@ body {
 header {
   background: linear-gradient(90deg, #8a2be2, #4b0082);
   color:white;
-  padding:30px 20px;
-  font-size:36px;
+  padding:20px;
+  font-size:calc(1.5rem + 1vw);
   font-weight:bold;
   text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
   animation: neon-flicker 2s infinite alternate;
@@ -29,55 +31,83 @@ header {
 }
 @keyframes neon-flicker { 0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;} 20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;} }
 
-#helpIcon { position:absolute; top:10px; right:10px; font-size:24px; background: rgba(255,255,255,0.1); border-radius:50%; width:35px; height:35px; line-height:35px; cursor:pointer; user-select:none; text-align:center; }
-#helpText { display:none; position:absolute; top:60px; right:10px; background: rgba(0,0,0,0.8); padding:15px; border-radius:10px; width:250px; text-align:left; font-size:14px; color:#fff; box-shadow:0 0 10px #8a2be2; z-index:20; }
+#helpIcon { 
+  position:absolute; top:10px; right:10px; 
+  font-size:calc(1rem + 1vw); 
+  background: rgba(255,255,255,0.1); 
+  border-radius:50%; width:35px; height:35px; 
+  line-height:35px; cursor:pointer; user-select:none; text-align:center; 
+}
+#helpText { 
+  display:none; position:absolute; top:60px; right:10px; 
+  background: rgba(0,0,0,0.85); padding:15px; border-radius:10px; 
+  width:90vw; max-width:300px; text-align:left; font-size:calc(0.75rem + 0.3vw); 
+  color:#fff; box-shadow:0 0 10px #8a2be2; z-index:20; 
+}
 
-.container { display:flex; flex-direction:column; align-items:center; margin-top:50px; }
-.statusMessage { margin-bottom:10px; font-size:18px; height:24px; }
-.scoreboard { background: rgba(255,255,255,0.1); padding:15px 25px; border-radius:12px; box-shadow:0 0 15px #8a2be2; font-size:18px; color: gold; min-width:200px; display:inline-block; margin-bottom:20px; }
-input[type=text] { padding:10px 15px; font-size:18px; border-radius:8px; border:none; margin-top:15px; width:200px; text-align:center; }
-button { margin-top:10px; padding:10px 20px; font-size:16px; font-weight:bold; border:none; border-radius:8px; cursor:pointer; background:#8a2be2; color:#fff; box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082; transition:all 0.3s ease; }
+.container { 
+  display:flex; flex-direction:column; align-items:center; 
+  margin:50px auto 20px auto; padding:0 10px; 
+  max-width: 90vw; 
+}
+.statusMessage { margin-bottom:10px; font-size:calc(0.9rem + 0.3vw); height:24px; }
+.scoreboard { 
+  background: rgba(255,255,255,0.1); padding:15px 25px; 
+  border-radius:12px; box-shadow:0 0 15px #8a2be2; 
+  font-size:calc(1rem + 0.5vw); color: gold; 
+  min-width:200px; display:inline-block; margin-bottom:20px; 
+  word-wrap: break-word;
+}
+#scrambledWord { font-size:calc(1.2rem + 1vw); font-weight:bold; letter-spacing:2px; margin-bottom:15px; word-break: break-word; }
+input[type=text] { 
+  padding:10px 15px; font-size:calc(0.9rem + 0.3vw); border-radius:8px; 
+  border:none; margin-top:15px; width:80%; max-width:250px; text-align:center; 
+  box-sizing: border-box;
+}
+button { 
+  margin-top:10px; padding:10px 15px; font-size:calc(0.8rem + 0.4vw); 
+  font-weight:bold; border:none; border-radius:8px; cursor:pointer; 
+  background:#8a2be2; color:#fff; box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082; 
+  transition:all 0.3s ease; 
+}
 button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad; }
-footer { font-size:16px; color:#ccc; margin-top:30px; }
-#starsCanvas, #rippleCanvas, #confettiCanvas { position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; }
-.developer { margin-top:20px; font-size:18px; color:#ffcc00; }
+
+.button-row {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; 
+  margin-top: 15px;
+}
+.button-row button { margin-top: 0; flex: 1 1 auto; min-width:100px; max-width:180px; }
+
+footer { font-size:calc(0.8rem + 0.3vw); color:#ccc; margin-top:30px; text-align: center; opacity: 0.9; transition: opacity 0.3s ease, color 0.3s ease, text-shadow 0.3s ease; cursor: pointer; }
+footer:hover { opacity: 1; color: #ffeb3b; text-shadow: 0 0 8px #ffeb3b, 0 0 12px #ffffff; }
+
+#starsCanvas, #rippleCanvas, #confettiCanvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
 
 /* Modal */
 .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:50; }
-.modal-content { background: #1a0a3a; padding:30px 40px; border-radius:15px; color:#fff; font-size:20px; text-align:center; box-shadow:0 0 20px #8a2be2; }
-.modal-content button { margin-top:20px; }
+.modal-content { 
+  background: #1a0a3a; padding:20px 25px; border-radius:15px; color:#fff; 
+  font-size:calc(1rem + 0.3vw); text-align:center; box-shadow:0 0 20px #8a2be2; 
+  max-width:90vw; word-wrap: break-word;
+}
+.modal-content button { margin-top:15px; padding:8px 16px; font-size:calc(0.8rem + 0.3vw); }
 
-.button-row {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 15px;
+/* Responsive adjustments */
+@media screen and (max-width: 600px){
+  header { font-size:2rem; padding:15px; }
+  input[type=text] { width:90%; font-size:1rem; }
+  .button-row button { min-width:80px; padding:8px; font-size:0.9rem; }
+  .scoreboard { font-size:1rem; padding:10px; }
+  #scrambledWord { font-size:1.2rem; }
+  #helpText { width:80vw; top:50px; right:5vw; font-size:0.8rem; }
 }
-.button-row button {
-  margin-top: 0;
-}
-footer {
-  font-size: 16px;
-  color: #ccc;
-  margin-top: 30px;
-  text-align: center;
-  opacity: 0.9;
-  transition: opacity 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-footer:hover {
-  opacity: 1;
-  color: #ffeb3b; /* soft yellow glow */
-  text-shadow: 0 0 8px #ffeb3b, 0 0 12px #ffffff;
-}
-
 </style>
 </head>
 <body>
-<canvas id="starsCanvas" width="450" height="870"></canvas>
-<canvas id="rippleCanvas" width="450" height="870"></canvas>
-<canvas id="confettiCanvas" width="450" height="870"></canvas>
+
+<canvas id="starsCanvas"></canvas>
+<canvas id="rippleCanvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
 <header>
   Scramble
@@ -88,20 +118,18 @@ footer:hover {
   How to Play:<br>
   - A scrambled word appears in the center.<br>
   - Type your guess in the input box.<br>
-  - Press <b>Spacebar</b> to submit your guess (Check).<br>
-  - Press <b>Enter</b> to get the next scrambled word (Next Word).<br>
-  - Click <b>Hint</b> or press <b>~</b> to reveal the first letter.<br>
-  - Click <b>Surrender</b> or press <b>Delete</b> to reveal the correct word.<br>
-  - Press <b>Tab</b> to toggle the help text.<br>
-  - Press <b>Esc</b> to go back to the lobby.<br>
-  - The game shows helpful messages on the scoreboard instead of counters.<br>
-  - Achievements unlock automatically when you guess words correctly in a streak!
+  - Press <b>Spacebar</b> to submit your guess.<br>
+  - Press <b>Enter</b> to get the next word.<br>
+  - Click <b>Hint</b> or press <b>~</b> to reveal a letter.<br>
+  - Click <b>Surrender</b> or press <b>Delete</b> to reveal the word.<br>
+  - Press <b>Tab</b> to toggle this help.<br>
+  - Press <b>Esc</b> to go back to lobby.<br>
 </div>
 
 <div class="container">
   <div class="statusMessage" id="statusMessage"></div>
   <div class="scoreboard" id="scoreboard">🎯 New scrambled word appeared! Please enter your guess!</div>
-  <div id="scrambledWord" style="font-size:28px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;"></div>
+  <div id="scrambledWord"></div>
   <input type="text" id="guessInput" placeholder="Type your guess">
 </div>
 
