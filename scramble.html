@@ -155,26 +155,27 @@ footer:hover { opacity: 1; color: #ffeb3b; text-shadow: 0 0 8px #ffeb3b, 0 0 12p
 <script>
 let words = [
   // 3-letter words
-  "Cat","Dog","Cow","Pig","Fox","Bat","Rat","Bee","Ant","Owl","Hen","Ram","Elk","Ape","Yak",
-  "Eel","Cub","Pup","Lid","Pen","Sun","Sky","Sea","Ice","Mud","Log","Net","Tin","Joy","Arc","Box","Car","Man","Toy",
+  "CAT","DOG","COW","PIG","FOX","BAT","RAT","BEE","ANT","OWL","HEN","RAM","ELK","APE","YAK",
+  "EEL","CUB","PUP","LID","PEN","SUN","SKY","SEA","ICE","MUD","LOG","NET","TIN","JOY","ARC","BOX","CAR","MAN","TOY",
 
   // 4-letter words
-  "Lion","Bear","Wolf","Fish","Bird","Frog","Crab","Duck","Swan","Boar","Hare","Crow","Mink","Pony","Colt",
-  "Toad","Pike","Carp","Bass","Seal","Kite","Lynx","Mole","Oxen","Gull","Worm","Bark","Leaf","Tree","Snow",
-  "Rain","Hail","Wind","Fire","Lava","Sand","Dust","Moon","Star","Mars","Gold","Iron","Lead","Coal","Zinc",
-  "Salt","Milk","Rice","Corn","Bean","Plum","Kiwi","Pear","Lime","Oats","Meat","Tuna","Eelz","Puma","Deer",
+  "LION","BEAR","WOLF","FISH","BIRD","FROG","CRAB","DUCK","SWAN","BOAR","HARE","CROW","MINK","PONY","COLT",
+  "TOAD","PIKE","CARP","BASS","SEAL","KITE","LYNX","MOLE","OXEN","GULL","WORM","BARK","LEAF","TREE","SNOW",
+  "RAIN","HAIL","WIND","FIRE","LAVA","SAND","DUST","MOON","STAR","MARS","GOLD","IRON","LEAD","COAL","ZINC",
+  "SALT","MILK","RICE","CORN","BEAN","PLUM","KIWI","PEAR","LIME","OATS","MEAT","TUNA","EELZ","PUMA","DEER",
 
   // 5+ letter words
-  "Rocket","Galaxy","Planet","Meteor","Comet","Orbit","Starry","Astral","Nebula","Eclipse","Solar","Lunar","Asteroid",
-  "Cosmos","Stellar","Gravity","Magnetic","Universe","Saturn","Jupiter","Neptune","Uranus","Mercury","Venus","Telescope",
-  "Satellite","Shooting","Horizon","Aurora","Cosmic","Celestial","Blackhole","Supernova","Quasar","Cometary","Solarize",
-  "Orbiting","Magnet","Electric","Plasma","Photon","Energy","Nuclear","Fusion","Fission","Oxygen","Helium","Nitrogen",
-  "Carbon","Hydrogen","Meteoric","Stardust","Moonlit","Sunlight","Twilight","Rocketry","Astronaut","Spaceship","Spacewalk",
-  "Milkyway","Nebular","Quasars","Starship","Lightyear","Magnetar","Neutron","Singularity","Cometeer","Planetary","Interstellar",
-  "Exoplanet","Moonbase","Rocketman","Starfall","Skyward","Meteorite","Aurorae","Celeste","Pulsars","Supernovae","Astronomer",
-  "Telescope","Spacesuit","Gravityfield","Astralplane","Cosmology","Magnetism","Constellation","Moonlight","Starlight","Orbiters",
-  "Satellites","Nebulizer","Astrolabe","Spaceport","Starquake","Moonbeam","Sunstone","Eclipsezone","Meteorstorm"
+  "ROCKET","GALAXY","PLANET","METEOR","COMET","ORBIT","STARRY","ASTRAL","NEBULA","ECLIPSE","SOLAR","LUNAR","ASTEROID",
+  "COSMOS","STELLAR","GRAVITY","MAGNETIC","UNIVERSE","SATURN","JUPITER","NEPTUNE","URANUS","MERCURY","VENUS","TELESCOPE",
+  "SATELLITE","SHOOTING","HORIZON","AURORA","COSMIC","CELESTIAL","BLACKHOLE","SUPERNOVA","QUASAR","COMETARY","SOLARIZE",
+  "ORBITING","MAGNET","ELECTRIC","PLASMA","PHOTON","ENERGY","NUCLEAR","FUSION","FISSION","OXYGEN","HELIUM","NITROGEN",
+  "CARBON","HYDROGEN","METEORIC","STARDUST","MOONLIT","SUNLIGHT","TWILIGHT","ROCKETRY","ASTRONAUT","SPACESHIP","SPACEWALK",
+  "MILKYWAY","NEBULAR","QUASARS","STARSHIP","LIGHTYEAR","MAGNETAR","NEUTRON","SINGULARITY","COMETEER","PLANETARY","INTERSTELLAR",
+  "EXOPLANET","MOONBASE","ROCKETMAN","STARFALL","SKYWARD","METEORITE","AURORAE","CELESTE","PULSARS","SUPERNOVAE","ASTRONOMER",
+  "TELESCOPE","SPACESUIT","GRAVITYFIELD","ASTRALPLANE","COSMOLOGY","MAGNETISM","CONSTELLATION","MOONLIGHT","STARLIGHT","ORBITERS",
+  "SATELLITES","NEBULIZER","ASTROLABE","SPACEPORT","STARQUAKE","MOONBEAM","SUNSTONE","ECLIPSEZONE","METEORSTORM"
 ];
+
 
 let currentWord="", scrambled="", correct=0, incorrect=0, perfectStreak=0;
 let hintUses = 0;
