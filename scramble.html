@@ -130,6 +130,7 @@ footer:hover { opacity: 1; color: #ffeb3b; text-shadow: 0 0 8px #ffeb3b, 0 0 12p
   <div class="statusMessage" id="statusMessage"></div>
   <div class="scoreboard" id="scoreboard">🎯 New scrambled word appeared! Please enter your guess!</div>
   <div id="scrambledWord"></div>
+  <div id="difficultyLabel"></div> <!-- Added -->
   <input type="text" id="guessInput" placeholder="Type your guess">
 </div>
 
@@ -152,18 +153,28 @@ footer:hover { opacity: 1; color: #ffeb3b; text-shadow: 0 0 8px #ffeb3b, 0 0 12p
 <footer>© 2025 All rights reserved || <strong>🚀 Developed by Accx Creations</strong></footer>
 
 <script>
+let words = [
+  // 3-letter words
+  "Cat","Dog","Cow","Pig","Fox","Bat","Rat","Bee","Ant","Owl","Hen","Ram","Elk","Ape","Yak",
+  "Eel","Cub","Pup","Lid","Pen","Sun","Sky","Sea","Ice","Mud","Log","Net","Tin","Joy","Arc","Box","Car","Man","Toy",
 
-// Words array with 100 words
-let words = ["NEON","COSMIC","GALAXY","STARS","RIPPLE","SOLUTION","ASTEROID","PLANET","COMET","METEOR",
-"TEACHER","KING","SPOON","SWIMMING","PYRAMID","MOUNTAIN","OCEAN","JUPITER","SATURN","URANUS",
-"MERCURY","VENUS","EARTH","MARS","PLUTO","BLACKHOLE","SUPERNOVA","QUASAR","ASTRONAUT","ROCKET",
-"SATELLITE","ORBIT","GRAVITY","FORCE","MAGNET","ELECTRIC","BATTERY","FIRE","WATER","EARTHQUAKE",
-"TSUNAMI","HURRICANE","TORNADO","VOLCANO","ICE","SNOW","RAIN","THUNDER","LIGHTNING","WIND",
-"RAINBOW","FLOWER","TREE","ANIMAL","ELEPHANT","TIGER","LION","MONKEY","BEAR","DOG",
-"CAT","MOUSE","RABBIT","HORSE","COW","PIG","SHEEP","GOAT","CHICKEN","DUCK",
-"FISH","SHARK","WHALE","DOLPHIN","OCTOPUS","CRAB","LOBSTER","SNAKE","FROG","SPIDER",
-"ANT","BUTTERFLY","BEE","DRAGON","UNICORN","PHOENIX","PEGASUS","CASTLE","KNIGHT","SWORD",
-"ARMOR","SHIELD","BOW","ARROW","CROWN","THRONE","PRINCESS","PRINCE","KINGDOM","TREASURE"];
+  // 4-letter words
+  "Lion","Bear","Wolf","Fish","Bird","Frog","Crab","Duck","Swan","Boar","Hare","Crow","Mink","Pony","Colt",
+  "Toad","Pike","Carp","Bass","Seal","Kite","Lynx","Mole","Oxen","Gull","Worm","Bark","Leaf","Tree","Snow",
+  "Rain","Hail","Wind","Fire","Lava","Sand","Dust","Moon","Star","Mars","Gold","Iron","Lead","Coal","Zinc",
+  "Salt","Milk","Rice","Corn","Bean","Plum","Kiwi","Pear","Lime","Oats","Meat","Tuna","Eelz","Puma","Deer",
+
+  // 5+ letter words
+  "Rocket","Galaxy","Planet","Meteor","Comet","Orbit","Starry","Astral","Nebula","Eclipse","Solar","Lunar","Asteroid",
+  "Cosmos","Stellar","Gravity","Magnetic","Universe","Saturn","Jupiter","Neptune","Uranus","Mercury","Venus","Telescope",
+  "Satellite","Shooting","Horizon","Aurora","Cosmic","Celestial","Blackhole","Supernova","Quasar","Cometary","Solarize",
+  "Orbiting","Magnet","Electric","Plasma","Photon","Energy","Nuclear","Fusion","Fission","Oxygen","Helium","Nitrogen",
+  "Carbon","Hydrogen","Meteoric","Stardust","Moonlit","Sunlight","Twilight","Rocketry","Astronaut","Spaceship","Spacewalk",
+  "Milkyway","Nebular","Quasars","Starship","Lightyear","Magnetar","Neutron","Singularity","Cometeer","Planetary","Interstellar",
+  "Exoplanet","Moonbase","Rocketman","Starfall","Skyward","Meteorite","Aurorae","Celeste","Pulsars","Supernovae","Astronomer",
+  "Telescope","Spacesuit","Gravityfield","Astralplane","Cosmology","Magnetism","Constellation","Moonlight","Starlight","Orbiters",
+  "Satellites","Nebulizer","Astrolabe","Spaceport","Starquake","Moonbeam","Sunstone","Eclipsezone","Meteorstorm"
+];
 
 let currentWord="", scrambled="", correct=0, incorrect=0, perfectStreak=0;
 let hintUses = 0;
@@ -197,7 +208,19 @@ function newWord() {
   hintUses = 0;
   revealedIndexes = []; // reset revealed letters
   document.querySelector('.button-row button:nth-child(2)').innerText = `Hint (${maxHints})`;
+
+  // Set difficulty based on word length
+  let len = currentWord.length;
+  let difficulty = "";
+  if(len <= 3) difficulty = "Easy";
+  else if(len === 4 || len === 5) difficulty = "Normal";
+  else if(len === 6 || len === 7) difficulty = "Hard";
+  else if(len >= 8 && len <= 10) difficulty = "Very Hard";
+  else if(len >= 11) difficulty = "Extremely Hard";
+
+  document.getElementById('difficultyLabel').innerText = `Difficulty: ${difficulty}`;
 }
+
 
 function checkGuess(){
   let guess = document.getElementById('guessInput').value.toUpperCase();
