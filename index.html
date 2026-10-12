@@ -8,6 +8,10 @@
   <link rel="icon" type="image/png" href="/G-GAMES/image/G-GAMES.png" />
 
   <style>
+    .lucide-icon { width: 22px; height: 22px; display: block; object-fit: contain; filter: brightness(0) saturate(100%) invert(90%) sepia(24%) saturate(1040%) hue-rotate(155deg); }
+    .feature-pill .lucide-icon { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; margin-right: 5px; }
+    .arrow .lucide-icon, .search-icon .lucide-icon { width: 18px; height: 18px; }
+
     :root {
       --bg-1: #05060d;
       --bg-2: #0b1025;
@@ -1222,7 +1226,7 @@
       </div>
 
       <div class="top-actions">
-        <button class="icon-btn" id="aboutBtn" type="button" aria-label="About G-GAMES" title="About G-GAMES">i</button>
+        <button class="icon-btn" id="aboutBtn" type="button" aria-label="About G-GAMES" title="About G-GAMES"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/info.svg" alt=""></button>
       </div>
     </header>
 
@@ -1234,10 +1238,10 @@
           Pick a game, challenge your reflexes, test your memory, solve puzzles, and enjoy quick mini games in a fast, responsive futuristic lobby.
         </p>
         <div class="hero-features">
-          <span class="feature-pill">⚡ Fast launch</span>
-          <span class="feature-pill">📱 Mobile ready</span>
-          <span class="feature-pill">🎮 25 mini games</span>
-          <span class="feature-pill">✨ Futuristic UI</span>
+          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt=""> Fast launch</span>
+          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/smartphone.svg" alt=""> Mobile ready</span>
+          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/gamepad-2.svg" alt=""> 25 mini games</span>
+          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt=""> Futuristic UI</span>
         </div>
       </div>
 
@@ -1267,7 +1271,7 @@
 
     <section class="controls" aria-label="Game filters">
       <div class="search-box">
-        <span class="search-icon">⌕</span>
+        <span class="search-icon"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/search.svg" alt=""></span>
         <input id="gameSearch" type="search" placeholder="Search games..." autocomplete="off" />
       </div>
 
@@ -1328,13 +1332,13 @@
     <div class="modal-panel">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <div class="game-icon" id="modalIcon">🎮</div>
+          <div class="game-icon" id="modalIcon"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/gamepad-2.svg" alt=""></div>
           <div>
             <h3 id="gameModalTitle">Game</h3>
             <span id="modalCategory">Mini game</span>
           </div>
         </div>
-        <button class="icon-btn" id="closeGameModal" type="button" aria-label="Close">✕</button>
+        <button class="icon-btn" id="closeGameModal" type="button" aria-label="Close"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/x.svg" alt=""></button>
       </div>
 
       <p class="modal-desc" id="modalDescription"></p>
@@ -1357,7 +1361,7 @@
             <span>Mini Games Lobby</span>
           </div>
         </div>
-        <button class="icon-btn" id="closeAboutModal" type="button" aria-label="Close">✕</button>
+        <button class="icon-btn" id="closeAboutModal" type="button" aria-label="Close"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/x.svg" alt=""></button>
       </div>
 
       <p class="modal-desc">
@@ -1401,31 +1405,31 @@
 
   <script>
     const games = [
-      { file: 'sudoku.html', title: 'Sudoku', icon: '🔢', category: 'puzzle', desc: 'Fill the grid so each row, column, and box contains the numbers 1 through 9.' },
-      { file: 'rock-paper-scissors.html', title: 'Rock Paper Scissors', icon: '✊', category: 'classic', desc: 'The classic hand game. Rock beats scissors, scissors beat paper, and paper beats rock.' },
-      { file: 'scramble.html', title: 'Scramble', icon: '🔤', category: 'brain', desc: 'Unscramble letters to form the correct word before time runs out.' },
-      { file: 'color-game.html', title: 'Color Game', icon: '🎨', category: 'brain', desc: 'Test your color recognition and memory with quick visual challenges.' },
-      { file: 'guess-game.html', title: 'Guess Game', icon: '❓', category: 'brain', desc: 'Use logic and luck to guess the hidden number.' },
-      { file: 'tic-tac-toe.html', title: 'Tic Tac Toe', icon: '⭕', category: 'classic', desc: 'Play the classic X versus O strategy game on a 3 by 3 board.' },
-      { file: 'memory-match.html', title: 'Memory Match', icon: '🧠', category: 'brain', desc: 'Flip cards, remember their positions, and match every pair.' },
-      { file: 'number-puzzle.html', title: 'Number Puzzle', icon: '🧩', category: 'puzzle', desc: 'Rearrange numbered tiles into the correct order.' },
-      { file: 'snake.html', title: 'Snake', icon: '🐍', category: 'arcade', desc: 'Grow your snake by collecting food while avoiding collisions.' },
-      { file: 'typing-test.html', title: 'Typing Test', icon: '⌨️', category: 'brain', desc: 'Measure your typing speed and accuracy.' },
-      { file: 'reaction-speed.html', title: 'Reaction Speed', icon: '⚡', category: 'arcade', desc: 'See how quickly you can react when the signal appears.' },
-      { file: 'hangman.html', title: 'Hangman', icon: '📝', category: 'brain', desc: 'Guess the hidden word before your attempts run out.' },
-      { file: 'whack-a-mole.html', title: 'Whack-a-Mole', icon: '🔨', category: 'arcade', desc: 'Tap the moles quickly and score as many points as possible.' },
-      { file: 'connect-four.html', title: 'Connect Four', icon: '🔴', category: 'classic', desc: 'Connect four discs in a row before your opponent does.' },
-      { file: 'tetris.html', title: 'Tetris', icon: '🧱', category: 'arcade', desc: 'Rotate and place falling blocks to complete horizontal lines.' },
-      { file: 'math-quiz.html', title: 'Math Quiz', icon: '➗', category: 'brain', desc: 'Solve quick arithmetic challenges and test your calculation speed.' },
-      { file: 'word-search.html', title: 'Word Search', icon: '🔎', category: 'puzzle', desc: 'Find hidden words inside a grid of letters.' },
-      { file: 'color-match.html', title: 'Color Match', icon: '🌈', category: 'arcade', desc: 'Match the correct colors under time pressure.' },
-      { file: 'flappy-bird.html', title: 'Flappy Bird', icon: '🐦', category: 'arcade', desc: 'Tap to fly and dodge obstacles for the highest score.' },
-      { file: '2048.html', title: '2048', icon: '2️⃣', category: 'puzzle', desc: 'Combine matching number tiles and try to reach 2048.' },
-      { file: 'minesweeper.html', title: 'Minesweeper', icon: '💣', category: 'puzzle', desc: 'Reveal safe tiles while using number clues to avoid hidden mines.' },
-      { file: 'space-invaders.html', title: 'Space Invaders', icon: '👾', category: 'arcade', desc: 'Move, aim, and defeat waves of invading enemies.' },
-      { file: 'brick-breaker.html', title: 'Brick Breaker', icon: '🟪', category: 'arcade', desc: 'Bounce the ball, destroy bricks, and clear the board.' },
-      { file: 'pong.html', title: 'Pong', icon: '🏓', category: 'classic', desc: 'Control the paddle and keep the ball from getting past you.' },
-      { file: 'maze-runner.html', title: 'Maze Runner', icon: '🌀', category: 'puzzle', desc: 'Navigate through the maze and reach the exit as quickly as possible.' }
+      { file: 'sudoku.html', title: 'Sudoku', icon: 'grid-3x3', category: 'puzzle', desc: 'Fill the grid so each row, column, and box contains the numbers 1 through 9.' },
+      { file: 'rock-paper-scissors.html', title: 'Rock Paper Scissors', icon: 'hand', category: 'classic', desc: 'The classic hand game. Rock beats scissors, scissors beat paper, and paper beats rock.' },
+      { file: 'scramble.html', title: 'Scramble', icon: 'whole-word', category: 'brain', desc: 'Unscramble letters to form the correct word before time runs out.' },
+      { file: 'color-game.html', title: 'Color Game', icon: 'palette', category: 'brain', desc: 'Test your color recognition and memory with quick visual challenges.' },
+      { file: 'guess-game.html', title: 'Guess Game', icon: 'circle-help', category: 'brain', desc: 'Use logic and luck to guess the hidden number.' },
+      { file: 'tic-tac-toe.html', title: 'Tic Tac Toe', icon: 'grid-2x2', category: 'classic', desc: 'Play the classic X versus O strategy game on a 3 by 3 board.' },
+      { file: 'memory-match.html', title: 'Memory Match', icon: 'brain', category: 'brain', desc: 'Flip cards, remember their positions, and match every pair.' },
+      { file: 'number-puzzle.html', title: 'Number Puzzle', icon: 'puzzle', category: 'puzzle', desc: 'Rearrange numbered tiles into the correct order.' },
+      { file: 'snake.html', title: 'Snake', icon: 'route', category: 'arcade', desc: 'Grow your snake by collecting food while avoiding collisions.' },
+      { file: 'typing-test.html', title: 'Typing Test', icon: 'keyboard', category: 'brain', desc: 'Measure your typing speed and accuracy.' },
+      { file: 'reaction-speed.html', title: 'Reaction Speed', icon: 'zap', category: 'arcade', desc: 'See how quickly you can react when the signal appears.' },
+      { file: 'hangman.html', title: 'Hangman', icon: 'notebook-pen', category: 'brain', desc: 'Guess the hidden word before your attempts run out.' },
+      { file: 'whack-a-mole.html', title: 'Whack-a-Mole', icon: 'hammer', category: 'arcade', desc: 'Tap the moles quickly and score as many points as possible.' },
+      { file: 'connect-four.html', title: 'Connect Four', icon: 'disc-3', category: 'classic', desc: 'Connect four discs in a row before your opponent does.' },
+      { file: 'tetris.html', title: 'Tetris', icon: 'blocks', category: 'arcade', desc: 'Rotate and place falling blocks to complete horizontal lines.' },
+      { file: 'math-quiz.html', title: 'Math Quiz', icon: 'calculator', category: 'brain', desc: 'Solve quick arithmetic challenges and test your calculation speed.' },
+      { file: 'word-search.html', title: 'Word Search', icon: 'search', category: 'puzzle', desc: 'Find hidden words inside a grid of letters.' },
+      { file: 'color-match.html', title: 'Color Match', icon: 'swatch-book', category: 'arcade', desc: 'Match the correct colors under time pressure.' },
+      { file: 'flappy-bird.html', title: 'Flappy Bird', icon: 'bird', category: 'arcade', desc: 'Tap to fly and dodge obstacles for the highest score.' },
+      { file: '2048.html', title: '2048', icon: 'combine', category: 'puzzle', desc: 'Combine matching number tiles and try to reach 2048.' },
+      { file: 'minesweeper.html', title: 'Minesweeper', icon: 'bomb', category: 'puzzle', desc: 'Reveal safe tiles while using number clues to avoid hidden mines.' },
+      { file: 'space-invaders.html', title: 'Space Invaders', icon: 'rocket', category: 'arcade', desc: 'Move, aim, and defeat waves of invading enemies.' },
+      { file: 'brick-breaker.html', title: 'Brick Breaker', icon: 'brick-wall', category: 'arcade', desc: 'Bounce the ball, destroy bricks, and clear the board.' },
+      { file: 'pong.html', title: 'Pong', icon: 'table-tennis', category: 'classic', desc: 'Control the paddle and keep the ball from getting past you.' },
+      { file: 'maze-runner.html', title: 'Maze Runner', icon: 'milestone', category: 'puzzle', desc: 'Navigate through the maze and reach the exit as quickly as possible.' }
     ];
 
     const gamesGrid = document.getElementById('gamesGrid');
@@ -1473,14 +1477,14 @@
           data-file="${game.file}"
         >
           <div class="game-top">
-            <div class="game-icon">${game.icon}</div>
+            <div class="game-icon"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${game.icon}.svg" alt="" loading="lazy"></div>
             <span class="game-badge">${titleCase(game.category)}</span>
           </div>
           <h3>${game.title}</h3>
           <p>${game.desc}</p>
           <div class="game-launch">
             <span>View game</span>
-            <span class="arrow">↗</span>
+            <span class="arrow"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-up-right.svg" alt=""></span>
           </div>
         </article>
       `).join('');
@@ -1491,7 +1495,7 @@
 
     function openGamePreview(game) {
       selectedGame = game;
-      modalIcon.textContent = game.icon;
+      modalIcon.innerHTML = `<img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${game.icon}.svg" alt="">`;
       gameModalTitle.textContent = game.title;
       modalCategory.textContent = `${titleCase(game.category)} mini game`;
       modalDescription.textContent = game.desc;
