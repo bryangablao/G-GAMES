@@ -2,310 +2,1453 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
 <title>Guess Game</title>
 <link rel="icon" type="image/png" href="image/GuessGame.png">
 
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(circle at top left, #380098, black);
-    background-size: 200% 200%;
-    animation: gradientMove 10s infinite alternate;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    overflow-x: hidden;
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --warning:#ffd76a;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
+}
+
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+
+.orb{
+  position:fixed;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  filter:blur(85px);
+  opacity:.25;
+  pointer-events:none;
+  z-index:-2;
+}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+
+.topbar-inner{
+  max-width:1180px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
+  border:1px solid rgba(94,246,255,.30);
+  box-shadow:0 0 24px rgba(94,246,255,.12);
+}
+
+.title-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.title-icon{
+  width:34px;
+  height:34px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 0 10px rgba(94,246,255,.22));
+}
+
+.page-title{
+  min-width:0;
+  text-align:left;
+}
+
+.page-title strong{
+  display:block;
+  font-size:clamp(16px,2.2vw,22px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.page-title span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  transition:.22s ease;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(94,246,255,.40);
+  box-shadow:0 0 24px rgba(94,246,255,.10);
+}
+
+.main{
+  flex:1;
+  width:100%;
+  padding:clamp(18px,4vw,44px) 14px 34px;
+}
+
+.hero{
+  max-width:1180px;
+  margin:0 auto 22px;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+  gap:18px;
+}
+
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+
+.hero-card{
+  border-radius:24px;
+  padding:clamp(22px,4vw,38px);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::after{
+  content:"?";
+  position:absolute;
+  right:26px;
+  top:4px;
+  font-size:120px;
+  font-weight:950;
+  color:rgba(94,246,255,.05);
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:9px 0 10px;
+  font-size:clamp(30px,5.6vw,60px);
+  line-height:.98;
+  letter-spacing:-.04em;
+}
+
+.hero h1 span{
+  background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  max-width:700px;
+  margin:0;
+  color:var(--muted);
+  font-size:clamp(14px,2vw,16px);
+  line-height:1.65;
+}
+
+.stats-card{
+  border-radius:24px;
+  padding:20px;
+  display:grid;
+  gap:12px;
+  align-content:center;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.stat span{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.stat strong{
+  font-size:16px;
+}
+
+.game-panel{
+  max-width:1180px;
+  margin:0 auto;
+  border-radius:28px;
+  padding:clamp(16px,3vw,28px);
+}
+
+.game-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.status-wrap{
+  min-width:0;
+}
+
+.status-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:900;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.status-message{
+  min-height:24px;
+  font-size:15px;
+  color:#dfe8ff;
+}
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  justify-content:flex-end;
+}
+
+.btn{
+  min-height:42px;
+  padding:10px 15px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+  cursor:pointer;
+  font-weight:850;
+  background:rgba(255,255,255,.055);
+  transition:.22s ease;
+}
+
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+
+.btn-primary{
+  background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));
+  border-color:rgba(94,246,255,.28);
+}
+
+.game-stage{
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);
+  gap:18px;
+  align-items:stretch;
+}
+
+.guess-panel,.history-panel{
+  border-radius:22px;
+  padding:clamp(18px,3vw,28px);
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.guess-panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  min-height:430px;
+}
+
+.game-symbol{
+  width:96px;
+  height:96px;
+  margin-bottom:16px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,rgba(94,246,255,.22),rgba(155,92,255,.13) 55%,rgba(255,255,255,.02) 72%);
+  border:1px solid rgba(94,246,255,.16);
+  box-shadow:0 0 40px rgba(94,246,255,.06);
+}
+
+.game-symbol svg{
+  width:52px;
+  height:52px;
+}
+
+.guess-title{
+  font-size:clamp(24px,4vw,34px);
+  font-weight:950;
+  margin-bottom:8px;
+}
+
+.guess-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+  max-width:500px;
+}
+
+.range-meter{
+  width:min(520px,100%);
+  margin:20px 0 12px;
+}
+
+.range-line{
+  height:7px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
+  position:relative;
+  box-shadow:0 0 22px rgba(94,246,255,.08);
+}
+
+.range-labels{
+  display:flex;
+  justify-content:space-between;
+  margin-top:7px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.guess-controls{
+  width:min(520px,100%);
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  margin-top:12px;
+}
+
+.guess-input{
+  min-width:0;
+  width:100%;
+  min-height:52px;
+  padding:13px 16px;
+  border-radius:14px;
+  border:1px solid rgba(94,246,255,.18);
+  outline:none;
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  -moz-appearance:textfield;
+}
+
+.guess-input:focus{
+  border-color:rgba(94,246,255,.46);
+  box-shadow:0 0 0 4px rgba(94,246,255,.06);
+}
+
+.guess-input::-webkit-inner-spin-button,
+.guess-input::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+.guess-button{
+  min-width:120px;
+}
+
+.feedback-card{
+  width:min(520px,100%);
+  min-height:74px;
+  margin-top:14px;
+  padding:15px 16px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#dfe8ff;
+  background:
+    linear-gradient(145deg,rgba(94,246,255,.05),rgba(155,92,255,.06)),
+    rgba(3,8,22,.54);
+  border:1px solid rgba(94,246,255,.10);
+  line-height:1.5;
+  font-weight:750;
+}
+
+.feedback-card.high{
+  border-color:rgba(255,215,106,.24);
+  color:var(--warning);
+}
+
+.feedback-card.low{
+  border-color:rgba(105,168,255,.24);
+  color:#9bc7ff;
+}
+
+.feedback-card.correct{
+  border-color:rgba(105,255,189,.30);
+  color:var(--success);
+  box-shadow:0 0 28px rgba(105,255,189,.07);
+}
+
+.history-panel{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.panel-label{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.metric{
+  padding:14px;
+  border-radius:15px;
+  text-align:center;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.metric span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+}
+
+.metric strong{
+  display:block;
+  margin-top:5px;
+  font-size:22px;
+  color:#fff;
+}
+
+.guess-history{
+  margin-top:14px;
+  min-height:170px;
+  max-height:250px;
+  overflow:auto;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.guess-history.empty{
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.history-item{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.history-item:last-child{
+  border-bottom:none;
+}
+
+.history-number{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.045);
+  font-weight:900;
+}
+
+.history-text{
+  text-align:left;
+  color:#dfe7ff;
+  font-size:13px;
+}
+
+.history-direction{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+
+.help-panel,.end-modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(1,4,12,.72);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.help-panel.open,.end-modal.open{
+  display:flex;
+}
+
+.modal-card{
+  width:min(540px,100%);
+  border-radius:24px;
+  padding:24px;
+  background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));
+  border:1px solid rgba(94,246,255,.17);
+  box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07);
+}
+
+.modal-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.modal-card h2{
+  margin:0;
+  font-size:25px;
+}
+
+.modal-card p,.modal-card li{
+  color:var(--muted);
+  line-height:1.65;
+}
+
+.modal-card ol{
+  padding-left:20px;
+  margin-bottom:0;
+}
+
+.win-card{
+  text-align:center;
+}
+
+.win-icon{
+  width:88px;
+  height:88px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle,rgba(105,255,189,.20),rgba(94,246,255,.08) 58%,rgba(255,255,255,.02));
+  border:1px solid rgba(105,255,189,.22);
+}
+
+.win-icon svg{
+  width:46px;
+  height:46px;
+}
+
+.win-number{
+  margin-top:12px;
+  font-size:clamp(34px,8vw,54px);
+  font-weight:950;
+  color:var(--success);
+  text-shadow:0 0 26px rgba(105,255,189,.15);
+}
+
+#particleCanvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:145;
+}
+
+/* Footer */
+.site-footer{
+  margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.footer-inner{
+  max-width:1180px;
+  margin:auto;
+  padding:26px 18px 18px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:24px;
+  align-items:center;
+}
+
+.footer-brand{text-align:left}
+
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.footer-logo-mark{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#041019;
+  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  box-shadow:0 0 22px rgba(94,246,255,.18);
+}
+
+.footer-tagline{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.footer-time{
+  text-align:center;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  color:#dfe7ff;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer-time strong{
+  color:var(--cyan);
+  display:block;
+  margin-bottom:2px;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 14px;
+}
+
+.footer-links a,.footer-links button{
+  border:0;
+  padding:0;
+  background:none;
+  color:#c8d1eb;
+  text-decoration:none;
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  transition:.2s ease;
+}
+
+.footer-links a:hover,.footer-links button:hover{
+  color:var(--cyan);
+}
+
+.footer-bottom{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#7f8aa9;
+  font-size:12px;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 12px rgba(105,255,189,.65);
+}
+
+@media(max-width:900px){
+  .hero,.game-stage{
+    grid-template-columns:1fr;
   }
 
-  @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+  .stats-card{
+    grid-template-columns:repeat(3,1fr);
   }
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 36px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 30px;
-    position: relative;
-    z-index: 10;
+  .stat{
+    display:block;
+    text-align:center;
   }
 
-  @keyframes neon-flicker {
-    0%,19%,21%,23%,25%,54%,56%,100% { text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2; }
-    20%,24%,55% { text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2; }
+  .stat span,.stat strong{
+    display:block;
   }
 
-  /* Help icon */
-  #helpIcon {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    line-height: 35px;
-    cursor: pointer;
-    user-select: none;
-    z-index: 20;
+  .stat strong{
+    margin-top:5px;
   }
 
-  /* Help modal text */
-  #helpText {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 15px;
-    background: rgba(0,0,0,0.8);
-    padding: 15px;
-    border-radius: 10px;
-    width: 250px;
-    text-align: left;
-    font-size: 14px;
-    color: #fff;
-    box-shadow: 0 0 10px #8a2be2;
-    z-index: 20;
+  .game-top{
+    grid-template-columns:1fr;
   }
 
-  .container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background: rgba(0,0,0,0.4);
-    border: 2px solid #8a2be2;
-    border-radius: 15px;
-    box-shadow: 0 0 15px #8a2be2, 0 0 30px #4b0082;
+  .toolbar{
+    justify-content:flex-start;
   }
 
-  .placeholder {
-    font-size: 20px;
-    margin: 20px 0;
-    color: #ccc;
+  .footer-grid{
+    grid-template-columns:1fr;
+    text-align:center;
   }
 
-  /* Remove arrows from number input */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
+  .footer-brand{
+    text-align:center;
   }
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 12px 25px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    margin-top: 20px;
+  .footer-logo{
+    justify-content:center;
   }
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
+  .footer-links{
+    justify-content:center;
+  }
+}
+
+@media(max-width:640px){
+  .brand span:last-child{
+    display:none;
   }
 
-  footer {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #ccc;
+  .page-title span{
+    display:none;
   }
 
-  /* Canvas layers */
-  #starsCanvas, #rippleCanvas {
-    position: fixed;
-    top:0; left:0;
-    width:100vw; height:100vh;
-    pointer-events:none;
+  .title-icon{
+    width:30px;
+    height:30px;
   }
-  #starsCanvas { z-index:0; }
-  #rippleCanvas { z-index:0; }
 
-  /* End modal */
-  #endModal {
-    display: none;
-    position: fixed;
-    top:0; left:0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    flex-direction: column;
-    text-align: center;
+  .main{
+    padding-left:10px;
+    padding-right:10px;
   }
-  #endModal h2 { font-size: 32px; margin-bottom: 20px; }
-  #endModal button {
-    padding: 12px 25px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background: #8a2be2;
-    color: white;
-    box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
+
+  .hero-card,.stats-card,.game-panel{
+    border-radius:20px;
   }
-  #endModal button:hover { transform: scale(1.05); box-shadow:0 0 20px #9b30ff,0 0 40px #6a0dad;}
+
+  .stats-card{
+    grid-template-columns:repeat(3,1fr);
+    padding:12px;
+    gap:8px;
+  }
+
+  .stat{
+    padding:11px 7px;
+  }
+
+  .stat span{
+    font-size:11px;
+  }
+
+  .stat strong{
+    font-size:14px;
+  }
+
+  .toolbar{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    width:100%;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+  .guess-panel{
+    min-height:360px;
+  }
+
+  .guess-controls{
+    grid-template-columns:1fr;
+  }
+
+  .guess-button{
+    width:100%;
+  }
+
+  .metrics{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .guess-history{
+    max-height:220px;
+  }
+}
+
+@media(max-width:390px){
+  .page-title strong{
+    font-size:14px;
+  }
+
+  .title-icon{
+    width:27px;
+    height:27px;
+  }
+
+  .stats-card{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .metrics{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
+}
 </style>
 </head>
 
 <body>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
+<canvas id="particleCanvas"></canvas>
 
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
+<div class="app">
 
-<header>
-  Guess Game
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
+      <div class="brand-mark">G</div>
+      <span>G-GAMES</span>
+    </a>
+
+    <div class="title-wrap">
+      <img class="title-icon" src="image/GuessGame.png" alt="Guess Game icon">
+      <div class="page-title">
+        <strong>Guess Game</strong>
+        <span>Number Challenge • Logic Game</span>
+      </div>
+    </div>
+
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Guess Game">?</button>
+  </div>
 </header>
 
-<div id="helpText">
-  <strong>How to Play Guess Game:</strong><br>
-  1. Guess the number from <strong>0 to 1000</strong>.<br>
-  2. The game picks a secret number in that range.<br>
-  3. Enter your guess to find it.<br>
-  4. The game will tell you if your guess is too high or too low.<br>
-  5. Keep guessing until you get it right!
-</div>
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Number Challenge</div>
+      <h1>Find the <span>Secret Number</span></h1>
+      <p>
+        A hidden number from 0 to 1000 is waiting to be discovered.
+        Use the Too High and Too Low clues to narrow the range and solve it in as few attempts as possible.
+      </p>
+    </div>
 
-<div class="container">
-  <div class="placeholder">
-    <p>🎲 Start guessing to find the secret number!</p>
-    <input type="number" id="guessInput" placeholder="Enter your guess" style="padding:10px;border-radius:8px;border:none;font-size:16px;">
-    <button onclick="makeGuess()" style="padding:10px 20px;margin-left:10px;background:#8a2be2;color:white;border:none;border-radius:8px;cursor:pointer;">Guess</button>
-    <p id="feedback">Good luck!</p>
+    <aside class="stats-card">
+      <div class="stat">
+        <span>Range</span>
+        <strong>0 – 1000</strong>
+      </div>
+      <div class="stat">
+        <span>Attempts</span>
+        <strong id="attemptStat">0</strong>
+      </div>
+      <div class="stat">
+        <span>Best</span>
+        <strong id="bestStat">—</strong>
+      </div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div class="status-wrap">
+        <div class="status-label">Game Status</div>
+        <div class="status-message" id="statusMsg">Please enter a number from 0 to 1000.</div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="newRound()">New Round</button>
+        <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-stage">
+      <section class="guess-panel">
+        <div class="game-symbol" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="guessIconGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#5ef6ff"/>
+                <stop offset="55%" stop-color="#9b5cff"/>
+                <stop offset="100%" stop-color="#ff5fd7"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="24" fill="none" stroke="url(#guessIconGradient)" stroke-width="4"/>
+            <path d="M24 24c1-7 7-11 14-10 7 1 11 7 10 13-1 5-4 8-9 11-4 2-6 4-6 8" fill="none" stroke="url(#guessIconGradient)" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="33" cy="52" r="3" fill="#5ef6ff"/>
+          </svg>
+        </div>
+
+        <div class="guess-title">Make Your Guess</div>
+        <div class="guess-subtitle">
+          Enter any whole number between 0 and 1000. The game will guide you higher or lower.
+        </div>
+
+        <div class="range-meter">
+          <div class="range-line"></div>
+          <div class="range-labels">
+            <span>0</span>
+            <span>500</span>
+            <span>1000</span>
+          </div>
+        </div>
+
+        <div class="guess-controls">
+          <input
+            class="guess-input"
+            type="number"
+            id="guessInput"
+            min="0"
+            max="1000"
+            inputmode="numeric"
+            placeholder="Enter 0–1000"
+            aria-label="Enter your number guess"
+          >
+          <button class="btn btn-primary guess-button" type="button" onclick="makeGuess()">Guess</button>
+        </div>
+
+        <div class="feedback-card" id="feedback">Start guessing to find the secret number.</div>
+      </section>
+
+      <aside class="history-panel">
+        <div class="panel-label">Round Progress</div>
+
+        <div class="metrics">
+          <div class="metric">
+            <span>Attempts</span>
+            <strong id="attemptCount">0</strong>
+          </div>
+
+          <div class="metric">
+            <span>Closest Range</span>
+            <strong id="rangeHint">0–1000</strong>
+          </div>
+        </div>
+
+        <div class="guess-history empty" id="guessHistory">
+          No guesses yet.
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">G</span>
+          <span>G-GAMES</span>
+        </div>
+        <div class="footer-tagline">
+          Fast, casual mini-games built for desktop, tablet, and mobile.
+        </div>
+      </div>
+
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time…</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    </div>
   </div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+</footer>
+
 </div>
 
-<footer>© 2025 All Rights Reserved | 🚀 Developed by Accx Creations</footer>
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="helpTitle">How to Play Guess Game</h2>
+      <button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button>
+    </div>
+    <ol>
+      <li>The game secretly selects a whole number from 0 to 1000.</li>
+      <li>Enter your guess and press Guess or the Enter key.</li>
+      <li>If your guess is too low, increase your next guess.</li>
+      <li>If your guess is too high, decrease your next guess.</li>
+      <li>Continue narrowing the range until you find the exact number.</li>
+    </ol>
+  </div>
+</div>
 
-<!-- End Modal -->
-<div id="endModal">
-  <h2 id="modalMessage">You Win!</h2>
-  <button onclick="closeModal()">Close</button>
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="modalMessage">
+  <div class="modal-card win-card">
+    <div class="win-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/>
+      </svg>
+    </div>
+    <h2 id="modalMessage">Correct Number</h2>
+    <p>You found the secret number.</p>
+    <div class="win-number" id="winningNumber">0</div>
+    <p id="winSummary">Solved in 0 attempts.</p>
+    <button class="btn btn-primary" type="button" onclick="closeModal()">Play Again</button>
+  </div>
 </div>
 
 <script>
-/* Help toggle */
-function toggleHelp() {
-  const help = document.getElementById('helpText');
-  help.style.display = help.style.display === 'block' ? 'none' : 'block';
+/* ===== Help ===== */
+const helpPanel = document.getElementById('helpPanel');
+const endModal = document.getElementById('endModal');
+
+function openHelp(){
+  helpPanel.classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-/* Back to Lobby */
-function goBack() { window.location.href="index.html"; }
+function closeHelp(){
+  helpPanel.classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-/* Simple Guess Game Logic */
-let secretNumber = Math.floor(Math.random() * 1001); // 0–1000
+helpPanel.addEventListener('click',(e)=>{
+  if(e.target === helpPanel) closeHelp();
+});
+
+endModal.addEventListener('click',(e)=>{
+  if(e.target === endModal) closeModal();
+});
+
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'Escape'){
+    if(helpPanel.classList.contains('open')) closeHelp();
+    else if(endModal.classList.contains('open')) closeModal();
+    else goBack();
+  }
+
+  if(e.key === 'Enter' && !helpPanel.classList.contains('open') && !endModal.classList.contains('open')){
+    makeGuess();
+  }
+});
+
+function goBack(){
+  window.location.href = 'index.html';
+}
+
+/* ===== Guess Game Logic ===== */
+let secretNumber = 0;
+let attempts = 0;
+let bestScore = null;
+let lowBound = 0;
+let highBound = 1000;
+let history = [];
+let roundFinished = false;
+
+function createSecretNumber(){
+  return Math.floor(Math.random() * 1001);
+}
+
+function newRound(){
+  secretNumber = createSecretNumber();
+  attempts = 0;
+  lowBound = 0;
+  highBound = 1000;
+  history = [];
+  roundFinished = false;
+
+  document.getElementById('guessInput').value = '';
+  document.getElementById('feedback').className = 'feedback-card';
+  document.getElementById('feedback').textContent = 'Start guessing to find the secret number.';
+  document.getElementById('statusMsg').textContent = 'Please enter a number from 0 to 1000.';
+  updateRoundUI();
+  renderHistory();
+
+  setTimeout(()=>document.getElementById('guessInput').focus(),50);
+}
+
 function makeGuess(){
-  const guess = Number(document.getElementById('guessInput').value);
-  const feedback = document.getElementById('feedback');
-  if(isNaN(guess)){
-    feedback.textContent = "Please enter a number!";
+  if(roundFinished) return;
+
+  const input = document.getElementById('guessInput');
+  const rawValue = input.value.trim();
+
+  if(rawValue === ''){
+    setFeedback('Please enter a number before guessing.','');
     return;
   }
+
+  const guess = Number(rawValue);
+
+  if(!Number.isInteger(guess) || guess < 0 || guess > 1000){
+    setFeedback('Enter a whole number from 0 to 1000.','');
+    return;
+  }
+
+  attempts++;
+
   if(guess === secretNumber){
-    feedback.textContent = "🎉 Correct! You guessed the number!";
-    document.getElementById('endModal').style.display = "flex";
-  } else if(guess < secretNumber){
-    feedback.textContent = "Too low! Try again.";
-  } else {
-    feedback.textContent = "Too high! Try again.";
+    roundFinished = true;
+    history.unshift({number:guess,label:'Correct',direction:'Exact'});
+    updateRoundUI();
+    renderHistory();
+    setFeedback(`Correct. ${guess} is the secret number.`,'correct');
+    document.getElementById('statusMsg').textContent = 'You found the secret number.';
+
+    if(bestScore === null || attempts < bestScore){
+      bestScore = attempts;
+    }
+
+    document.getElementById('bestStat').textContent = bestScore;
+    document.getElementById('winningNumber').textContent = secretNumber;
+    document.getElementById('winSummary').textContent =
+      `Solved in ${attempts} attempt${attempts === 1 ? '' : 's'}.`;
+
+    launchParticles();
+    setTimeout(()=>{
+      endModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    },250);
+
+    return;
   }
+
+  if(guess < secretNumber){
+    lowBound = Math.max(lowBound,guess + 1);
+    history.unshift({number:guess,label:'Too Low',direction:'Go Higher'});
+    setFeedback(`${guess} is too low. Try a higher number.`,'low');
+    document.getElementById('statusMsg').textContent = 'Your guess was too low.';
+  }else{
+    highBound = Math.min(highBound,guess - 1);
+    history.unshift({number:guess,label:'Too High',direction:'Go Lower'});
+    setFeedback(`${guess} is too high. Try a lower number.`,'high');
+    document.getElementById('statusMsg').textContent = 'Your guess was too high.';
+  }
+
+  updateRoundUI();
+  renderHistory();
+
+  input.value = '';
+  input.focus();
 }
 
-/* Close modal and reset game */
+function setFeedback(text,type){
+  const feedback = document.getElementById('feedback');
+  feedback.className = 'feedback-card' + (type ? ` ${type}` : '');
+  feedback.textContent = text;
+}
+
+function updateRoundUI(){
+  document.getElementById('attemptCount').textContent = attempts;
+  document.getElementById('attemptStat').textContent = attempts;
+  document.getElementById('rangeHint').textContent = `${lowBound}–${highBound}`;
+  document.getElementById('bestStat').textContent = bestScore === null ? '—' : bestScore;
+}
+
+function renderHistory(){
+  const container = document.getElementById('guessHistory');
+
+  if(history.length === 0){
+    container.className = 'guess-history empty';
+    container.textContent = 'No guesses yet.';
+    return;
+  }
+
+  container.className = 'guess-history';
+  container.innerHTML = '';
+
+  history.slice(0,8).forEach(item=>{
+    const row = document.createElement('div');
+    row.className = 'history-item';
+
+    const number = document.createElement('div');
+    number.className = 'history-number';
+    number.textContent = item.number;
+
+    const text = document.createElement('div');
+    text.className = 'history-text';
+    text.textContent = item.label;
+
+    const direction = document.createElement('div');
+    direction.className = 'history-direction';
+    direction.textContent = item.direction;
+
+    row.appendChild(number);
+    row.appendChild(text);
+    row.appendChild(direction);
+    container.appendChild(row);
+  });
+}
+
 function closeModal(){
-  document.getElementById('endModal').style.display = "none";
-  secretNumber = Math.floor(Math.random() * 1001);
-  document.getElementById('feedback').textContent = "New round! Start guessing.";
-  document.getElementById('guessInput').value = "";
+  endModal.classList.remove('open');
+  document.body.style.overflow = '';
+  clearParticles();
+  newRound();
 }
 
-/* Stars background */
-const starsCanvas=document.getElementById('starsCanvas');
-const starsCtx=starsCanvas.getContext('2d');
-let stars=[];
-function resizeStarsCanvas(){
-  starsCanvas.width=window.innerWidth;
-  starsCanvas.height=window.innerHeight;
-  generateStars();
+/* ===== Celebration Particles ===== */
+const particleCanvas = document.getElementById('particleCanvas');
+const particleCtx = particleCanvas.getContext('2d');
+let particles = [];
+let particleFrame = null;
+
+function resizeParticleCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1,2);
+  particleCanvas.width = Math.floor(window.innerWidth * dpr);
+  particleCanvas.height = Math.floor(window.innerHeight * dpr);
+  particleCanvas.style.width = window.innerWidth + 'px';
+  particleCanvas.style.height = window.innerHeight + 'px';
+  particleCtx.setTransform(dpr,0,0,dpr,0,0);
 }
-function generateStars(){
-  stars=[];
-  for(let i=0;i<200;i++){
-    stars.push({
-      x:Math.random()*starsCanvas.width,
-      y:Math.random()*starsCanvas.height,
-      alpha:Math.random()*0.7+0.3,
-      radius:Math.random()*1.5+0.5,
-      flickerSpeed:Math.random()*0.05+0.02
-    });
+
+window.addEventListener('resize',resizeParticleCanvas);
+resizeParticleCanvas();
+
+function launchParticles(){
+  clearParticles();
+
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+
+  particles = Array.from({length:120},()=>{
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2.4 + Math.random() * 6.5;
+
+    return {
+      x:cx + (Math.random()-.5)*80,
+      y:cy + (Math.random()-.5)*50,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed - 1.4,
+      gravity:.075,
+      life:1,
+      decay:.011 + Math.random()*.011,
+      size:3 + Math.random()*6,
+      hue:120 + Math.random()*130,
+      rot:Math.random()*Math.PI,
+      vr:(Math.random()-.5)*.2
+    };
+  });
+
+  animateParticles();
+}
+
+function animateParticles(){
+  particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+  particles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.rot += p.vr;
+    p.life -= p.decay;
+
+    particleCtx.save();
+    particleCtx.globalAlpha = Math.max(0,p.life);
+    particleCtx.translate(p.x,p.y);
+    particleCtx.rotate(p.rot);
+    particleCtx.fillStyle = `hsl(${p.hue},100%,62%)`;
+    particleCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.5);
+    particleCtx.restore();
+  });
+
+  particles = particles.filter(p=>p.life > 0);
+
+  if(particles.length){
+    particleFrame = requestAnimationFrame(animateParticles);
+  }else{
+    particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    particleFrame = null;
   }
 }
-function animateStars(){
-  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
-  stars.forEach(star=>{
-    star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);
-    if(star.alpha<0.1) star.alpha=0.1;
-    if(star.alpha>1) star.alpha=1;
-    starsCtx.beginPath();
-    starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);
-    starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;
-    starsCtx.fill();
-  });
-  requestAnimationFrame(animateStars);
-}
-window.addEventListener('resize',resizeStarsCanvas);
-resizeStarsCanvas();
-animateStars();
 
-/* Ripple effect */
-const rippleCanvas=document.getElementById('rippleCanvas');
-const rippleCtx=rippleCanvas.getContext('2d');
-let ripples=[];
-function resizeRippleCanvas(){
-  rippleCanvas.width=window.innerWidth;
-  rippleCanvas.height=window.innerHeight;
+function clearParticles(){
+  particles = [];
+
+  if(particleFrame){
+    cancelAnimationFrame(particleFrame);
+    particleFrame = null;
+  }
+
+  particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
 }
-window.addEventListener('resize',resizeRippleCanvas);
-resizeRippleCanvas();
-window.addEventListener('mousemove',(e)=>{
-  ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});
-  if(ripples.length>20) ripples.shift();
-});
-function animateRipples(){
-  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
-  ripples.forEach((r,i)=>{
-    r.radius+=1.5;
-    r.alpha-=0.007;
-    if(r.alpha<=0){ ripples.splice(i,1); return; }
-    rippleCtx.beginPath();
-    rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);
-    rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;
-    rippleCtx.lineWidth=r.lineWidth;
-    rippleCtx.stroke();
+
+/* ===== Philippine Standard Time ===== */
+function updatePhilippineTime(){
+  const formatter = new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric',
+    hour:'numeric',
+    minute:'2-digit',
+    second:'2-digit',
+    hour12:true
   });
-  requestAnimationFrame(animateRipples);
+
+  document.getElementById('phTime').textContent = formatter.format(new Date());
 }
-animateRipples();
+
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+
+/* ===== Start ===== */
+newRound();
 </script>
 </body>
 </html>
