@@ -2,301 +2,1277 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
 <title>Number Puzzle</title>
+<link rel="icon" type="image/png" href="image/number-puzzle.png">
+
 <style>
-/* === Global Body & Background === */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0; padding: 0;
-  text-align: center;
-  color: #fff;
-  background: radial-gradient(circle at top left, #380098, black);
-  background-size: 200% 200%;
-  animation: gradientMove 10s infinite alternate;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-@keyframes gradientMove {
-  0%{background-position:0% 50%;}
-  100%{background-position:100% 50%;}
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --warning:#ffd76a;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
 }
 
-/* === Header === */
-header {
-  background: linear-gradient(90deg, #8a2be2, #4b0082);
-  padding: 30px 20px;
-  font-size: 36px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: white;
-  text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-  animation: neon-flicker 2s infinite alternate;
-  position: relative;
-  z-index: 10;
-}
-@keyframes neon-flicker {
-  0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
-  20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
 }
 
-/* === Help Icon === */
-#helpIcon {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 24px;
-  width: 35px; height: 35px;
-  line-height: 35px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  cursor: pointer; user-select: none;
-  z-index: 20;
-}
-#helpText {
-  display: none;
-  position: absolute;
-  top: 70px; right: 15px;
-  background: rgba(0,0,0,0.8);
-  padding: 15px;
-  border-radius: 10px;
-  width: 250px;
-  text-align: left;
-  font-size: 14px;
-  color: #fff;
-  box-shadow: 0 0 10px #8a2be2;
-  z-index: 20;
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
 
-/* === Container & Buttons === */
-.container {
-  max-width: 500px; 
-  margin: 40px auto; 
-  position: relative; 
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center board and buttons */
-  flex-grow: 1;
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
 }
 
-.controls {
-  margin-bottom: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+
+.orb{
+  position:fixed;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  filter:blur(85px);
+  opacity:.25;
+  pointer-events:none;
+  z-index:-2;
+}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
-.controls button,
-.back-button {
-  background: linear-gradient(135deg,#8a2be2,#4b0082);
-  border: none; 
-  padding: 12px 25px; 
-  color: white; 
-  font-size: 16px; 
-  border-radius: 10px; 
-  cursor: pointer; 
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
-  transition: all 0.3s ease;
-}
-.controls button:hover,
-.back-button:hover { 
-  transform: scale(1.05); 
-  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
 }
 
-/* === Puzzle Tiles === */
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(4, 80px);
-  gap: 5px;
-  margin: 0 auto 20px; /* center grid */
+.topbar-inner{
+  max-width:1180px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
 }
 
-.tile {
-  background: linear-gradient(135deg,#4b0082,#6a0dad); /* distinct from buttons */
-  color: #fff;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  box-shadow: 0 0 8px #4b0082, 0 0 16px #6a0dad;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.tile:hover { transform: scale(1.05); }
-.tile.hint { 
-  box-shadow: 0 0 20px #ffea00, 0 0 40px #ffd700; 
-  transform: scale(1.1);
-}
-.empty { background: transparent; box-shadow: none; cursor: default; }
-
-/* === Footer === */
-footer {
-  padding: 15px 20px;
-  font-size: 14px;
-  color: #fff;
-  text-align: center;
-  background: linear-gradient(90deg, #4b0082, #8a2be2);
-  box-shadow: 0 -2px 10px #8a2be2;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.08em;
+  white-space:nowrap;
 }
 
-/* === Background Canvases === */
-#starsCanvas,#rippleCanvas{
-  position:fixed; top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none; z-index:0;
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
+  border:1px solid rgba(94,246,255,.30);
+  box-shadow:0 0 24px rgba(94,246,255,.12);
+}
+
+.title-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.title-icon{
+  width:34px;
+  height:34px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 0 10px rgba(94,246,255,.22));
+}
+
+.page-title{
+  min-width:0;
+  text-align:left;
+}
+
+.page-title strong{
+  display:block;
+  font-size:clamp(16px,2.2vw,22px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.page-title span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  transition:.22s ease;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(94,246,255,.40);
+  box-shadow:0 0 24px rgba(94,246,255,.10);
+}
+
+.main{
+  flex:1;
+  width:100%;
+  padding:clamp(18px,4vw,44px) 14px 34px;
+}
+
+.hero{
+  max-width:1180px;
+  margin:0 auto 22px;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+  gap:18px;
+}
+
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+
+.hero-card{
+  border-radius:24px;
+  padding:clamp(22px,4vw,38px);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::after{
+  content:"15";
+  position:absolute;
+  right:26px;
+  top:2px;
+  font-size:112px;
+  font-weight:950;
+  color:rgba(94,246,255,.045);
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:9px 0 10px;
+  font-size:clamp(30px,5.6vw,60px);
+  line-height:.98;
+  letter-spacing:-.04em;
+}
+
+.hero h1 span{
+  background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  max-width:700px;
+  margin:0;
+  color:var(--muted);
+  font-size:clamp(14px,2vw,16px);
+  line-height:1.65;
+}
+
+.stats-card{
+  border-radius:24px;
+  padding:20px;
+  display:grid;
+  gap:12px;
+  align-content:center;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+
+.game-panel{
+  max-width:1180px;
+  margin:0 auto;
+  border-radius:28px;
+  padding:clamp(16px,3vw,28px);
+}
+
+.game-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.status-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:900;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.status-message{
+  min-height:24px;
+  font-size:15px;
+  color:#dfe8ff;
+}
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  justify-content:flex-end;
+}
+
+.btn{
+  min-height:42px;
+  padding:10px 15px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+  cursor:pointer;
+  font-weight:850;
+  background:rgba(255,255,255,.055);
+  transition:.22s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{
+  background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));
+  border-color:rgba(94,246,255,.28);
+}
+
+.puzzle-stage{
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) minmax(280px,.72fr);
+  gap:18px;
+  align-items:stretch;
+}
+
+.board-panel,.info-panel{
+  border-radius:22px;
+  padding:clamp(16px,3vw,28px);
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.board-panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:490px;
+}
+
+.puzzle-icon{
+  width:72px;
+  height:72px;
+  margin-bottom:14px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(94,246,255,.08),rgba(155,92,255,.12));
+  border:1px solid rgba(94,246,255,.14);
+}
+.puzzle-icon svg{width:42px;height:42px}
+
+.board-title{
+  font-size:clamp(22px,4vw,32px);
+  font-weight:950;
+  margin-bottom:7px;
+}
+
+.board-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+  max-width:520px;
+  margin-bottom:18px;
+  text-align:center;
+}
+
+.board-wrap{
+  width:min(440px,100%);
+  padding:clamp(8px,2vw,12px);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(94,246,255,.05),rgba(155,92,255,.08));
+  border:1px solid rgba(94,246,255,.12);
+  box-shadow:inset 0 0 38px rgba(0,0,0,.22),0 0 30px rgba(94,246,255,.04);
+}
+
+.board{
+  width:100%;
+  aspect-ratio:1;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(4,1fr);
+  gap:clamp(6px,1.5vw,10px);
+}
+
+.tile{
+  min-width:0;
+  min-height:0;
+  border:none;
+  border-radius:clamp(10px,2.5vw,15px);
+  display:grid;
+  place-items:center;
+  font-size:clamp(18px,5vw,30px);
+  font-weight:950;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  background:
+    linear-gradient(145deg,rgba(94,246,255,.12),rgba(155,92,255,.24)),
+    rgba(14,22,49,.92);
+  border:1px solid rgba(94,246,255,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 8px 20px rgba(0,0,0,.24);
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+
+.tile:hover{
+  transform:translateY(-2px);
+  border-color:rgba(94,246,255,.35);
+  box-shadow:0 10px 28px rgba(0,0,0,.28),0 0 20px rgba(94,246,255,.06);
+}
+.tile:active{transform:scale(.97)}
+.tile.hint{
+  border-color:rgba(255,215,106,.72);
+  box-shadow:0 0 0 3px rgba(255,215,106,.12),0 0 30px rgba(255,215,106,.20);
+  background:
+    linear-gradient(145deg,rgba(255,215,106,.16),rgba(155,92,255,.20)),
+    rgba(14,22,49,.92);
+}
+.tile.empty{
+  cursor:default;
+  pointer-events:none;
+  background:rgba(255,255,255,.015);
+  border:1px dashed rgba(255,255,255,.08);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.15);
+}
+
+.info-panel{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.panel-label{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.metric{
+  padding:14px;
+  border-radius:15px;
+  text-align:center;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+.metric span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+}
+.metric strong{
+  display:block;
+  margin-top:5px;
+  font-size:22px;
+  color:#fff;
+}
+
+.progress-card{
+  margin-top:14px;
+  padding:16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:13px;
+  color:#dfe7ff;
+  margin-bottom:8px;
+}
+.progress-row span:first-child{color:var(--muted)}
+.progress-row:last-child{margin-bottom:0}
+
+.tip-card{
+  margin-top:14px;
+  padding:15px 16px;
+  border-radius:16px;
+  color:#dfe8ff;
+  background:linear-gradient(145deg,rgba(94,246,255,.05),rgba(155,92,255,.06)),rgba(3,8,22,.54);
+  border:1px solid rgba(94,246,255,.10);
+  line-height:1.55;
+  font-size:13px;
+}
+
+.help-panel,.end-modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(1,4,12,.72);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.help-panel.open,.end-modal.open{display:flex}
+
+.modal-card{
+  width:min(540px,100%);
+  border-radius:24px;
+  padding:24px;
+  background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));
+  border:1px solid rgba(94,246,255,.17);
+  box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07);
+}
+.modal-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+.win-card{text-align:center}
+.win-icon{
+  width:88px;
+  height:88px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle,rgba(105,255,189,.20),rgba(94,246,255,.08) 58%,rgba(255,255,255,.02));
+  border:1px solid rgba(105,255,189,.22);
+}
+.win-icon svg{width:46px;height:46px}
+.win-moves{
+  margin-top:12px;
+  font-size:clamp(34px,8vw,54px);
+  font-weight:950;
+  color:var(--success);
+  text-shadow:0 0 26px rgba(105,255,189,.15);
+}
+
+#particleCanvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:145;
+}
+
+/* Footer - same visual structure as guess-game.html */
+.site-footer{
+  margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:24px;
+  align-items:center;
+}
+.footer-brand{text-align:left}
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+.footer-logo-mark{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#041019;
+  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  box-shadow:0 0 22px rgba(94,246,255,.18);
+}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{
+  text-align:center;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  color:#dfe7ff;
+  font-size:13px;
+  line-height:1.5;
+}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 14px;
+}
+.footer-links a,.footer-links button{
+  border:0;
+  padding:0;
+  background:none;
+  color:#c8d1eb;
+  text-decoration:none;
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  transition:.2s ease;
+}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#7f8aa9;
+  font-size:12px;
+}
+.status{display:inline-flex;align-items:center;gap:7px}
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 12px rgba(105,255,189,.65);
+}
+
+@media(max-width:900px){
+  .hero,.puzzle-stage{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}
+  .stat span,.stat strong{display:block}
+  .stat strong{margin-top:5px}
+  .game-top{grid-template-columns:1fr}
+  .toolbar{justify-content:flex-start}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .footer-brand{text-align:center}
+  .footer-logo{justify-content:center}
+  .footer-links{justify-content:center}
+  .board-panel{min-height:auto}
+}
+
+@media(max-width:640px){
+  .brand span:last-child{display:none}
+  .page-title span{display:none}
+  .title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}
+  .stat{padding:11px 7px}
+  .stat span{font-size:11px}
+  .stat strong{font-size:14px}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .btn{width:100%}
+  .metrics{grid-template-columns:1fr 1fr}
+  .board-wrap{width:min(390px,100%)}
+}
+
+@media(max-width:460px){
+  .topbar-inner{grid-template-columns:auto minmax(0,1fr) auto;gap:8px}
+  .brand-mark{width:34px;height:34px}
+  .title-wrap{gap:7px}
+  .page-title strong{font-size:14px}
+  .title-icon{width:26px;height:26px}
+  .icon-btn{width:36px;height:36px}
+  .toolbar{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr}
+  .board-panel,.info-panel{padding:14px}
+  .board-wrap{padding:7px;border-radius:18px}
+  .board{gap:6px}
+  .tile{border-radius:10px;font-size:clamp(17px,7vw,25px)}
+  .footer-bottom{justify-content:center;text-align:center}
+}
+
+@media(max-width:340px){
+  .title-icon{display:none}
+  .page-title strong{font-size:13px}
+  .main{padding-left:7px;padding-right:7px}
+  .game-panel{padding:10px}
+  .board-panel{padding:10px}
+  .board-wrap{padding:6px}
+  .board{gap:5px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
+
 <body>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
+<canvas id="particleCanvas"></canvas>
 
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
+        <div class="brand-mark">G</div>
+        <span>G-GAMES</span>
+      </a>
 
-<header>
-  Number Puzzle
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
-</header>
+      <div class="title-wrap">
+        <img class="title-icon" src="image/number-puzzle.png" alt="Number Puzzle icon" onerror="this.style.display='none'">
+        <div class="page-title">
+          <strong>Number Puzzle</strong>
+          <span>Sliding Puzzle • Logic Challenge</span>
+        </div>
+      </div>
 
-<div id="helpText">
-  <strong>How to Play Number Puzzle:</strong><br>
-  Arrange numbers 1–15 in order by sliding tiles into the empty space.<br>
-  Click a tile next to the empty space to move it.<br>
-  Goal: Solve the puzzle!
+      <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Number Puzzle">?</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">G-GAMES • Sliding Puzzle</div>
+        <h1>Arrange the <span>Numbers in Order</span></h1>
+        <p>
+          Slide the numbered tiles into the empty space and restore the board from 1 through 15.
+          Plan your moves carefully, use the hint when needed, and try to solve the puzzle in fewer moves.
+        </p>
+      </div>
+
+      <aside class="stats-card">
+        <div class="stat">
+          <span>Board</span>
+          <strong>4 × 4</strong>
+        </div>
+        <div class="stat">
+          <span>Moves</span>
+          <strong id="moveStat">0</strong>
+        </div>
+        <div class="stat">
+          <span>Best</span>
+          <strong id="bestStat">—</strong>
+        </div>
+      </aside>
+    </section>
+
+    <section class="game-panel">
+      <div class="game-top">
+        <div>
+          <div class="status-label">Game Status</div>
+          <div class="status-message" id="statusMsg">Move a tile next to the empty space to begin.</div>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn btn-primary" type="button" onclick="newGame()">New Game</button>
+          <button class="btn" type="button" onclick="showHint()">Hint</button>
+          <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+        </div>
+      </div>
+
+      <div class="puzzle-stage">
+        <section class="board-panel">
+          <div class="puzzle-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <defs>
+                <linearGradient id="puzzleGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#5ef6ff"/>
+                  <stop offset="55%" stop-color="#9b5cff"/>
+                  <stop offset="100%" stop-color="#ff5fd7"/>
+                </linearGradient>
+              </defs>
+              <rect x="10" y="10" width="18" height="18" rx="4" fill="none" stroke="url(#puzzleGradient)" stroke-width="4"/>
+              <rect x="36" y="10" width="18" height="18" rx="4" fill="none" stroke="url(#puzzleGradient)" stroke-width="4"/>
+              <rect x="10" y="36" width="18" height="18" rx="4" fill="none" stroke="url(#puzzleGradient)" stroke-width="4"/>
+              <path d="M39 39h12v12H39z" fill="none" stroke="#5ef6ff" stroke-width="4" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+
+          <div class="board-title">15 Puzzle</div>
+          <div class="board-subtitle">Tap a numbered tile directly beside the empty space to slide it into position.</div>
+
+          <div class="board-wrap">
+            <div id="board" class="board" aria-label="Number puzzle board"></div>
+          </div>
+        </section>
+
+        <aside class="info-panel">
+          <div class="panel-label">Puzzle Progress</div>
+
+          <div class="metrics">
+            <div class="metric">
+              <span>Moves</span>
+              <strong id="moveCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>Correct Tiles</span>
+              <strong id="correctCount">0/15</strong>
+            </div>
+          </div>
+
+          <div class="progress-card">
+            <div class="progress-row">
+              <span>Puzzle Size</span>
+              <strong>4 × 4</strong>
+            </div>
+            <div class="progress-row">
+              <span>Numbered Tiles</span>
+              <strong>15</strong>
+            </div>
+            <div class="progress-row">
+              <span>Open Spaces</span>
+              <strong>1</strong>
+            </div>
+          </div>
+
+          <div class="tip-card" id="tipCard">
+            Tip: A tile can only move when it is directly above, below, left, or right of the empty space.
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="footer-logo-mark">G</span>
+            <span>G-GAMES</span>
+          </div>
+          <div class="footer-tagline">
+            Fast, casual mini-games built for desktop, tablet, and mobile.
+          </div>
+        </div>
+
+        <div class="footer-time" aria-live="polite">
+          <strong>Philippine Standard Time</strong>
+          <span id="phTime">Loading Philippine Standard Time…</span>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <button type="button" onclick="openHelp()">How to Play</button>
+          <a href="index.html">Game Lobby</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Accxs Creations. All rights reserved.</span>
+        <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+      </div>
+    </div>
+  </footer>
 </div>
 
-<div class="container">
-  <div class="controls">
-    <button onclick="newGame()">New Game</button>
-    <button onclick="showHint()">Hint</button>
-    <button class="back-button" onclick="goBack()">Back to Lobby</button>
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="helpTitle">How to Play Number Puzzle</h2>
+      <button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button>
+    </div>
+    <ol>
+      <li>The board contains numbers 1 through 15 and one empty space.</li>
+      <li>Tap a tile directly beside the empty space to slide it into that position.</li>
+      <li>Continue moving tiles until every number is arranged from 1 to 15.</li>
+      <li>Use the Hint button to highlight one movable tile when you need help.</li>
+      <li>Try to finish using as few moves as possible.</li>
+    </ol>
   </div>
-  <div id="board" class="board"></div>
 </div>
 
-<footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="modalMessage">
+  <div class="modal-card win-card">
+    <div class="win-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/>
+      </svg>
+    </div>
+    <h2 id="modalMessage">Puzzle Solved</h2>
+    <p>You arranged all 15 tiles in the correct order.</p>
+    <div class="win-moves" id="winMoves">0</div>
+    <p id="winSummary">Solved in 0 moves.</p>
+    <button class="btn btn-primary" type="button" onclick="closeModal()">Play Again</button>
+  </div>
+</div>
 
 <script>
-/* === Help Toggle === */
-function toggleHelp(){
-  const help = document.getElementById('helpText');
-  help.style.display = (help.style.display==='block')?'none':'block';
-}
-
-/* === Go Back === */
-function goBack(){ window.location.href="index.html"; }
-
-/* === Number Puzzle Logic === */
-let board = [];
+const helpPanel = document.getElementById('helpPanel');
+const endModal = document.getElementById('endModal');
+const boardElement = document.getElementById('board');
 const size = 4;
-const boardElement = document.getElementById("board");
 
-function initBoard() {
-  board = Array.from({length: size*size}, (_,i)=>i);
-  shuffleBoard();
-  renderBoard();
+let board = [];
+let moves = 0;
+let bestScore = null;
+let gameFinished = false;
+let hintTimer = null;
+
+try{
+  const saved = localStorage.getItem('numberPuzzleBestMoves');
+  if(saved !== null && !Number.isNaN(Number(saved))){
+    bestScore = Number(saved);
+  }
+}catch(e){
+  bestScore = null;
 }
 
-function shuffleBoard(){
-  for(let i=board.length-1;i>0;i--){
-    let j=Math.floor(Math.random()*(i+1));
-    [board[i],board[j]]=[board[j],board[i]];
+function openHelp(){
+  helpPanel.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeHelp(){
+  helpPanel.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+helpPanel.addEventListener('click',(e)=>{
+  if(e.target === helpPanel) closeHelp();
+});
+
+endModal.addEventListener('click',(e)=>{
+  if(e.target === endModal) closeModal();
+});
+
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'Escape'){
+    if(helpPanel.classList.contains('open')) closeHelp();
+    else if(endModal.classList.contains('open')) closeModal();
+    else goBack();
   }
-  if(!isSolvable(board)) shuffleBoard();
+
+  if(helpPanel.classList.contains('open') || endModal.classList.contains('open')) return;
+
+  const emptyIndex = board.indexOf(0);
+  const row = Math.floor(emptyIndex / size);
+  const col = emptyIndex % size;
+  let tileIndex = null;
+
+  if(e.key === 'ArrowUp' && row < size - 1) tileIndex = emptyIndex + size;
+  if(e.key === 'ArrowDown' && row > 0) tileIndex = emptyIndex - size;
+  if(e.key === 'ArrowLeft' && col < size - 1) tileIndex = emptyIndex + 1;
+  if(e.key === 'ArrowRight' && col > 0) tileIndex = emptyIndex - 1;
+
+  if(tileIndex !== null){
+    e.preventDefault();
+    moveTile(tileIndex);
+  }
+});
+
+function goBack(){
+  window.location.href = 'index.html';
+}
+
+function createSolvedBoard(){
+  return [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];
+}
+
+function shuffleByLegalMoves(moveCount = 220){
+  board = createSolvedBoard();
+  let previousEmpty = -1;
+
+  for(let i = 0; i < moveCount; i++){
+    const emptyIndex = board.indexOf(0);
+    let valid = getValidMoves(emptyIndex).filter(index => index !== previousEmpty);
+
+    if(valid.length === 0) valid = getValidMoves(emptyIndex);
+
+    const selected = valid[Math.floor(Math.random() * valid.length)];
+    previousEmpty = emptyIndex;
+    [board[emptyIndex], board[selected]] = [board[selected], board[emptyIndex]];
+  }
+
+  if(isSolved()) shuffleByLegalMoves(moveCount + 20);
 }
 
 function renderBoard(){
-  boardElement.innerHTML="";
+  boardElement.innerHTML = '';
+
   board.forEach((num,idx)=>{
-    const tile=document.createElement("div");
-    tile.classList.add("tile");
-    if(num===0) tile.classList.add("empty");
-    else { tile.textContent=num; tile.onclick=()=>moveTile(idx); }
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'tile';
+    tile.setAttribute('aria-label', num === 0 ? 'Empty space' : `Tile ${num}`);
+
+    if(num === 0){
+      tile.classList.add('empty');
+      tile.disabled = true;
+    }else{
+      tile.textContent = num;
+      tile.addEventListener('click',()=>moveTile(idx));
+    }
+
     boardElement.appendChild(tile);
   });
+
+  updateUI();
 }
 
 function moveTile(index){
-  const emptyIndex=board.indexOf(0);
-  const validMoves=getValidMoves(emptyIndex);
-  if(validMoves.includes(index)){
-    [board[emptyIndex],board[index]]=[board[index],board[emptyIndex]];
-    renderBoard(); checkWin();
-  }
+  if(gameFinished) return;
+
+  const emptyIndex = board.indexOf(0);
+  const validMoves = getValidMoves(emptyIndex);
+
+  if(!validMoves.includes(index)) return;
+
+  [board[emptyIndex],board[index]] = [board[index],board[emptyIndex]];
+  moves++;
+  clearHint();
+  renderBoard();
+
+  document.getElementById('statusMsg').textContent = `Move ${moves}: keep arranging the tiles in order.`;
+
+  if(isSolved()) finishGame();
 }
 
 function getValidMoves(emptyIndex){
-  const moves=[];
-  const row=Math.floor(emptyIndex/size);
-  const col=emptyIndex%size;
-  if(row>0) moves.push(emptyIndex-size);
-  if(row<size-1) moves.push(emptyIndex+size);
-  if(col>0) moves.push(emptyIndex-1);
-  if(col<size-1) moves.push(emptyIndex+1);
-  return moves;
+  const movesList = [];
+  const row = Math.floor(emptyIndex / size);
+  const col = emptyIndex % size;
+
+  if(row > 0) movesList.push(emptyIndex - size);
+  if(row < size - 1) movesList.push(emptyIndex + size);
+  if(col > 0) movesList.push(emptyIndex - 1);
+  if(col < size - 1) movesList.push(emptyIndex + 1);
+
+  return movesList;
 }
 
-function isSolvable(arr){
-  let invCount=0;
-  for(let i=0;i<arr.length-1;i++){
-    for(let j=i+1;j<arr.length;j++){
-      if(arr[i]&&arr[j]&&arr[i]>arr[j]) invCount++;
-    }
+function isSolved(){
+  return board.every((value,index)=>{
+    if(index === board.length - 1) return value === 0;
+    return value === index + 1;
+  });
+}
+
+function getCorrectTileCount(){
+  let count = 0;
+  for(let i = 0; i < board.length - 1; i++){
+    if(board[i] === i + 1) count++;
   }
-  const rowFromBottom = size - Math.floor(arr.indexOf(0)/size);
-  return (size%2!==0 && invCount%2===0) || (size%2===0 && (rowFromBottom%2===0)==(invCount%2!==0));
+  return count;
 }
 
-function checkWin(){
-  if(board.slice(0,board.length-1).every((val,idx)=>val===idx+1)){
-    setTimeout(()=>alert("🎉 Congratulations! You solved the puzzle!"),100);
+function updateUI(){
+  document.getElementById('moveCount').textContent = moves;
+  document.getElementById('moveStat').textContent = moves;
+  document.getElementById('correctCount').textContent = `${getCorrectTileCount()}/15`;
+  document.getElementById('bestStat').textContent = bestScore === null ? '—' : bestScore;
+}
+
+function newGame(){
+  gameFinished = false;
+  moves = 0;
+  clearHint();
+  shuffleByLegalMoves();
+  renderBoard();
+  document.getElementById('statusMsg').textContent = 'Move a tile next to the empty space to begin.';
+  document.getElementById('tipCard').textContent = 'Tip: A tile can only move when it is directly above, below, left, or right of the empty space.';
+}
+
+function clearHint(){
+  document.querySelectorAll('.tile.hint').forEach(tile=>tile.classList.remove('hint'));
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
   }
 }
 
-function newGame(){ initBoard(); }
+function showHint(){
+  if(gameFinished) return;
 
-/* === Hint Feature === */
-function showHint() {
-  document.querySelectorAll(".tile.hint").forEach(t => t.classList.remove("hint"));
+  clearHint();
   const emptyIndex = board.indexOf(0);
   const validMoves = getValidMoves(emptyIndex);
-  let hintIndex = validMoves.find(i => board[i] !== i + 1);
-  if (hintIndex === undefined) hintIndex = validMoves[0];
-  const tileElements = document.querySelectorAll(".tile");
-  tileElements[hintIndex].classList.add("hint");
-  setTimeout(() => {
-    tileElements[hintIndex].classList.remove("hint");
-  }, 2000);
+  let bestIndex = validMoves[0];
+  let bestGain = -Infinity;
+
+  validMoves.forEach(index=>{
+    const before = getCorrectTileCount();
+    [board[emptyIndex],board[index]] = [board[index],board[emptyIndex]];
+    const after = getCorrectTileCount();
+    [board[emptyIndex],board[index]] = [board[index],board[emptyIndex]];
+
+    const gain = after - before;
+    if(gain > bestGain){
+      bestGain = gain;
+      bestIndex = index;
+    }
+  });
+
+  const tileElements = boardElement.querySelectorAll('.tile');
+  const tile = tileElements[bestIndex];
+
+  if(tile){
+    tile.classList.add('hint');
+    document.getElementById('statusMsg').textContent = `Hint: try moving tile ${board[bestIndex]}.`;
+    document.getElementById('tipCard').textContent = `Suggested move: tile ${board[bestIndex]} can slide into the empty space.`;
+
+    hintTimer = setTimeout(()=>{
+      tile.classList.remove('hint');
+      hintTimer = null;
+    },2200);
+  }
 }
 
-/* === Stars Background === */
-const starsCanvas=document.getElementById("starsCanvas");
-const starsCtx=starsCanvas.getContext("2d");
-let stars=[];
-function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
-function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
-function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
-window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
+function finishGame(){
+  gameFinished = true;
+  document.getElementById('statusMsg').textContent = 'Puzzle solved successfully.';
 
-/* === Ripple Trail === */
-const rippleCanvas=document.getElementById("rippleCanvas");
-const rippleCtx=rippleCanvas.getContext("2d");
-let ripples=[];
-function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
-window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
-window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
-function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
-animateRipples();
+  if(bestScore === null || moves < bestScore){
+    bestScore = moves;
+    try{ localStorage.setItem('numberPuzzleBestMoves',String(bestScore)); }catch(e){}
+  }
 
-/* Start new game */
-initBoard();
+  updateUI();
+  document.getElementById('winMoves').textContent = moves;
+  document.getElementById('winSummary').textContent = `Solved in ${moves} move${moves === 1 ? '' : 's'}.`;
+  launchParticles();
+
+  setTimeout(()=>{
+    endModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  },250);
+}
+
+function closeModal(){
+  endModal.classList.remove('open');
+  document.body.style.overflow = '';
+  clearParticles();
+  newGame();
+}
+
+/* Celebration particles */
+const particleCanvas = document.getElementById('particleCanvas');
+const particleCtx = particleCanvas.getContext('2d');
+let particles = [];
+let particleFrame = null;
+
+function resizeParticleCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1,2);
+  particleCanvas.width = Math.floor(window.innerWidth * dpr);
+  particleCanvas.height = Math.floor(window.innerHeight * dpr);
+  particleCanvas.style.width = window.innerWidth + 'px';
+  particleCanvas.style.height = window.innerHeight + 'px';
+  particleCtx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+window.addEventListener('resize',resizeParticleCanvas);
+resizeParticleCanvas();
+
+function launchParticles(){
+  clearParticles();
+
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+
+  particles = Array.from({length:110},()=>{
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2.4 + Math.random() * 6.5;
+
+    return {
+      x:cx + (Math.random()-.5)*80,
+      y:cy + (Math.random()-.5)*50,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed - 1.4,
+      gravity:.075,
+      life:1,
+      decay:.011 + Math.random()*.011,
+      size:3 + Math.random()*6,
+      hue:120 + Math.random()*130,
+      rot:Math.random()*Math.PI,
+      vr:(Math.random()-.5)*.2
+    };
+  });
+
+  animateParticles();
+}
+
+function animateParticles(){
+  particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+  particles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.rot += p.vr;
+    p.life -= p.decay;
+
+    particleCtx.save();
+    particleCtx.globalAlpha = Math.max(0,p.life);
+    particleCtx.translate(p.x,p.y);
+    particleCtx.rotate(p.rot);
+    particleCtx.fillStyle = `hsl(${p.hue},100%,62%)`;
+    particleCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.5);
+    particleCtx.restore();
+  });
+
+  particles = particles.filter(p=>p.life > 0);
+
+  if(particles.length){
+    particleFrame = requestAnimationFrame(animateParticles);
+  }else{
+    particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    particleFrame = null;
+  }
+}
+
+function clearParticles(){
+  particles = [];
+  if(particleFrame){
+    cancelAnimationFrame(particleFrame);
+    particleFrame = null;
+  }
+  particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+}
+
+/* Philippine Standard Time */
+function updatePhilippineTime(){
+  const formatter = new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric',
+    hour:'numeric',
+    minute:'2-digit',
+    second:'2-digit',
+    hour12:true
+  });
+
+  document.getElementById('phTime').textContent = formatter.format(new Date());
+}
+
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+newGame();
 </script>
-
 </body>
 </html>
