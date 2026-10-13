@@ -2,83 +2,681 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
 <title>Hangman</title>
+<link rel="icon" type="image/png" href="image/Hangman.png">
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
-  }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
+}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+.orb{
+  position:fixed;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  filter:blur(85px);
+  opacity:.25;
+  pointer-events:none;
+  z-index:-2;
+}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+.app{min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+
+.topbar-inner{
+  max-width:1180px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
+  border:1px solid rgba(94,246,255,.30);
+  box-shadow:0 0 24px rgba(94,246,255,.12);
+}
+
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{
+  width:34px;
+  height:34px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 0 10px rgba(94,246,255,.22));
+}
+.page-title{min-width:0;text-align:left}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  transition:.22s ease;
+}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
+
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{
+  max-width:1180px;
+  margin:0 auto 22px;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+  gap:18px;
+}
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{
+  content:"A_Z";
+  position:absolute;
+  right:22px;
+  top:16px;
+  font-size:clamp(58px,9vw,110px);
+  font-weight:950;
+  letter-spacing:-.12em;
+  color:rgba(94,246,255,.045);
+}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(16px,3vw,28px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:18px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:6px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+.btn{
+  min-height:44px;
+  padding:10px 15px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+  cursor:pointer;
+  font-weight:850;
+  background:rgba(255,255,255,.055);
+  transition:.22s ease;
+  touch-action:manipulation;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
+
+.game-stage{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.22fr);gap:18px;align-items:stretch}
+.drawing-panel,.play-panel{border-radius:22px;padding:clamp(18px,3vw,28px);background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+
+.drawing-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:430px}
+.hangman-svg{width:min(300px,100%);height:auto;filter:drop-shadow(0 0 22px rgba(94,246,255,.06))}
+.gallows{stroke:#dfe7ff;stroke-width:5;stroke-linecap:round;fill:none}
+.person-part{stroke:#ff7a92;stroke-width:5;stroke-linecap:round;fill:none;opacity:0;transition:opacity .2s ease}
+.person-part.visible{opacity:1}
+
+.mistakes-label{margin-top:18px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.mistakes-count{margin-top:5px;font-size:24px;font-weight:950;color:var(--danger)}
+
+.play-panel{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.category-badge{align-self:center;padding:8px 12px;border-radius:999px;background:rgba(94,246,255,.07);border:1px solid rgba(94,246,255,.16);color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.word-display{
+  margin:26px auto 16px;
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px 8px;
+  min-height:64px;
+}
+.letter-slot{
+  width:clamp(30px,5vw,42px);
+  min-height:50px;
+  border-bottom:3px solid rgba(94,246,255,.55);
+  display:grid;
+  place-items:center;
+  font-size:clamp(22px,4vw,30px);
+  font-weight:950;
+  color:#fff;
+  text-transform:uppercase;
+}
+.letter-slot.space{border-bottom:0;width:18px}
+.hint{margin:0 auto 18px;color:var(--muted);font-size:14px;line-height:1.55;max-width:620px;text-align:center}
+
+.keyboard{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px;width:100%;max-width:760px;margin:0 auto}
+.key{
+  min-width:0;
+  min-height:46px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:11px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+  transition:.18s ease;
+  touch-action:manipulation;
+  user-select:none;
+}
+.key:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(94,246,255,.32);box-shadow:0 0 18px rgba(94,246,255,.07)}
+.key:active:not(:disabled){transform:scale(.96)}
+.key:disabled{cursor:default;opacity:.45}
+.key.correct{background:rgba(105,255,189,.13);border-color:rgba(105,255,189,.35);color:var(--success);opacity:1}
+.key.wrong{background:rgba(255,96,125,.10);border-color:rgba(255,96,125,.27);color:#ff9aae;opacity:.55}
+
+.round-summary{margin:18px auto 0;min-height:50px;width:min(620px,100%);padding:13px 16px;border-radius:15px;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(3,8,22,.54);border:1px solid rgba(94,246,255,.10);color:#dfe8ff;font-weight:750;line-height:1.45}
+.round-summary.win{border-color:rgba(105,255,189,.30);color:var(--success)}
+.round-summary.lose{border-color:rgba(255,96,125,.30);color:#ff9aae}
+
+/* Footer */
+.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{text-align:left}
+.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}
+.footer-logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:#dfe7ff;font-size:13px;line-height:1.5}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
+.footer-links a,.footer-links button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px;transition:.2s ease}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}
+.status{display:inline-flex;align-items:center;gap:7px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+
+.help-panel,.end-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.help-panel.open,.end-modal.open{display:flex}
+.modal-card{width:min(540px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+.end-card{text-align:center}
+.end-card .result-word{font-size:clamp(28px,7vw,46px);font-weight:950;margin:12px 0;background:linear-gradient(90deg,var(--cyan),#c49cff,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+@media(max-width:900px){
+  .hero,.game-stage{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
+  .game-top{grid-template-columns:1fr}.toolbar{justify-content:flex-start}
+  .drawing-panel{min-height:340px}.hangman-svg{width:min(240px,80vw)}
+  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{text-align:center}.footer-logo{justify-content:center}.footer-links{justify-content:center}
+}
+
+@media(max-width:640px){
+  .brand span:last-child{display:none}
+  .page-title span{display:none}
+  .title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .drawing-panel{min-height:300px;padding:16px}.play-panel{padding:16px}
+  .keyboard{grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.key{min-height:44px;font-size:14px}
+  .word-display{gap:8px 6px}.letter-slot{width:30px;min-height:44px;font-size:22px}
+  .footer-bottom{justify-content:center;text-align:center}
+}
+
+@media(max-width:390px){
+  .page-title strong{font-size:14px}.title-icon{width:27px;height:27px}
+  .stats-card{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}
+  .keyboard{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}.key{min-height:42px;padding:0;font-size:13px}
+  .letter-slot{width:27px;min-height:40px;font-size:20px}
+}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
 
-<header>Hangman</header>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
+      <div class="brand-mark">G</div>
+      <span>G-GAMES</span>
+    </a>
 
-<div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Hangman game here.</div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+    <div class="title-wrap">
+      <img class="title-icon" src="image/Hangman.png" alt="Hangman icon" onerror="this.style.display='none'">
+      <div class="page-title">
+        <strong>Hangman</strong>
+        <span>Word Challenge • Letter Puzzle</span>
+      </div>
+    </div>
+
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Hangman">?</button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Word Challenge</div>
+      <h1>Save the <span>Hidden Word</span></h1>
+      <p>Guess one letter at a time and reveal the hidden word before your six allowed mistakes are used. Use the on-screen keyboard on desktop, tablet, or mobile.</p>
+    </div>
+
+    <aside class="stats-card">
+      <div class="stat"><span>Wins</span><strong id="winsStat">0</strong></div>
+      <div class="stat"><span>Losses</span><strong id="lossesStat">0</strong></div>
+      <div class="stat"><span>Streak</span><strong id="streakStat">0</strong></div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div>
+        <div class="status-label">Game Status</div>
+        <div class="status-message" id="statusMsg">Choose a letter to begin.</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="newRound()">New Word</button>
+        <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-stage">
+      <section class="drawing-panel" aria-label="Hangman drawing">
+        <svg class="hangman-svg" viewBox="0 0 320 320" role="img" aria-label="Hangman progress drawing">
+          <line class="gallows" x1="35" y1="285" x2="285" y2="285"/>
+          <line class="gallows" x1="80" y1="285" x2="80" y2="35"/>
+          <line class="gallows" x1="80" y1="35" x2="220" y2="35"/>
+          <line class="gallows" x1="220" y1="35" x2="220" y2="72"/>
+          <circle id="part0" class="person-part" cx="220" cy="102" r="30"/>
+          <line id="part1" class="person-part" x1="220" y1="132" x2="220" y2="205"/>
+          <line id="part2" class="person-part" x1="220" y1="150" x2="180" y2="180"/>
+          <line id="part3" class="person-part" x1="220" y1="150" x2="260" y2="180"/>
+          <line id="part4" class="person-part" x1="220" y1="205" x2="185" y2="250"/>
+          <line id="part5" class="person-part" x1="220" y1="205" x2="255" y2="250"/>
+        </svg>
+        <div class="mistakes-label">Mistakes</div>
+        <div class="mistakes-count"><span id="mistakeCount">0</span> / 6</div>
+      </section>
+
+      <section class="play-panel">
+        <div class="category-badge" id="categoryBadge">Category</div>
+        <div class="word-display" id="wordDisplay" aria-label="Hidden word"></div>
+        <p class="hint" id="hintText">Hint will appear here.</p>
+        <div class="keyboard" id="keyboard" aria-label="Letter keyboard"></div>
+        <div class="round-summary" id="roundSummary">Select a letter to start guessing.</div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">G</span>
+          <span>G-GAMES</span>
+        </div>
+        <div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div>
+      </div>
+
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time...</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="helpTitle">How to Play Hangman</h2>
+      <button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button>
+    </div>
+    <ol>
+      <li>A hidden word is selected automatically at the start of every round.</li>
+      <li>Select letters using the on-screen keyboard or your physical keyboard.</li>
+      <li>Correct letters are revealed in the word.</li>
+      <li>Incorrect letters add one part to the Hangman drawing.</li>
+      <li>You win by revealing the entire word before reaching six mistakes.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+  <div class="modal-card end-card">
+    <h2 id="endTitle">Round Complete</h2>
+    <p id="endMessage">You completed the round.</p>
+    <div class="result-word" id="resultWord">WORD</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" type="button" onclick="closeEndModal(true)">Play Again</button>
+      <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+    </div>
+  </div>
 </div>
 
 <script>
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+const WORDS = [
+  {word:'JAVASCRIPT',category:'Technology',hint:'A programming language commonly used in web browsers.'},
+  {word:'COMPUTER',category:'Technology',hint:'An electronic device used to process information.'},
+  {word:'KEYBOARD',category:'Technology',hint:'A device with keys used for typing.'},
+  {word:'INTERNET',category:'Technology',hint:'A worldwide network connecting computers and devices.'},
+  {word:'GALAXY',category:'Space',hint:'A huge collection of stars, gas, and dust.'},
+  {word:'PLANET',category:'Space',hint:'A large object that moves around a star.'},
+  {word:'ASTRONAUT',category:'Space',hint:'A person trained to travel into space.'},
+  {word:'VOLCANO',category:'Nature',hint:'A mountain that can erupt with lava.'},
+  {word:'RAINBOW',category:'Nature',hint:'A colorful arc often seen after rain.'},
+  {word:'OCEAN',category:'Nature',hint:'A very large body of salt water.'},
+  {word:'ELEPHANT',category:'Animals',hint:'A very large land animal with a trunk.'},
+  {word:'PENGUIN',category:'Animals',hint:'A flightless bird known for living in cold regions.'},
+  {word:'DOLPHIN',category:'Animals',hint:'An intelligent marine mammal.'},
+  {word:'BASKETBALL',category:'Sports',hint:'A sport played by shooting a ball through a hoop.'},
+  {word:'FOOTBALL',category:'Sports',hint:'A team sport played with a ball and goals or end zones.'},
+  {word:'PUZZLE',category:'Games',hint:'A problem or challenge designed to test thinking.'},
+  {word:'HANGMAN',category:'Games',hint:'The word game you are currently playing.'},
+  {word:'PHILIPPINES',category:'Places',hint:'An island country in Southeast Asia.'},
+  {word:'MOUNTAIN',category:'Places',hint:'A large natural elevation of the Earth.'},
+  {word:'ADVENTURE',category:'General',hint:'An exciting or unusual experience.'}
+];
 
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const MAX_MISTAKES = 6;
+let current = null;
+let guessed = new Set();
+let mistakes = 0;
+let roundEnded = false;
+let lastIndex = -1;
+
+let stats = JSON.parse(localStorage.getItem('gGamesHangmanStats') || '{"wins":0,"losses":0,"streak":0}');
+if(typeof stats.wins !== 'number') stats = {wins:0,losses:0,streak:0};
+
+const wordDisplay = document.getElementById('wordDisplay');
+const keyboard = document.getElementById('keyboard');
+const statusMsg = document.getElementById('statusMsg');
+const roundSummary = document.getElementById('roundSummary');
+const mistakeCount = document.getElementById('mistakeCount');
+const categoryBadge = document.getElementById('categoryBadge');
+const hintText = document.getElementById('hintText');
+const helpPanel = document.getElementById('helpPanel');
+const endModal = document.getElementById('endModal');
+
+function chooseWord(){
+  let index;
+  do{ index = Math.floor(Math.random() * WORDS.length); }
+  while(WORDS.length > 1 && index === lastIndex);
+  lastIndex = index;
+  return WORDS[index];
+}
+
+function newRound(){
+  current = chooseWord();
+  guessed = new Set();
+  mistakes = 0;
+  roundEnded = false;
+  categoryBadge.textContent = current.category;
+  hintText.textContent = current.hint;
+  statusMsg.textContent = 'Choose a letter to begin.';
+  roundSummary.className = 'round-summary';
+  roundSummary.textContent = 'Select a letter to start guessing.';
+  mistakeCount.textContent = '0';
+  document.querySelectorAll('.person-part').forEach(p => p.classList.remove('visible'));
+  renderWord();
+  renderKeyboard();
+  updateStats();
+}
+
+function renderWord(){
+  wordDisplay.innerHTML = '';
+  [...current.word].forEach(char => {
+    const slot = document.createElement('div');
+    slot.className = char === ' ' ? 'letter-slot space' : 'letter-slot';
+    slot.textContent = char === ' ' ? '' : (guessed.has(char) || roundEnded ? char : '');
+    wordDisplay.appendChild(slot);
+  });
+}
+
+function renderKeyboard(){
+  keyboard.innerHTML = '';
+  alphabet.forEach(letter => {
+    const button = document.createElement('button');
+    button.className = 'key';
+    button.type = 'button';
+    button.textContent = letter;
+    button.setAttribute('aria-label', 'Guess letter ' + letter);
+    button.disabled = guessed.has(letter) || roundEnded;
+    if(guessed.has(letter)) button.classList.add(current.word.includes(letter) ? 'correct' : 'wrong');
+    button.addEventListener('click', () => guessLetter(letter));
+    keyboard.appendChild(button);
+  });
+}
+
+function guessLetter(letter){
+  if(roundEnded || guessed.has(letter)) return;
+  guessed.add(letter);
+
+  if(current.word.includes(letter)){
+    statusMsg.textContent = letter + ' is in the word.';
+    roundSummary.className = 'round-summary';
+    roundSummary.textContent = 'Good guess. Keep going.';
+  }else{
+    mistakes++;
+    mistakeCount.textContent = mistakes;
+    const part = document.getElementById('part' + (mistakes - 1));
+    if(part) part.classList.add('visible');
+    statusMsg.textContent = letter + ' is not in the word.';
+    roundSummary.className = 'round-summary';
+    roundSummary.textContent = 'Incorrect letter. You have ' + (MAX_MISTAKES - mistakes) + ' mistake' + ((MAX_MISTAKES - mistakes) === 1 ? '' : 's') + ' remaining.';
+  }
+
+  renderWord();
+  renderKeyboard();
+  checkRound();
+}
+
+function checkRound(){
+  const solved = [...current.word].every(char => char === ' ' || guessed.has(char));
+  if(solved){
+    roundEnded = true;
+    stats.wins++;
+    stats.streak++;
+    saveStats();
+    renderWord();
+    renderKeyboard();
+    statusMsg.textContent = 'You revealed the hidden word.';
+    roundSummary.className = 'round-summary win';
+    roundSummary.textContent = 'Round won. The word was ' + current.word + '.';
+    showEndModal(true);
+  }else if(mistakes >= MAX_MISTAKES){
+    roundEnded = true;
+    stats.losses++;
+    stats.streak = 0;
+    saveStats();
+    renderWord();
+    renderKeyboard();
+    statusMsg.textContent = 'No guesses remaining.';
+    roundSummary.className = 'round-summary lose';
+    roundSummary.textContent = 'Round lost. The word was ' + current.word + '.';
+    showEndModal(false);
+  }
+}
+
+function showEndModal(won){
+  document.getElementById('endTitle').textContent = won ? 'You Won' : 'Round Over';
+  document.getElementById('endMessage').textContent = won ? 'You successfully revealed the hidden word.' : 'You reached the maximum number of mistakes.';
+  document.getElementById('resultWord').textContent = current.word;
+  setTimeout(() => {
+    endModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }, 350);
+}
+
+function closeEndModal(startNew){
+  endModal.classList.remove('open');
+  document.body.style.overflow = '';
+  if(startNew) newRound();
+}
+
+function saveStats(){
+  localStorage.setItem('gGamesHangmanStats', JSON.stringify(stats));
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('winsStat').textContent = stats.wins;
+  document.getElementById('lossesStat').textContent = stats.losses;
+  document.getElementById('streakStat').textContent = stats.streak;
+}
+
+function openHelp(){
+  helpPanel.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp(){
+  helpPanel.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function goBack(){ window.location.href = 'index.html'; }
+
+helpPanel.addEventListener('click', e => { if(e.target === helpPanel) closeHelp(); });
+endModal.addEventListener('click', e => { if(e.target === endModal) closeEndModal(false); });
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(helpPanel.classList.contains('open')) closeHelp();
+    else if(endModal.classList.contains('open')) closeEndModal(false);
+    return;
+  }
+  if(helpPanel.classList.contains('open') || endModal.classList.contains('open')) return;
+  const key = e.key.toUpperCase();
+  if(/^[A-Z]$/.test(key)) guessLetter(key);
+});
+
+function updatePhilippineTime(){
+  const formatter = new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true
+  });
+  document.getElementById('phTime').textContent = formatter.format(new Date());
+}
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+
+newRound();
+</script>
 </body>
 </html>
