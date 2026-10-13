@@ -1,376 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memory Match</title>
-<link rel="icon" type="image/png" href="image/memory.png">
-
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#060816">
+<title>Memory Match</title><link rel="icon" type="image/png" href="image/memory.png">
 <style>
-/* ---------- Global look ---------- */
-body{
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin:0;
-  color:#fff;
-  background: radial-gradient(circle at top left,#380098,black);
-  animation: gradientMove 10s infinite alternate;
-  overflow-x:hidden;
-  text-align:center;
-}
-@keyframes gradientMove{
-  0%{background-position:0% 50%;}
-  100%{background-position:100% 50%;}
-}
-header{
-  background:linear-gradient(90deg,#8a2be2,#4b0082);
-  padding:30px 20px;
-  font-size:36px;
-  font-weight:bold;
-  letter-spacing:1px;
-  text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
-  animation: neon-flicker 2s infinite alternate;
-  position:relative;
-  z-index:5;
-}
-@keyframes neon-flicker{
-  0%,19%,21%,23%,25%,54%,56%,100%{
-    text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
-  }
-  20%,24%,55%{
-    text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;
-  }
+:root{--bg:#050816;--cyan:#5ef6ff;--blue:#69a8ff;--violet:#9b5cff;--pink:#ff5fd7;--text:#f6f8ff;--muted:#9da8c8;--success:#69ffbd;--shadow:0 22px 70px rgba(0,0,0,.44)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;overflow-x:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%)}
+body::before{content:"";position:fixed;inset:0;z-index:-4;pointer-events:none;background-image:linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%)}body::after{content:"";position:fixed;inset:-30%;z-index:-5;pointer-events:none;background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));filter:blur(70px);animation:ambientSpin 30s linear infinite}@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30)}.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}.title-icon{width:34px;height:34px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}.page-title{min-width:0}.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:900;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:1.05;letter-spacing:-.04em}.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.stat span{font-size:13px;color:var(--muted)}.stat strong{font-size:16px}
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(16px,3vw,28px)}.game-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}.status-label,.panel-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:6px}.status-message{font-size:15px;color:#dfe8ff}.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.btn,select{min-height:44px;padding:10px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:750;background:#18213c}.btn{cursor:pointer;transition:transform .2s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.38));border-color:rgba(94,246,255,.3)}select{max-width:100%}select option{background:#111a31}.game-stage{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:18px}.board-panel,.progress-panel{border-radius:22px;padding:clamp(12px,2.5vw,24px);background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);min-width:0}.board-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:15px}.board-heading h2{font-size:18px;margin:0}.board-heading span{font-size:12px;color:var(--muted)}.grid{--columns:4;display:grid;grid-template-columns:repeat(var(--columns),minmax(0,1fr));gap:clamp(5px,1.3vw,11px);width:min(100%,650px);margin:auto}.card{aspect-ratio:4/5;min-width:0;border:0;border-radius:clamp(7px,1.4vw,13px);padding:0;cursor:pointer;background:transparent;perspective:750px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.card-inner{position:relative;width:100%;height:100%;display:block;transform-style:preserve-3d;transition:transform .42s ease}.card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg)}.card-face{position:absolute;inset:0;display:grid;place-items:center;border-radius:inherit;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid rgba(94,246,255,.2)}.card-back{background:linear-gradient(145deg,#24355f,#30204f);box-shadow:inset 0 0 20px rgba(94,246,255,.06)}.card-back svg{width:42%;height:42%;color:#a5dfff}.card-front{transform:rotateY(180deg);background:linear-gradient(145deg,#132942,#241d4b)}.card-front svg{width:58%;height:58%;stroke:var(--cyan);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.card.matched .card-front{background:linear-gradient(145deg,#12453d,#18354b);border-color:rgba(105,255,189,.6)}.card.matched .card-front svg{stroke:var(--success)}.card:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}.metric{padding:15px;border-radius:15px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);margin-bottom:10px}.metric span{display:block;font-size:12px;color:var(--muted)}.metric strong{display:block;font-size:24px;margin-top:5px}.progress-track{height:9px;border-radius:99px;background:#222a46;overflow:hidden;margin:15px 0}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--success));transition:width .3s}.hint{font-size:13px;line-height:1.6;color:var(--muted)}
+.help-panel,.end-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.76);backdrop-filter:blur(10px)}.help-panel.open,.end-modal.open{display:flex}.modal-card{width:min(540px,100%);max-height:90dvh;overflow:auto;border-radius:24px;padding:24px;background:linear-gradient(145deg,#111733,#080c1d);border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55)}.modal-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-card h2{margin:0;font-size:25px}.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}.modal-card ol{padding-left:20px}.win-card{text-align:center}.win-mark{font-size:50px;color:var(--success);margin-bottom:12px}.win-number{font-size:28px;font-weight:900;color:var(--success);margin:12px 0}
+/* Footer */
+.site-footer{
+  margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
 }
 
-/* help button */
-#helpIcon{
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:24px;
-  background:rgba(255,255,255,0.1);
-  border-radius:50%;
-  width:35px;height:35px;
-  line-height:35px;
-  cursor:pointer;user-select:none;
-}
-#helpText{
-  display:none;
-  position:absolute;
-  top:70px;right:15px;
-  background:rgba(0,0,0,0.8);
-  padding:15px;
-  border-radius:10px;
-  width:250px;
-  text-align:left;
-  font-size:14px;
-  color:#fff;
-  box-shadow:0 0 10px #8a2be2;
-  z-index:6;
+.footer-inner{
+  max-width:1180px;
+  margin:auto;
+  padding:26px 18px 18px;
 }
 
-/* container */
-.container{
-  max-width:900px;
-  margin:30px auto;
-  background:rgba(0,0,0,0.4);
-  padding:20px;
-  border:2px solid #8a2be2;
-  border-radius:15px;
-  box-shadow:0 0 15px #8a2be2,0 0 30px #4b0082;
-}
-.controls{
-  margin-bottom:15px;
-}
-select,button{
-  padding:10px 15px;
-  margin:5px;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-}
-select{
-  background:#222;
-  color:#fff;
-}
-.new-game-btn{
-  background:#8a2be2;color:white;
-  cursor:pointer;
-  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
-}
-.new-game-btn:hover{transform:scale(1.05);}
-.back-button{
-  background:#8a2be2;
-  color:white;
-  cursor:pointer;
-  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
-  margin-top:15px;
-}
-.back-button:hover{transform:scale(1.05);}
-
-/* grid of cards */
-.grid{
+.footer-grid{
   display:grid;
-  gap:10px;
-  justify-content:center;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:24px;
+  align-items:center;
 }
-.card{
-  width:80px;
-  height:100px;
-  background:#444;
-  border-radius:8px;
+
+.footer-brand{text-align:left}
+
+.footer-logo{
   display:flex;
   align-items:center;
-  justify-content:center;
-  font-size:40px;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.footer-logo-mark{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#041019;
+  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  box-shadow:0 0 22px rgba(94,246,255,.18);
+}
+
+.footer-tagline{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.footer-time{
+  text-align:center;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  color:#dfe7ff;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer-time strong{
+  color:var(--cyan);
+  display:block;
+  margin-bottom:2px;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 14px;
+}
+
+.footer-links a,.footer-links button{
+  border:0;
+  padding:0;
+  background:none;
+  color:#c8d1eb;
+  text-decoration:none;
   cursor:pointer;
-  perspective:600px;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform 0.5s;
+  font:inherit;
+  font-size:13px;
+  transition:.2s ease;
 }
-.card.flipped{
-  background:#8a2be2;
+
+.footer-links a:hover,.footer-links button:hover{
+  color:var(--cyan);
 }
-.card.matched{
-  background:limegreen;
-  cursor:default;
+
+.footer-bottom{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#7f8aa9;
+  font-size:12px;
 }
+
 .status{
-  margin:10px 0;
-  font-size:18px;
-  color:#ccc;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
 }
 
-footer{
-  margin:20px 0;
-  font-size:16px;
-  color:#ccc;
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 12px rgba(105,255,189,.65);
 }
 
-/* canvases */
-#starsCanvas,#rippleCanvas{
-  position:fixed;top:0;left:0;width:100vw;height:100vh;
-  pointer-events:none;
-}
-#starsCanvas{z-index:0;}
-#rippleCanvas{z-index:0;}
 
-/* modal for win message */
-#endModal{
-  display:none;
-  position:fixed;top:0;left:0;width:100vw;height:100vh;
-  background:rgba(0,0,0,0.8);
-  justify-content:center;align-items:center;
-  flex-direction:column;
-  color:#fff;
-  z-index:10;
-}
-#endModal h2{font-size:32px;margin-bottom:20px;}
-#endModal button{
-  padding:12px 25px;
-  font-size:18px;
-  border-radius:10px;
-  background:#8a2be2;color:white;border:none;
-  box-shadow:0 0 10px #8a2be2,0 0 20px #4b0082;
-  cursor:pointer;
-}
-#endModal button:hover{transform:scale(1.05);}
-</style>
-</head>
+@media(max-width:900px){.hero,.game-stage{grid-template-columns:1fr}.stats-card{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}.footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{text-align:center}.footer-logo,.footer-links{justify-content:center}.progress-panel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start}.progress-panel .panel-label,.progress-panel .progress-track,.progress-panel .hint{grid-column:1/-1}.metric{margin:0;text-align:center}}
+@media(max-width:640px){.brand span:last-child,.page-title span{display:none}.title-icon{width:30px;height:30px}.main{padding-left:10px;padding-right:10px}.hero-card,.stats-card,.game-panel{border-radius:20px}.stats-card{padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.toolbar label{grid-column:1/-1}.toolbar select{width:100%}.toolbar .btn{width:100%}.board-panel{padding:10px}.progress-panel{padding:12px}.metric{padding:10px}.metric strong{font-size:18px}.card{aspect-ratio:4/5}.grid{gap:6px}}
+@media(max-width:390px){.page-title strong{font-size:14px}.title-icon{width:27px;height:27px}.brand-mark{width:34px;height:34px}.topbar-inner{gap:7px}.stats-card{grid-template-columns:repeat(3,minmax(0,1fr))}.toolbar{grid-template-columns:1fr}.progress-panel{gap:6px}.metric span{font-size:10px}.metric strong{font-size:16px}.grid{gap:4px}.card{border-radius:7px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+</style></head><body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app"><header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><span class="brand-mark">G</span><span>G-GAMES</span></a><div class="title-wrap"><img class="title-icon" src="image/memory.png" alt="Memory Match icon"><div class="page-title"><strong>Memory Match</strong><span>Card Challenge • Brain Game</span></div></div><button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play">?</button></div></header>
+<main class="main"><section class="hero"><div class="hero-card"><div class="eyebrow">G-GAMES • Memory Challenge</div><h1>Find the <span>Matching Pairs</span></h1><p>Flip two cards, remember their positions, and match every pair. Choose your difficulty and challenge your memory.</p></div><aside class="stats-card"><div class="stat"><span>Difficulty</span><strong id="difficultyStat">Easy</strong></div><div class="stat"><span>Moves</span><strong id="movesStat">0</strong></div><div class="stat"><span>Best Moves</span><strong id="bestStat">—</strong></div></aside></section>
+<section class="game-panel"><div class="game-top"><div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg" aria-live="polite">Find all the matching pairs.</div></div><div class="toolbar"><label for="difficulty">Difficulty</label><select id="difficulty" aria-label="Select difficulty"><option value="easy">Easy (4 × 3)</option><option value="medium">Medium (4 × 4)</option><option value="hard">Hard (5 × 4)</option><option value="veryhard">Very Hard (6 × 5)</option></select><button class="btn btn-primary" type="button" onclick="startGame()">New Game</button><button class="btn" type="button" onclick="goBack()">Back to Lobby</button></div></div>
+<div class="game-stage"><section class="board-panel"><div class="board-heading"><h2>Memory Board</h2><span id="boardLabel">6 pairs to find</span></div><div class="grid" id="grid" aria-label="Memory matching cards"></div></section><aside class="progress-panel"><div class="panel-label">Round Progress</div><div class="metric"><span>Pairs Matched</span><strong id="pairsStat">0 / 6</strong></div><div class="metric"><span>Time Elapsed</span><strong id="timerStat">00:00</strong></div><div class="metric"><span>Accuracy</span><strong id="accuracyStat">100%</strong></div><div class="progress-track" aria-label="Matching progress"><div class="progress-fill" id="progressFill"></div></div><div class="hint">Tap or click any two cards to reveal their icons. Matching cards stay visible. Your timer starts with your first flip.</div></aside></div></section></main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">G</span>
+          <span>G-GAMES</span>
+        </div>
+        <div class="footer-tagline">
+          Fast, casual mini-games built for desktop, tablet, and mobile.
+        </div>
+      </div>
 
-<body>
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time…</span>
+      </div>
 
-<header>
-  Memory Match
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
-</header>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
+    </div>
 
-<div id="helpText">
-  <strong>How to Play Memory Match:</strong><br>
-  1. Choose a difficulty (more cards = harder).<br>
-  2. Click “New Game” to start.<br>
-  3. Flip two cards at a time to find matching pairs.<br>
-  4. Match all cards to win.<br>
-  5. Try to remember card positions and finish fast!
-</div>
-
-<div class="container">
-  <div class="controls">
-    <label for="difficulty">Difficulty:</label>
-    <select id="difficulty">
-      <option value="easy">Easy (4×3)</option>
-      <option value="medium">Medium (4×4)</option>
-      <option value="hard">Hard (5×4)</option>
-      <option value="veryhard">Very Hard (6×5)</option>
-    </select>
-    <button class="new-game-btn" onclick="startGame()">New Game</button>
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    </div>
   </div>
-
-  <div class="status" id="status">Select difficulty and start a new game!</div>
-  <div class="grid" id="grid"></div>
-
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+</footer>
 </div>
-
-<footer>© 2025 All Rights Reserved | 🚀 Developed by Accx Creations</footer>
-
-<!-- win modal -->
-<div id="endModal">
-  <h2 id="modalMessage">You Win!</h2>
-  <button onclick="closeModal()">Close</button>
-</div>
-
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="modal-card"><div class="modal-top"><h2 id="helpTitle">How to Play Memory Match</h2><button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button></div><ol><li>Choose a difficulty and select New Game.</li><li>Tap or click two cards to reveal their icons.</li><li>If the icons match, the cards remain face up.</li><li>If they differ, the cards flip back after a short delay.</li><li>Match every pair using as few moves as possible.</li></ol></div></div>
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="winTitle"><div class="modal-card win-card"><div class="win-mark" aria-hidden="true">✓</div><h2 id="winTitle">All Pairs Matched!</h2><div class="win-number" id="winSummary"></div><p id="winDetails"></p><button class="btn btn-primary" type="button" onclick="closeModal()">Play Again</button></div></div>
 <script>
-/* ---------- Help toggle ---------- */
-function toggleHelp(){
-  const h=document.getElementById('helpText');
-  h.style.display=h.style.display==='block'?'none':'block';
-}
-
-/* ---------- Back button ---------- */
-function goBack(){ window.location.href="index.html"; }
-
-/* ---------- Memory Match logic ---------- */
-const gridEl=document.getElementById('grid');
-const statusEl=document.getElementById('status');
-let firstCard=null,secondCard=null,lockBoard=false,matchedPairs=0,totalPairs=0;
-
-function startGame(){
-  const diff=document.getElementById('difficulty').value;
-  let rows,cols;
-  if(diff==='easy'){rows=3;cols=4;}
-  else if(diff==='medium'){rows=4;cols=4;}
-  else if(diff==='hard'){rows=4;cols=5;}
-  else{rows=5;cols=6;}
-  totalPairs=(rows*cols)/2;
-  matchedPairs=0;
-  statusEl.textContent="Game Started! Find all "+totalPairs+" pairs.";
-  generateCards(rows,cols);
-}
-
-function generateCards(r,c){
-  gridEl.innerHTML='';
-  gridEl.style.gridTemplateColumns=`repeat(${c},80px)`;
-  const symbols='🍎🍌🍇🍉🍓🥕🍒🥑🥦🥬🍋🍊🥝🍍🥥🍆🌽🫛🧄🥔🧅🥒🥨🍪🍫🍩🍰🧁🍔🍟🍕🌭🥪🥗🍿🍗🥩🍖🍣🍤🍱🥟🥠🍜🍝🥞🧇';
-  let chosen=[...symbols].sort(()=>0.5-Math.random()).slice(0,totalPairs);
-  let deck=[...chosen,...chosen];
-  deck.sort(()=>0.5-Math.random());
-  deck.forEach(sym=>{
-    const card=document.createElement('div');
-    card.className='card';
-    card.dataset.symbol=sym;
-    card.onclick=()=>flipCard(card);
-    gridEl.appendChild(card);
-  });
-}
-
-function flipCard(card){
-  if(lockBoard||card===firstCard||card.classList.contains('matched'))return;
-  card.textContent=card.dataset.symbol;
-  card.classList.add('flipped');
-  if(!firstCard){
-    firstCard=card;return;
-  }
-  secondCard=card;
-  lockBoard=true;
-  checkMatch();
-}
-
-function checkMatch(){
-  if(firstCard.dataset.symbol===secondCard.dataset.symbol){
-    firstCard.classList.add('matched');
-    secondCard.classList.add('matched');
-    matchedPairs++;
-    statusEl.textContent=`Pairs matched: ${matchedPairs}/${totalPairs}`;
-    resetTurn();
-    if(matchedPairs===totalPairs) showWinModal();
-  }else{
-    setTimeout(()=>{
-      firstCard.textContent='';
-      secondCard.textContent='';
-      firstCard.classList.remove('flipped');
-      secondCard.classList.remove('flipped');
-      resetTurn();
-    },800);
-  }
-}
-function resetTurn(){[firstCard,secondCard,lockBoard]=[null,null,false];}
-
-function showWinModal(){
-  document.getElementById('modalMessage').textContent="🎉 You matched all pairs!";
-  document.getElementById('endModal').style.display='flex';
-}
-function closeModal(){
-  document.getElementById('endModal').style.display='none';
-  statusEl.textContent="Great job! Start a new game or change difficulty.";
-}
-
-/* ---------- Stars background ---------- */
-const starsCanvas=document.getElementById('starsCanvas');
-const starsCtx=starsCanvas.getContext('2d');
-let stars=[];
-function resizeStarsCanvas(){
-  starsCanvas.width=window.innerWidth;
-  starsCanvas.height=window.innerHeight;
-  generateStars();
-}
-function generateStars(){
-  stars=[];
-  for(let i=0;i<200;i++){
-    stars.push({x:Math.random()*starsCanvas.width,
-                y:Math.random()*starsCanvas.height,
-                alpha:Math.random()*0.7+0.3,
-                radius:Math.random()*1.5+0.5,
-                flickerSpeed:Math.random()*0.05+0.02});
-  }
-}
-function animateStars(){
-  starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
-  stars.forEach(star=>{
-    star.alpha+=star.flickerSpeed*(Math.random()<0.5?-1:1);
-    if(star.alpha<0.1) star.alpha=0.1;
-    if(star.alpha>1) star.alpha=1;
-    starsCtx.beginPath();
-    starsCtx.arc(star.x,star.y,star.radius,0,Math.PI*2);
-    starsCtx.fillStyle=`rgba(255,255,255,${star.alpha})`;
-    starsCtx.fill();
-  });
-  requestAnimationFrame(animateStars);
-}
-window.addEventListener('resize',resizeStarsCanvas);
-resizeStarsCanvas();animateStars();
-
-/* ---------- Ripple effect ---------- */
-const rippleCanvas=document.getElementById('rippleCanvas');
-const rippleCtx=rippleCanvas.getContext('2d');
-let ripples=[];
-function resizeRippleCanvas(){
-  rippleCanvas.width=window.innerWidth;
-  rippleCanvas.height=window.innerHeight;
-}
-window.addEventListener('resize',resizeRippleCanvas);
-resizeRippleCanvas();
-window.addEventListener('mousemove',e=>{
-  ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});
-  if(ripples.length>20) ripples.shift();
-});
-function animateRipples(){
-  rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
-  ripples.forEach((r,i)=>{
-    r.radius+=1.5;
-    r.alpha-=0.007;
-    if(r.alpha<=0){ripples.splice(i,1);return;}
-    rippleCtx.beginPath();
-    rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);
-    rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;
-    rippleCtx.lineWidth=r.lineWidth;
-    rippleCtx.stroke();
-  });
-  requestAnimationFrame(animateRipples);
-}
-animateRipples();
-</script>
-</body>
-</html>
+const configs={easy:[3,4],medium:[4,4],hard:[4,5],veryhard:[5,6]};
+// Inline SVG line icons: no emoji or external icon service required.
+const paths=[
+'<circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/>',
+'<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>',
+'<path d="M12 3 3 9v6l9 6 9-6V9zM3 9l9 6 9-6M12 15v6"/>',
+'<path d="M12 2 4 6v6c0 5 3 8 8 10 5-2 8-5 8-10V6z"/>',
+'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6m0 6v6M3 12h6m6 0h6"/>',
+'<path d="M4 18 12 4l8 14z"/><path d="M8 15h8"/>',
+'<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8M12 8v8"/>',
+'<path d="M12 2 2 12l10 10 10-10z"/><path d="M8 12h8"/>',
+'<path d="M5 5h14v14H5zM5 5l14 14M19 5 5 19"/>',
+'<path d="M12 2 5 9l7 13 7-13zM5 9h14"/>',
+'<circle cx="8" cy="8" r="4"/><circle cx="16" cy="8" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="16" cy="16" r="4"/>',
+'<path d="M3 12h18M12 3v18M5 5l14 14M19 5 5 19"/>',
+'<path d="M4 7h16v10H4zM8 7V4h8v3M8 17v3h8v-3"/>',
+'<path d="M12 3 3 12l9 9 9-9zM12 3v18M3 12h18"/>',
+'<path d="M4 4h16v16H4zM8 8h8v8H8z"/>'
+];
+const backSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7zM3 7l9 5 9-5M12 12v10"/></svg>';
+const grid=document.getElementById('grid');let first=null,second=null,locked=false,matched=0,moves=0,total=0,seconds=0,timer=null,started=false,finished=false,round=0;let lastFocus=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function bestKey(){return 'ggames-memory-best-'+document.getElementById('difficulty').value}
+function readBest(){try{return localStorage.getItem(bestKey())}catch{return null}}
+function saveBest(value){try{localStorage.setItem(bestKey(),String(value))}catch{}}
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function updateUI(){document.getElementById('movesStat').textContent=moves;document.getElementById('pairsStat').textContent=matched+' / '+total;document.getElementById('accuracyStat').textContent=(moves?Math.round(matched/moves*100):100)+'%';document.getElementById('progressFill').style.width=(total?matched/total*100:0)+'%';document.getElementById('timerStat').textContent=formatTime(seconds);document.getElementById('bestStat').textContent=readBest()??'—'}
+function stopTimer(){if(timer!==null){clearInterval(timer);timer=null}}
+function startGame(){round++;stopTimer();const diff=document.getElementById('difficulty').value;const [rows,cols]=configs[diff];total=rows*cols/2;first=second=null;locked=false;matched=moves=seconds=0;started=finished=false;document.getElementById('endModal').classList.remove('open');document.body.style.overflow='';grid.style.setProperty('--columns',cols);grid.replaceChildren();document.getElementById('difficultyStat').textContent=({easy:'Easy',medium:'Medium',hard:'Hard',veryhard:'Very Hard'})[diff];document.getElementById('boardLabel').textContent=total+' pairs to find';document.getElementById('statusMsg').textContent='Find all '+total+' matching pairs.';const deck=shuffle([...Array(total).keys(),...Array(total).keys()]);deck.forEach((symbol,index)=>{const card=document.createElement('button');card.type='button';card.className='card';card.dataset.symbol=symbol;card.setAttribute('aria-label','Card '+(index+1)+', face down');card.setAttribute('aria-pressed','false');card.innerHTML='<span class="card-inner"><span class="card-face card-back">'+backSvg+'</span><span class="card-face card-front"><svg viewBox="0 0 24 24" aria-hidden="true">'+paths[symbol]+'</svg></span></span>';card.addEventListener('click',()=>flipCard(card));grid.appendChild(card)});updateUI()}
+function reveal(card){card.classList.add('flipped');card.setAttribute('aria-pressed','true');card.setAttribute('aria-label','Revealed card '+(Number(card.dataset.symbol)+1))}
+function conceal(card){card.classList.remove('flipped');card.setAttribute('aria-pressed','false');card.setAttribute('aria-label','Card face down')}
+function flipCard(card){if(locked||finished||card===first||card.classList.contains('matched')||card.classList.contains('flipped'))return;if(!started){started=true;timer=setInterval(()=>{seconds++;updateUI()},1000)}reveal(card);if(!first){first=card;return}second=card;locked=true;moves++;const a=first,b=second;const thisRound=round;if(a.dataset.symbol===b.dataset.symbol){a.classList.add('matched');b.classList.add('matched');a.disabled=b.disabled=true;matched++;first=second=null;locked=false;document.getElementById('statusMsg').textContent='Great match! '+matched+' of '+total+' pairs found.';updateUI();if(matched===total)win()}else{document.getElementById('statusMsg').textContent='Not a match. Try to remember those cards.';updateUI();setTimeout(()=>{if(round!==thisRound)return;conceal(a);conceal(b);first=second=null;locked=false},850)}}
+function win(){finished=true;stopTimer();const old=readBest();if(old===null||moves<Number(old))saveBest(moves);updateUI();document.getElementById('statusMsg').textContent='You matched all '+total+' pairs!';document.getElementById('winSummary').textContent=moves+' moves';document.getElementById('winDetails').textContent='Completed '+total+' pairs in '+formatTime(seconds)+'.'+(old===null||moves<Number(old)?' New best score!':'');setTimeout(()=>{if(!finished)return;lastFocus=document.activeElement;document.getElementById('endModal').classList.add('open');document.body.style.overflow='hidden';document.querySelector('#endModal button').focus()},350)}
+function goBack(){location.href='index.html'}
+function openHelp(){lastFocus=document.activeElement;document.getElementById('helpPanel').classList.add('open');document.body.style.overflow='hidden';document.querySelector('#helpPanel button').focus()}
+function closeHelp(){document.getElementById('helpPanel').classList.remove('open');document.body.style.overflow='';lastFocus?.focus()}
+function closeModal(){document.getElementById('endModal').classList.remove('open');document.body.style.overflow='';startGame();document.querySelector('.btn-primary').focus()}
+document.getElementById('helpPanel').addEventListener('click',e=>{if(e.target.id==='helpPanel')closeHelp()});document.getElementById('endModal').addEventListener('click',e=>{if(e.target.id==='endModal')closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('helpPanel').classList.contains('open'))closeHelp();else if(document.getElementById('endModal').classList.contains('open'))closeModal()}});
+function updatePhilippineTime(){document.getElementById('phTime').textContent=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true}).format(new Date())}updatePhilippineTime();setInterval(updatePhilippineTime,1000);startGame();
+</script></body></html>
