@@ -2,430 +2,1289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
 <title>Typing Test</title>
+<link rel="icon" type="image/png" href="image/typing-test.png">
+
 <style>
-/* === Global Body & Background === */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0; padding: 0;
-  text-align: center;
-  color: #fff;
-  background: radial-gradient(circle at top left, #380098, black);
-  background-size: 200% 200%;
-  animation: gradientMove 10s infinite alternate;
-  overflow-x: hidden;
-}
-@keyframes gradientMove {
-  0%{background-position:0% 50%;}
-  100%{background-position:100% 50%;}
-}
-
-/* === Header === */
-header {
-  background: linear-gradient(90deg, #8a2be2, #4b0082);
-  padding: 30px 20px;
-  font-size: 36px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: white;
-  text-shadow: 0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;
-  animation: neon-flicker 2s infinite alternate;
-  position: relative;
-  z-index: 10;
-}
-@keyframes neon-flicker {
-  0%,19%,21%,23%,25%,54%,56%,100% {text-shadow:0 0 5px #fff,0 0 10px #8a2be2,0 0 20px #4b0082,0 0 30px #8a2be2;}
-  20%,24%,55% {text-shadow:0 0 2px #fff,0 0 5px #8a2be2,0 0 10px #4b0082,0 0 15px #8a2be2;}
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --warning:#ffd76a;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
 }
 
-/* === Help Icon === */
-#helpIcon {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 24px;
-  width: 35px; height: 35px;
-  line-height: 35px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  cursor: pointer; user-select: none;
-  z-index: 20;
-}
-#helpText {
-  display: none;
-  position: absolute;
-  top: 70px; right: 15px;
-  background: rgba(0,0,0,0.8);
-  padding: 15px;
-  border-radius: 10px;
-  width: 250px;
-  text-align: left;
-  font-size: 14px;
-  color: #fff;
-  box-shadow: 0 0 10px #8a2be2;
-  z-index: 20;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
 }
 
-/* === Container & Buttons === */
-.container {
-  max-width: 800px; 
-  margin: 20px auto; 
-  position: relative; 
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-  padding: 0 20px;
-  box-sizing: border-box;
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
 
-.controls {
-  margin-bottom: 20px;
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
 }
 
-.controls button,
-.back-button {
-  background: linear-gradient(135deg,#8a2be2,#4b0082);
-  border: none; 
-  padding: 12px 25px; 
-  color: white; 
-  font-size: 16px; 
-  border-radius: 10px; 
-  cursor: pointer; 
-  margin-right: 10px; 
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
-  transition: all 0.3s ease;
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+
+.orb{
+  position:fixed;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  filter:blur(85px);
+  opacity:.25;
+  pointer-events:none;
+  z-index:-2;
 }
-.controls button:hover,
-.back-button:hover { 
-  transform: scale(1.05); 
-  box-shadow: 0 0 20px #9b30ff,0 0 40px #6a0dad; 
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
-/* === Timer === */
-#timerContainer {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 18px;
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
 }
 
-#timerSelect {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+.topbar-inner{
+  max-width:1180px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
 }
 
-#timerValue {
-  font-weight: bold;
-  font-size: 20px;
-  padding: 5px 15px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  box-shadow: 0 0 10px #8a2be2,0 0 20px #4b0082;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.08em;
+  white-space:nowrap;
 }
 
-/* === Typing Area === */
-#testText {
-  font-size: 18px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  width: 100%;
-  min-height: 150px;
-  text-align: left;
-  line-height: 1.6;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
+  border:1px solid rgba(94,246,255,.30);
+  box-shadow:0 0 24px rgba(94,246,255,.12);
 }
 
-#testText p {
-  margin: 5px 0;
+.title-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  min-width:0;
 }
 
-.correct { color: #00ff00; }
-.incorrect { color: #ff4d4d; }
-
-#inputArea {
-  font-size: 18px;
-  padding: 12px;
-  width: 100%;
-  max-width: 100%;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
+.title-icon{
+  width:34px;
+  height:34px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 0 10px rgba(94,246,255,.22));
 }
 
-/* === Background Canvases === */
-#starsCanvas,#rippleCanvas{
-  position:fixed; top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none; z-index:0;
+.page-title{min-width:0;text-align:left}
+.page-title strong{
+  display:block;
+  font-size:clamp(16px,2.2vw,22px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.page-title span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
 }
 
-/* === Footer === */
-footer{
-  margin-top: 30px;
-  font-size: 16px;
-  color: #ccc;
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  transition:.22s ease;
+}
+.icon-btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(94,246,255,.40);
+  box-shadow:0 0 24px rgba(94,246,255,.10);
 }
 
-/* === Modal === */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-.modal-content {
-  background: #1e1e2f;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 0 20px #8a2be2, 0 0 40px #4b0082;
-}
-.modal-content h2 { margin-bottom: 20px; color: #fff; }
-.close-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: #8a2be2;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
+.main{
+  flex:1;
+  width:100%;
+  padding:clamp(18px,4vw,44px) 14px 34px;
 }
 
-/* === Responsive === */
-@media screen and (max-width: 500px){
-  .container { padding: 0 10px; }
-  #testText { font-size: 16px; }
-  #inputArea { font-size: 16px; padding: 10px; }
-  #timerContainer { gap: 10px; font-size: 16px; }
+.hero{
+  max-width:1180px;
+  margin:0 auto 22px;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+  gap:18px;
+}
+
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+
+.hero-card{
+  border-radius:24px;
+  padding:clamp(22px,4vw,38px);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::after{
+  content:"Aa";
+  position:absolute;
+  right:22px;
+  top:10px;
+  font-size:90px;
+  line-height:1;
+  font-weight:950;
+  color:rgba(94,246,255,.045);
+  letter-spacing:-.08em;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:9px 0 10px;
+  font-size:clamp(30px,5.6vw,60px);
+  line-height:.98;
+  letter-spacing:-.04em;
+}
+
+.hero h1 span{
+  background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  font-size:clamp(14px,2vw,16px);
+  line-height:1.65;
+}
+
+.stats-card{
+  border-radius:24px;
+  padding:20px;
+  display:grid;
+  gap:12px;
+  align-content:center;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+
+.game-panel{
+  max-width:1180px;
+  margin:0 auto;
+  border-radius:28px;
+  padding:clamp(16px,3vw,28px);
+}
+
+.game-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:center;
+  margin-bottom:18px;
+}
+.status-wrap{min-width:0}
+.status-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:900;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.status-message{
+  min-height:24px;
+  font-size:15px;
+  color:#dfe8ff;
+}
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  justify-content:flex-end;
+}
+
+.btn{
+  min-height:42px;
+  padding:10px 15px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+  cursor:pointer;
+  font-weight:850;
+  background:rgba(255,255,255,.055);
+  transition:.22s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{
+  background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));
+  border-color:rgba(94,246,255,.28);
+}
+
+.typing-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+  gap:18px;
+}
+
+.typing-card,.side-panel{
+  border-radius:22px;
+  padding:clamp(18px,3vw,28px);
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.timer-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:end;
+  margin-bottom:16px;
+}
+
+.field-label{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:900;
+  margin-bottom:7px;
+  text-align:left;
+}
+
+.timer-select{
+  width:100%;
+  min-height:46px;
+  border-radius:13px;
+  border:1px solid rgba(94,246,255,.17);
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  padding:0 13px;
+  font-size:15px;
+  outline:none;
+}
+.timer-select:focus{
+  border-color:rgba(94,246,255,.44);
+  box-shadow:0 0 0 4px rgba(94,246,255,.06);
+}
+.timer-select option{background:#0b1027;color:#fff}
+
+.timer-box{
+  min-width:118px;
+  min-height:46px;
+  padding:10px 14px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,rgba(94,246,255,.10),rgba(155,92,255,.13));
+  border:1px solid rgba(94,246,255,.16);
+}
+.timer-box span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.timer-box strong{font-size:22px;margin-top:2px;color:var(--cyan)}
+
+.test-text{
+  min-height:200px;
+  padding:clamp(18px,3vw,24px);
+  border-radius:18px;
+  text-align:left;
+  font-size:clamp(17px,2.2vw,20px);
+  line-height:1.8;
+  letter-spacing:.01em;
+  overflow-wrap:anywhere;
+  background:
+    linear-gradient(145deg,rgba(94,246,255,.035),rgba(155,92,255,.045)),
+    rgba(3,8,22,.50);
+  border:1px solid rgba(94,246,255,.10);
+  box-shadow:inset 0 0 30px rgba(0,0,0,.14);
+}
+
+.test-text span{
+  color:#cdd6ee;
+  border-radius:3px;
+}
+.test-text span.correct{color:var(--success)}
+.test-text span.incorrect{
+  color:#fff;
+  background:rgba(255,96,125,.30);
+  box-shadow:0 0 0 1px rgba(255,96,125,.22);
+}
+.test-text span.current{
+  box-shadow:inset 0 -2px 0 var(--cyan);
+}
+
+.input-wrap{margin-top:14px}
+.typing-input{
+  width:100%;
+  min-height:58px;
+  resize:vertical;
+  max-height:150px;
+  padding:15px 16px;
+  border-radius:15px;
+  border:1px solid rgba(94,246,255,.18);
+  outline:none;
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  font-size:17px;
+  line-height:1.5;
+  font-family:inherit;
+}
+.typing-input::placeholder{color:#7783a6}
+.typing-input:focus{
+  border-color:rgba(94,246,255,.46);
+  box-shadow:0 0 0 4px rgba(94,246,255,.06);
+}
+.typing-input:disabled{opacity:.55;cursor:not-allowed}
+
+.input-note{
+  margin-top:8px;
+  text-align:left;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.panel-label{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  font-weight:900;
+  margin-bottom:12px;
+  text-align:left;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.metric{
+  padding:14px;
+  border-radius:15px;
+  text-align:center;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+.metric span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+}
+.metric strong{
+  display:block;
+  margin-top:5px;
+  font-size:22px;
+  color:#fff;
+}
+
+.progress-card{
+  margin-top:14px;
+  padding:15px;
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);
+}
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  color:var(--muted);
+  font-size:12px;
+}
+.progress-track{
+  height:8px;
+  margin-top:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  overflow:hidden;
+}
+.progress-fill{
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
+  box-shadow:0 0 20px rgba(94,246,255,.15);
+  transition:width .15s ease;
+}
+
+.tip-card{
+  margin-top:14px;
+  padding:15px;
+  border-radius:16px;
+  text-align:left;
+  color:#cfd8f1;
+  font-size:13px;
+  line-height:1.6;
+  background:linear-gradient(145deg,rgba(94,246,255,.045),rgba(155,92,255,.05));
+  border:1px solid rgba(94,246,255,.08);
+}
+
+.help-panel,.result-modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(1,4,12,.72);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.help-panel.open,.result-modal.open{display:flex}
+
+.modal-card{
+  width:min(560px,100%);
+  border-radius:24px;
+  padding:24px;
+  background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));
+  border:1px solid rgba(94,246,255,.17);
+  box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07);
+}
+.modal-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+
+.result-card{text-align:center}
+.result-icon{
+  width:88px;
+  height:88px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle,rgba(94,246,255,.18),rgba(155,92,255,.08) 58%,rgba(255,255,255,.02));
+  border:1px solid rgba(94,246,255,.22);
+}
+.result-icon svg{width:46px;height:46px}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:18px 0;
+}
+.result-metric{
+  padding:14px 10px;
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+.result-metric span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.result-metric strong{
+  display:block;
+  margin-top:6px;
+  font-size:23px;
+}
+
+/* Footer */
+.site-footer{
+  margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:24px;
+  align-items:center;
+}
+.footer-brand{text-align:left}
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+.footer-logo-mark{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#041019;
+  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  box-shadow:0 0 22px rgba(94,246,255,.18);
+}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{
+  text-align:center;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  color:#dfe7ff;
+  font-size:13px;
+  line-height:1.5;
+}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 14px;
+}
+.footer-links a,.footer-links button{
+  border:0;
+  padding:0;
+  background:none;
+  color:#c8d1eb;
+  text-decoration:none;
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  transition:.2s ease;
+}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#7f8aa9;
+  font-size:12px;
+}
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 12px rgba(105,255,189,.65);
+}
+
+@media(max-width:900px){
+  .hero,.typing-layout{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}
+  .stat span,.stat strong{display:block}
+  .stat strong{margin-top:5px}
+  .game-top{grid-template-columns:1fr}
+  .toolbar{justify-content:flex-start}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .footer-brand{text-align:center}
+  .footer-logo{justify-content:center}
+  .footer-links{justify-content:center}
+}
+
+@media(max-width:640px){
+  .brand span:last-child{display:none}
+  .page-title span{display:none}
+  .title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}
+  .stat{padding:11px 7px}
+  .stat span{font-size:11px}
+  .stat strong{font-size:14px}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .btn{width:100%}
+  .timer-row{grid-template-columns:1fr}
+  .timer-box{min-width:0;width:100%}
+  .metrics{grid-template-columns:1fr 1fr}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .result-grid .result-metric:last-child{grid-column:1/-1}
+  .test-text{min-height:170px}
+  .typing-input{min-height:72px}
+}
+
+@media(max-width:390px){
+  .page-title strong{font-size:14px}
+  .title-icon{width:27px;height:27px}
+  .stats-card{grid-template-columns:1fr}
+  .toolbar{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr}
+  .result-grid .result-metric:last-child{grid-column:auto}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
+
 <body>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
 
-<canvas id="starsCanvas"></canvas>
-<canvas id="rippleCanvas"></canvas>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
+      <div class="brand-mark">G</div>
+      <span>G-GAMES</span>
+    </a>
 
-<header>
-  Typing Test
-  <div id="helpIcon" onclick="toggleHelp()">?</div>
+    <div class="title-wrap">
+      <img class="title-icon" src="image/typing-test.png" alt="Typing Test icon" onerror="this.style.display='none'">
+      <div class="page-title">
+        <strong>Typing Test</strong>
+        <span>Speed Challenge • Accuracy Game</span>
+      </div>
+    </div>
+
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Typing Test">?</button>
+  </div>
 </header>
 
-<div id="helpText">
-  <strong>How to Play Typing Test:</strong><br>
-  1. Type the sentences as fast and accurately as you can.<br>
-  2. The test starts automatically when you type.<br>
-  3. Press Reset to start over.<br>
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Typing Challenge</div>
+      <h1>Type Fast. <span>Stay Accurate.</span></h1>
+      <p>
+        Test your typing speed and accuracy against a rotating set of sentences. Choose your time limit,
+        start typing, and aim for the highest words-per-minute score without sacrificing precision.
+      </p>
+    </div>
+
+    <aside class="stats-card">
+      <div class="stat">
+        <span>Current WPM</span>
+        <strong id="heroWpm">0</strong>
+      </div>
+      <div class="stat">
+        <span>Accuracy</span>
+        <strong id="heroAccuracy">100%</strong>
+      </div>
+      <div class="stat">
+        <span>Sentences</span>
+        <strong id="heroSentences">0</strong>
+      </div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div class="status-wrap">
+        <div class="status-label">Test Status</div>
+        <div class="status-message" id="statusMsg">Choose a timer and begin typing when you are ready.</div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="resetTest()">Reset Test</button>
+        <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="typing-layout">
+      <section class="typing-card">
+        <div class="timer-row">
+          <div>
+            <label class="field-label" for="timerSelect">Test Duration</label>
+            <select class="timer-select" id="timerSelect" aria-label="Choose typing test duration">
+              <option value="30">30 seconds</option>
+              <option value="60" selected>1 minute</option>
+              <option value="120">2 minutes</option>
+              <option value="300">5 minutes</option>
+              <option value="600">10 minutes</option>
+            </select>
+          </div>
+
+          <div class="timer-box" aria-live="polite">
+            <span>Time Left</span>
+            <strong id="timerValue">60s</strong>
+          </div>
+        </div>
+
+        <div id="testText" class="test-text" aria-live="polite"></div>
+
+        <div class="input-wrap">
+          <label class="field-label" for="inputArea">Type Here</label>
+          <textarea
+            id="inputArea"
+            class="typing-input"
+            rows="2"
+            placeholder="Start typing the sentence above..."
+            autocapitalize="sentences"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-label="Typing input"
+          ></textarea>
+          <div class="input-note">The timer starts automatically when you type your first character.</div>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-label">Live Performance</div>
+
+        <div class="metrics">
+          <div class="metric">
+            <span>WPM</span>
+            <strong id="wpmValue">0</strong>
+          </div>
+          <div class="metric">
+            <span>Accuracy</span>
+            <strong id="accuracyValue">100%</strong>
+          </div>
+          <div class="metric">
+            <span>Characters</span>
+            <strong id="charValue">0</strong>
+          </div>
+          <div class="metric">
+            <span>Completed</span>
+            <strong id="sentenceValue">0</strong>
+          </div>
+        </div>
+
+        <div class="progress-card">
+          <div class="progress-top">
+            <span>Current sentence</span>
+            <strong id="progressText">0%</strong>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="tip-card">
+          Accuracy matters as much as speed. Correct characters increase your effective WPM, while mistakes reduce your accuracy score.
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">G</span>
+          <span>G-GAMES</span>
+        </div>
+        <div class="footer-tagline">
+          Fast, casual mini-games built for desktop, tablet, and mobile.
+        </div>
+      </div>
+
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time…</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    </div>
+  </div>
+</footer>
 </div>
 
-<div class="container">
-  <div class="controls">
-    <button onclick="resetTest()">Reset</button>
-    <button class="back-button" onclick="goBack()">Back to Lobby</button>
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="helpTitle">How to Play Typing Test</h2>
+      <button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button>
+    </div>
+    <ol>
+      <li>Choose a test duration from 30 seconds up to 10 minutes.</li>
+      <li>Start typing the displayed sentence. The timer begins on your first character.</li>
+      <li>Correct characters are highlighted while incorrect characters are marked clearly.</li>
+      <li>When you complete a sentence exactly, the next sentence loads automatically.</li>
+      <li>When time expires, your final WPM, accuracy, and completed sentence count are shown.</li>
+    </ol>
   </div>
-
-  <!-- Timer -->
-  <div id="timerContainer">
-    <select id="timerSelect">
-      <option value="30">30s</option>
-      <option value="60" selected>1 min</option>
-      <option value="120">2 min</option>
-      <option value="300">5 min</option>
-      <option value="600">10 min</option>
-    </select>
-    <span id="timerValue">60s</span>
-  </div>
-
-  <div id="testText"></div>
-  <input type="text" id="inputArea" placeholder="Start typing..." autofocus>
 </div>
 
-<footer>© 2025 All rights reserved | 🚀 Developed by Accx Creations</footer>
+<div class="result-modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="modal-card result-card">
+    <div class="result-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <defs>
+          <linearGradient id="timerGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5ef6ff"/>
+            <stop offset="55%" stop-color="#9b5cff"/>
+            <stop offset="100%" stop-color="#ff5fd7"/>
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="35" r="20" fill="none" stroke="url(#timerGradient)" stroke-width="4"/>
+        <path d="M32 35V23M32 35l10 6M25 8h14M32 8v7" fill="none" stroke="url(#timerGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
 
-<!-- Modal -->
-<div id="resultModal" class="modal">
-  <div class="modal-content">
-    <h2>⏱ Time’s Up!</h2>
-    <p id="resultStats"></p>
-    <button class="close-btn" onclick="closeModal()">Close</button>
+    <h2 id="resultTitle">Time's Up</h2>
+    <p>Your typing test is complete.</p>
+
+    <div class="result-grid">
+      <div class="result-metric">
+        <span>WPM</span>
+        <strong id="resultWpm">0</strong>
+      </div>
+      <div class="result-metric">
+        <span>Accuracy</span>
+        <strong id="resultAccuracy">0%</strong>
+      </div>
+      <div class="result-metric">
+        <span>Sentences</span>
+        <strong id="resultSentences">0</strong>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="button" onclick="closeModal()">Try Again</button>
   </div>
 </div>
 
 <script>
-/* === Help Toggle === */
-function toggleHelp(){
-  const help = document.getElementById('helpText');
-  help.style.display = (help.style.display==='block')?'none':'block';
-}
-function goBack(){ window.location.href="index.html"; }
+/* ===== Core Elements ===== */
+const helpPanel = document.getElementById('helpPanel');
+const resultModal = document.getElementById('resultModal');
+const testTextDiv = document.getElementById('testText');
+const inputArea = document.getElementById('inputArea');
+const timerSelect = document.getElementById('timerSelect');
+const timerValue = document.getElementById('timerValue');
+const statusMsg = document.getElementById('statusMsg');
 
-/* === Typing Test Logic === */
+/* ===== Help ===== */
+function openHelp(){
+  helpPanel.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeHelp(){
+  helpPanel.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+helpPanel.addEventListener('click',(e)=>{
+  if(e.target === helpPanel) closeHelp();
+});
+
+resultModal.addEventListener('click',(e)=>{
+  if(e.target === resultModal) closeModal();
+});
+
+function goBack(){
+  window.location.href = 'index.html';
+}
+
+/* ===== Typing Test Data ===== */
 const sentences = [
-"The quick brown fox jumps over the lazy dog.",
-"Learning new skills improves your mind and body.",
-"Technology is advancing faster than ever before.",
-"Exercise regularly to stay healthy and strong.",
-"Reading books expands your imagination and knowledge.",
-"Music has the power to evoke deep emotions.",
-"Traveling opens your eyes to new cultures and people.",
-"Creativity is key to solving complex problems.",
-"Practice makes perfect, never give up.",
-"The sun rises every morning bringing light to the world.",
-"Friendship is one of life's greatest treasures.",
-"Education is the foundation of a bright future.",
-"Patience is a virtue that everyone should learn.",
-"Honesty is always the best policy.",
-"Time management is crucial for success.",
-"Nature provides beauty and peace for the soul.",
-"Hard work beats talent when talent does not work hard.",
-"A healthy diet leads to a happier life.",
-"Kindness is contagious and spreads quickly.",
-"Challenges help us grow and become stronger."
+  "The quick brown fox jumps over the lazy dog.",
+  "Learning new skills improves your mind and body.",
+  "Technology is advancing faster than ever before.",
+  "Exercise regularly to stay healthy and strong.",
+  "Reading books expands your imagination and knowledge.",
+  "Music has the power to evoke deep emotions.",
+  "Traveling opens your eyes to new cultures and people.",
+  "Creativity is key to solving complex problems.",
+  "Practice makes perfect, never give up.",
+  "The sun rises every morning bringing light to the world.",
+  "Friendship is one of life's greatest treasures.",
+  "Education is the foundation of a bright future.",
+  "Patience is a virtue that everyone should learn.",
+  "Honesty is always the best policy.",
+  "Time management is crucial for success.",
+  "Nature provides beauty and peace for the soul.",
+  "Hard work beats talent when talent does not work hard.",
+  "A healthy diet leads to a happier life.",
+  "Kindness is contagious and spreads quickly.",
+  "Challenges help us grow and become stronger."
 ];
 
 let testSentences = [];
-for(let i=0;i<100;i++) testSentences.push(sentences[Math.floor(Math.random()*sentences.length)]);
+let currentIndex = 0;
+let startTime = null;
+let timerStarted = false;
+let timeLeft = Number(timerSelect.value);
+let timerInterval = null;
+let totalCorrectChars = 0;
+let totalAttemptedChars = 0;
+let completedSentences = 0;
+let testFinished = false;
 
-const testTextDiv=document.getElementById('testText');
-const inputArea=document.getElementById('inputArea');
-const timerSelect=document.getElementById('timerSelect');
-const timerValue=document.getElementById('timerValue');
+function buildSentenceQueue(){
+  testSentences = [];
+  let previous = '';
 
-let currentIndex=0;
-let startTime=null;
-let correctTyped=0;
-let totalTyped=0;
-let timerStarted=false;
-let timeLeft=parseInt(timerSelect.value);
-let timerInterval;
+  for(let i=0;i<120;i++){
+    let next = sentences[Math.floor(Math.random()*sentences.length)];
+    while(next === previous && sentences.length > 1){
+      next = sentences[Math.floor(Math.random()*sentences.length)];
+    }
+    testSentences.push(next);
+    previous = next;
+  }
+}
 
 function loadSentence(){
-  testTextDiv.innerHTML="";
-  const sentence=testSentences[currentIndex];
-  sentence.split("").forEach(ch=>{
-    const span=document.createElement("span");
-    span.textContent=ch;
+  testTextDiv.innerHTML = '';
+  const sentence = testSentences[currentIndex] || sentences[0];
+
+  sentence.split('').forEach((ch,index)=>{
+    const span = document.createElement('span');
+    span.textContent = ch;
+    if(index === 0) span.classList.add('current');
     testTextDiv.appendChild(span);
   });
+
+  updateLiveStats();
 }
 
 function resetTest(){
-  currentIndex=0; startTime=null;
-  correctTyped=0; totalTyped=0;
-  inputArea.value="";
-  loadSentence();
-  timerStarted=false;
   clearInterval(timerInterval);
-  timeLeft=parseInt(timerSelect.value);
-  timerValue.textContent=timeLeft+"s";
-  inputArea.disabled=false;
+  timerInterval = null;
+
+  buildSentenceQueue();
+  currentIndex = 0;
+  startTime = null;
+  timerStarted = false;
+  testFinished = false;
+  totalCorrectChars = 0;
+  totalAttemptedChars = 0;
+  completedSentences = 0;
+  timeLeft = Number(timerSelect.value);
+
+  inputArea.value = '';
+  inputArea.disabled = false;
+  timerSelect.disabled = false;
+  timerValue.textContent = formatTime(timeLeft);
+  statusMsg.textContent = 'Choose a timer and begin typing when you are ready.';
+
+  loadSentence();
+  updateLiveStats();
+
+  if(resultModal.classList.contains('open')){
+    resultModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  setTimeout(()=>inputArea.focus(),50);
 }
 
 function startTimer(){
-  if(timerStarted) return;
-  timerStarted=true;
-  timeLeft=parseInt(timerSelect.value);
-  timerValue.textContent=timeLeft+"s";
-  timerInterval=setInterval(()=>{
+  if(timerStarted || testFinished) return;
+
+  timerStarted = true;
+  startTime = Date.now();
+  timerSelect.disabled = true;
+  statusMsg.textContent = 'Typing test in progress.';
+
+  timerInterval = setInterval(()=>{
     timeLeft--;
-    timerValue.textContent=timeLeft+"s";
-    if(timeLeft<=0){
+    timerValue.textContent = formatTime(timeLeft);
+    updateLiveStats();
+
+    if(timeLeft <= 0){
       clearInterval(timerInterval);
-      inputArea.disabled=true;
-      endTest();
+      timerInterval = null;
+      timeLeft = 0;
+      timerValue.textContent = formatTime(0);
+      finishTest();
     }
   },1000);
 }
 
-inputArea.addEventListener("input",()=>{
-  if(!startTime) startTime=Date.now();
-  startTimer();
+function formatTime(seconds){
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m > 0 ? `${m}:${String(s).padStart(2,'0')}` : `${s}s`;
+}
 
-  const sentenceSpans=testTextDiv.querySelectorAll("span");
-  const typed=inputArea.value.split("");
+function getCurrentSentenceStats(){
+  const sentence = testSentences[currentIndex] || '';
+  const typed = inputArea.value;
+  let correct = 0;
 
-  totalTyped=typed.length;
-  correctTyped=0;
+  for(let i=0;i<typed.length;i++){
+    if(typed[i] === sentence[i]) correct++;
+  }
+
+  return {
+    typedLength:typed.length,
+    correct,
+    sentenceLength:sentence.length
+  };
+}
+
+function getElapsedMinutes(){
+  if(!startTime) return 0;
+  const endTime = testFinished ? (startTime + ((Number(timerSelect.value) - timeLeft) * 1000)) : Date.now();
+  return Math.max((endTime - startTime) / 60000, 1/60);
+}
+
+function calculateWpm(){
+  if(!startTime) return 0;
+  const current = getCurrentSentenceStats();
+  const effectiveCorrect = totalCorrectChars + current.correct;
+  return Math.max(0,Math.round((effectiveCorrect / 5) / getElapsedMinutes()));
+}
+
+function calculateAccuracy(){
+  const current = getCurrentSentenceStats();
+  const attempts = totalAttemptedChars + current.typedLength;
+  const correct = totalCorrectChars + current.correct;
+  return attempts > 0 ? Math.round((correct / attempts) * 100) : 100;
+}
+
+function updateLiveStats(){
+  const current = getCurrentSentenceStats();
+  const wpm = calculateWpm();
+  const accuracy = calculateAccuracy();
+  const attemptedChars = totalAttemptedChars + current.typedLength;
+  const progress = current.sentenceLength > 0
+    ? Math.min(100,Math.round((current.typedLength / current.sentenceLength) * 100))
+    : 0;
+
+  document.getElementById('wpmValue').textContent = wpm;
+  document.getElementById('accuracyValue').textContent = `${accuracy}%`;
+  document.getElementById('charValue').textContent = attemptedChars;
+  document.getElementById('sentenceValue').textContent = completedSentences;
+
+  document.getElementById('heroWpm').textContent = wpm;
+  document.getElementById('heroAccuracy').textContent = `${accuracy}%`;
+  document.getElementById('heroSentences').textContent = completedSentences;
+
+  document.getElementById('progressText').textContent = `${progress}%`;
+  document.getElementById('progressFill').style.width = `${progress}%`;
+}
+
+inputArea.addEventListener('input',()=>{
+  if(testFinished) return;
+  if(!timerStarted && inputArea.value.length > 0) startTimer();
+
+  const sentence = testSentences[currentIndex];
+  const sentenceSpans = testTextDiv.querySelectorAll('span');
+  const typed = inputArea.value;
 
   sentenceSpans.forEach((span,i)=>{
-    const char=typed[i];
-    if(char==null){
-      span.classList.remove("correct","incorrect");
-    } else if(char===span.textContent){
-      span.classList.add("correct");
-      span.classList.remove("incorrect");
-      correctTyped++;
-    } else {
-      span.classList.add("incorrect");
-      span.classList.remove("correct");
+    span.classList.remove('correct','incorrect','current');
+    const char = typed[i];
+
+    if(char == null){
+      if(i === typed.length) span.classList.add('current');
+    }else if(char === span.textContent){
+      span.classList.add('correct');
+    }else{
+      span.classList.add('incorrect');
     }
   });
 
-  if(inputArea.value===testSentences[currentIndex]){
-    inputArea.value="";
+  if(typed === sentence){
+    totalAttemptedChars += typed.length;
+    totalCorrectChars += typed.length;
+    completedSentences++;
     currentIndex++;
+    inputArea.value = '';
+
+    if(currentIndex >= testSentences.length) buildSentenceQueue();
     loadSentence();
+    statusMsg.textContent = 'Sentence completed. Keep going.';
   }
+
+  updateLiveStats();
 });
 
-timerSelect.addEventListener("change",()=>{
-  timeLeft=parseInt(timerSelect.value);
-  timerValue.textContent=timeLeft+"s";
+timerSelect.addEventListener('change',()=>{
+  if(timerStarted) return;
+  timeLeft = Number(timerSelect.value);
+  timerValue.textContent = formatTime(timeLeft);
 });
 
-/* === Modal handling === */
-function endTest(){
-  const elapsed=(Date.now()-startTime)/1000/60;
-  const wpm=Math.round((correctTyped/5)/elapsed);
-  const accuracy=Math.round((correctTyped/totalTyped)*100)||0;
-  document.getElementById("resultStats").textContent=`Your WPM: ${wpm} | Accuracy: ${accuracy}%`;
-  document.getElementById("resultModal").style.display="flex";
+function finishTest(){
+  if(testFinished) return;
+  testFinished = true;
+  inputArea.disabled = true;
+  timerSelect.disabled = true;
+
+  const wpm = calculateWpm();
+  const accuracy = calculateAccuracy();
+
+  document.getElementById('resultWpm').textContent = wpm;
+  document.getElementById('resultAccuracy').textContent = `${accuracy}%`;
+  document.getElementById('resultSentences').textContent = completedSentences;
+
+  statusMsg.textContent = 'Time is up. Your final results are ready.';
+  updateLiveStats();
+
+  resultModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
+
 function closeModal(){
-  document.getElementById("resultModal").style.display="none";
+  resultModal.classList.remove('open');
+  document.body.style.overflow = '';
   resetTest();
 }
 
+/* ===== Keyboard shortcuts ===== */
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'Escape'){
+    if(helpPanel.classList.contains('open')) closeHelp();
+    else if(resultModal.classList.contains('open')) closeModal();
+  }
+});
+
+/* ===== Philippine Standard Time ===== */
+function updatePhilippineTime(){
+  const formatter = new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric',
+    hour:'numeric',
+    minute:'2-digit',
+    second:'2-digit',
+    hour12:true
+  });
+
+  document.getElementById('phTime').textContent = formatter.format(new Date());
+}
+
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+
+/* ===== Start ===== */
 resetTest();
-
-/* === Stars Background === */
-const starsCanvas=document.getElementById("starsCanvas");
-const starsCtx=starsCanvas.getContext("2d");
-let stars=[];
-function resizeStarsCanvas(){starsCanvas.width=window.innerWidth;starsCanvas.height=window.innerHeight;generateStars();}
-function generateStars(){stars=[];for(let i=0;i<200;i++){stars.push({x:Math.random()*starsCanvas.width,y:Math.random()*starsCanvas.height,alpha:Math.random()*0.7+0.3,radius:Math.random()*1.5+0.5,speed:Math.random()*0.05+0.02});}}
-function animateStars(){starsCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);stars.forEach(s=>{s.alpha+=s.speed*(Math.random()<0.5?-1:1);if(s.alpha<0.1)s.alpha=0.1;if(s.alpha>1)s.alpha=1;starsCtx.beginPath();starsCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);starsCtx.fillStyle=`rgba(255,255,255,${s.alpha})`;starsCtx.fill();});requestAnimationFrame(animateStars);}
-window.addEventListener("resize",resizeStarsCanvas);resizeStarsCanvas();animateStars();
-
-/* === Ripple Trail === */
-const rippleCanvas=document.getElementById("rippleCanvas");
-const rippleCtx=rippleCanvas.getContext("2d");
-let ripples=[];
-function resizeRippleCanvas(){rippleCanvas.width=window.innerWidth;rippleCanvas.height=window.innerHeight;}
-window.addEventListener("resize",resizeRippleCanvas);resizeRippleCanvas();
-window.addEventListener("mousemove",(e)=>{ripples.push({x:e.clientX,y:e.clientY,radius:0,alpha:0.3,lineWidth:1+Math.random()});if(ripples.length>20)ripples.shift();});
-function animateRipples(){rippleCtx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);ripples.forEach((r,i)=>{r.radius+=1.5;r.alpha-=0.007;if(r.alpha<=0){ripples.splice(i,1);return;}rippleCtx.beginPath();rippleCtx.arc(r.x,r.y,r.radius,0,Math.PI*2);rippleCtx.strokeStyle=`rgba(56,0,152,${r.alpha})`;rippleCtx.lineWidth=r.lineWidth;rippleCtx.stroke();});requestAnimationFrame(animateRipples);}
-animateRipples();
 </script>
-
 </body>
 </html>
