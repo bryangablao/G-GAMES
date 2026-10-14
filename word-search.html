@@ -2,83 +2,649 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
 <title>Word Search</title>
+<link rel="icon" type="image/png" href="image/WordSearch.png">
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #0d0d1a);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
 
-  header {
-    background: linear-gradient(90deg, #8a2be2, #4b0082);
-    color: white;
-    padding: 30px 20px;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    animation: neon-flicker 2s infinite alternate;
-    margin-bottom: 50px;
-  }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
+}
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
-  @keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #8a2be2, 0 0 20px #4b0082, 0 0 30px #8a2be2;
-    }
-    20%, 24%, 55% {
-      text-shadow: 0 0 2px #fff, 0 0 5px #8a2be2, 0 0 10px #4b0082, 0 0 15px #8a2be2;
-    }
-  }
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{width:34px;height:34px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.page-title{min-width:0;text-align:left}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:900;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);transition:.22s ease}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{content:"ABC";position:absolute;right:24px;top:18px;font-size:64px;font-weight:950;letter-spacing:-.08em;color:rgba(94,246,255,.045)}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
 
-  .placeholder {
-    font-size: 20px;
-    margin-bottom: 40px;
-    color: #ccc;
-  }
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(16px,3vw,28px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:18px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:6px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+.btn{min-height:42px;padding:10px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.09);color:#fff;cursor:pointer;font-weight:850;background:rgba(255,255,255,.055);transition:.22s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
 
-  .back-button {
-    background: #8a2be2;
-    border: none;
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #8a2be2, 0 0 20px #4b0082;
-    transition: all 0.3s ease;
-  }
+.game-stage{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr);gap:18px;align-items:start}
+.board-panel,.words-panel{border-radius:22px;padding:clamp(14px,2.5vw,24px);background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+.board-wrap{width:100%;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.word-grid{
+  --size:10;
+  width:min(100%,680px);
+  aspect-ratio:1/1;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(var(--size),1fr);
+  gap:clamp(3px,.6vw,7px);
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.cell{
+  min-width:0;
+  aspect-ratio:1/1;
+  border-radius:clamp(7px,1vw,12px);
+  display:grid;
+  place-items:center;
+  font-size:clamp(12px,2.1vw,24px);
+  font-weight:950;
+  color:#f4f7ff;
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+  cursor:pointer;
+  transition:.15s ease;
+}
+.cell:hover{border-color:rgba(94,246,255,.28);background:rgba(94,246,255,.07)}
+.cell.selecting{background:linear-gradient(145deg,rgba(94,246,255,.20),rgba(155,92,255,.20));border-color:rgba(94,246,255,.55);box-shadow:0 0 20px rgba(94,246,255,.10)}
+.cell.found{background:linear-gradient(145deg,rgba(105,255,189,.20),rgba(94,246,255,.12));border-color:rgba(105,255,189,.52);color:#dffff2;box-shadow:0 0 18px rgba(105,255,189,.08)}
 
-  .back-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #9b30ff, 0 0 40px #6a0dad;
-  }
+.words-panel{display:flex;flex-direction:column;gap:16px}
+.panel-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:900;margin-bottom:8px}
+.word-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.word-chip{padding:11px 12px;border-radius:13px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);font-weight:850;font-size:13px;letter-spacing:.04em;color:#dfe7ff;text-align:center;transition:.2s ease}
+.word-chip.found{text-decoration:line-through;color:var(--success);border-color:rgba(105,255,189,.24);background:rgba(105,255,189,.06)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{padding:14px;border-radius:15px;text-align:center;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.metric span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.11em}
+.metric strong{display:block;margin-top:5px;font-size:22px;color:#fff}
+.hint-card{padding:14px;border-radius:15px;background:linear-gradient(145deg,rgba(94,246,255,.05),rgba(155,92,255,.06));border:1px solid rgba(94,246,255,.10);color:#dfe8ff;font-size:13px;line-height:1.55}
+
+.modal-layer{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.modal-layer.open{display:flex}
+.modal-card{width:min(540px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+.win-card{text-align:center}
+.win-symbol{width:88px;height:88px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.20),rgba(94,246,255,.08) 58%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}
+.win-symbol svg{width:46px;height:46px}
+
+.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{text-align:left}
+.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}
+.footer-logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:#dfe7ff;font-size:13px;line-height:1.5}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
+.footer-links a,.footer-links button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px;transition:.2s ease}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}
+.status{display:inline-flex;align-items:center;gap:7px}.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+
+@media(max-width:900px){
+  .hero,.game-stage{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}
+  .stat span,.stat strong{display:block}.stat strong{margin-top:5px}
+  .game-top{grid-template-columns:1fr}.toolbar{justify-content:flex-start}
+  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{text-align:center}.footer-logo{justify-content:center}.footer-links{justify-content:center}
+}
+@media(max-width:640px){
+  .brand span:last-child{display:none}.page-title span{display:none}.title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .board-panel,.words-panel{padding:12px}
+  .word-list{grid-template-columns:1fr 1fr}
+  .cell{font-size:clamp(11px,5vw,18px);border-radius:7px}
+}
+@media(max-width:390px){
+  .page-title strong{font-size:14px}.title-icon{width:27px;height:27px}
+  .stats-card{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}
+  .word-list{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+<div class="orb orb-c"></div>
 
-<header>Word Search</header>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
+      <div class="brand-mark">G</div>
+      <span>G-GAMES</span>
+    </a>
 
-<div class="container">
-  <div class="placeholder">Mini-game placeholder. Implement Word Search here.</div>
-  <button class="back-button" onclick="goBack()">Back to Lobby</button>
+    <div class="title-wrap">
+      <img class="title-icon" src="image/WordSearch.png" alt="Word Search icon" onerror="this.style.display='none'">
+      <div class="page-title">
+        <strong>Word Search</strong>
+        <span>Find Hidden Words • Puzzle Game</span>
+      </div>
+    </div>
+
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Word Search">?</button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Word Puzzle</div>
+      <h1>Find Every <span>Hidden Word</span></h1>
+      <p>Drag across the letter grid to uncover the hidden words. Words may appear horizontally, vertically, or diagonally in either direction.</p>
+    </div>
+
+    <aside class="stats-card">
+      <div class="stat"><span>Grid</span><strong>10 × 10</strong></div>
+      <div class="stat"><span>Found</span><strong id="foundStat">0 / 8</strong></div>
+      <div class="stat"><span>Time</span><strong id="timeStat">00:00</strong></div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div>
+        <div class="status-label">Game Status</div>
+        <div class="status-message" id="statusMsg">Select letters in a straight line to find a word.</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="newGame()">New Puzzle</button>
+        <button class="btn" type="button" onclick="showHint()">Hint</button>
+        <button class="btn" type="button" onclick="goBack()">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-stage">
+      <section class="board-panel">
+        <div class="board-wrap">
+          <div class="word-grid" id="wordGrid" aria-label="Word search letter grid"></div>
+        </div>
+      </section>
+
+      <aside class="words-panel">
+        <div>
+          <div class="panel-label">Words to Find</div>
+          <div class="word-list" id="wordList"></div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><span>Words Found</span><strong id="foundCount">0</strong></div>
+          <div class="metric"><span>Remaining</span><strong id="remainingCount">8</strong></div>
+        </div>
+
+        <div class="hint-card" id="hintCard">Tip: drag from the first letter to the last letter of a word. You can drag in any straight direction.</div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="footer-logo-mark">G</span><span>G-GAMES</span></div>
+        <div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div>
+      </div>
+
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time…</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="modal-layer" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="helpTitle">How to Play Word Search</h2>
+      <button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button>
+    </div>
+    <ol>
+      <li>Find every word shown in the Words to Find list.</li>
+      <li>Press or touch the first letter, then drag to the last letter.</li>
+      <li>Words can be horizontal, vertical, or diagonal.</li>
+      <li>Words can also appear forward or backward.</li>
+      <li>Find all eight words to complete the puzzle.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="modal-layer" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+  <div class="modal-card win-card">
+    <div class="win-symbol" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/>
+      </svg>
+    </div>
+    <h2 id="winTitle">Puzzle Complete</h2>
+    <p>You found all hidden words.</p>
+    <p id="winSummary">Completed in 00:00.</p>
+    <button class="btn btn-primary" type="button" onclick="closeWinAndRestart()">Play Again</button>
+  </div>
 </div>
 
 <script>
-function goBack() {
-  window.location.href = "index.html";
-}
-</script>
+const WORD_BANK = [
+  'PUZZLE','SEARCH','LETTER','BRAIN','LOGIC','GAMES','MOBILE','NEON',
+  'VECTOR','SCREEN','PLAYER','LEVEL','SCORE','CLICK','SWIPE','BOARD'
+];
+const GRID_SIZE = 10;
+const WORD_COUNT = 8;
+const DIRECTIONS = [
+  [1,0],[-1,0],[0,1],[0,-1],
+  [1,1],[1,-1],[-1,1],[-1,-1]
+];
 
+let grid = [];
+let placedWords = [];
+let foundWords = new Set();
+let selecting = false;
+let startCell = null;
+let currentSelection = [];
+let timerSeconds = 0;
+let timerId = null;
+let gameFinished = false;
+
+const gridEl = document.getElementById('wordGrid');
+const wordListEl = document.getElementById('wordList');
+const helpPanel = document.getElementById('helpPanel');
+const winModal = document.getElementById('winModal');
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function blankGrid(){
+  return Array.from({length:GRID_SIZE},()=>Array(GRID_SIZE).fill(''));
+}
+
+function canPlace(word,row,col,dr,dc){
+  const endR=row+dr*(word.length-1);
+  const endC=col+dc*(word.length-1);
+  if(endR<0||endR>=GRID_SIZE||endC<0||endC>=GRID_SIZE) return false;
+  for(let i=0;i<word.length;i++){
+    const r=row+dr*i,c=col+dc*i;
+    if(grid[r][c] && grid[r][c]!==word[i]) return false;
+  }
+  return true;
+}
+
+function placeWord(word){
+  const dirs=shuffle(DIRECTIONS);
+  for(let attempt=0;attempt<250;attempt++){
+    const [dr,dc]=dirs[attempt % dirs.length];
+    const row=Math.floor(Math.random()*GRID_SIZE);
+    const col=Math.floor(Math.random()*GRID_SIZE);
+    if(canPlace(word,row,col,dr,dc)){
+      const cells=[];
+      for(let i=0;i<word.length;i++){
+        const r=row+dr*i,c=col+dc*i;
+        grid[r][c]=word[i];
+        cells.push([r,c]);
+      }
+      placedWords.push({word,cells});
+      return true;
+    }
+  }
+  return false;
+}
+
+function generatePuzzle(){
+  let attempts=0;
+  while(attempts<50){
+    grid=blankGrid();
+    placedWords=[];
+    const chosen=shuffle(WORD_BANK).slice(0,WORD_COUNT).sort((a,b)=>b.length-a.length);
+    let ok=true;
+    for(const word of chosen){
+      if(!placeWord(word)){ok=false;break;}
+    }
+    if(ok){
+      for(let r=0;r<GRID_SIZE;r++){
+        for(let c=0;c<GRID_SIZE;c++){
+          if(!grid[r][c]) grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+        }
+      }
+      return;
+    }
+    attempts++;
+  }
+}
+
+function renderGrid(){
+  gridEl.innerHTML='';
+  gridEl.style.setProperty('--size',GRID_SIZE);
+  for(let r=0;r<GRID_SIZE;r++){
+    for(let c=0;c<GRID_SIZE;c++){
+      const cell=document.createElement('div');
+      cell.className='cell';
+      cell.dataset.row=r;
+      cell.dataset.col=c;
+      cell.textContent=grid[r][c];
+      cell.setAttribute('role','button');
+      cell.setAttribute('aria-label',`Row ${r+1}, column ${c+1}, letter ${grid[r][c]}`);
+      gridEl.appendChild(cell);
+    }
+  }
+  refreshFoundCells();
+}
+
+function renderWordList(){
+  wordListEl.innerHTML='';
+  placedWords.map(x=>x.word).sort().forEach(word=>{
+    const chip=document.createElement('div');
+    chip.className='word-chip'+(foundWords.has(word)?' found':'');
+    chip.dataset.word=word;
+    chip.textContent=word;
+    wordListEl.appendChild(chip);
+  });
+}
+
+function cellAt(row,col){
+  return gridEl.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+}
+
+function getLineCells(r1,c1,r2,c2){
+  const dr=Math.sign(r2-r1), dc=Math.sign(c2-c1);
+  const rowDiff=Math.abs(r2-r1), colDiff=Math.abs(c2-c1);
+  const straight = r1===r2 || c1===c2 || rowDiff===colDiff;
+  if(!straight) return [];
+  const steps=Math.max(rowDiff,colDiff);
+  const cells=[];
+  for(let i=0;i<=steps;i++) cells.push([r1+dr*i,c1+dc*i]);
+  return cells;
+}
+
+function clearSelecting(){
+  gridEl.querySelectorAll('.cell.selecting').forEach(el=>el.classList.remove('selecting'));
+}
+
+function previewSelection(endRow,endCol){
+  if(!startCell) return;
+  clearSelecting();
+  currentSelection=getLineCells(startCell.row,startCell.col,endRow,endCol);
+  currentSelection.forEach(([r,c])=>cellAt(r,c)?.classList.add('selecting'));
+}
+
+function selectionWord(cells){
+  return cells.map(([r,c])=>grid[r][c]).join('');
+}
+
+function finishSelection(){
+  if(!selecting) return;
+  selecting=false;
+  const word=selectionWord(currentSelection);
+  const reversed=word.split('').reverse().join('');
+  const match=placedWords.find(item=>!foundWords.has(item.word)&&(item.word===word||item.word===reversed));
+
+  clearSelecting();
+  if(match){
+    foundWords.add(match.word);
+    document.getElementById('statusMsg').textContent=`Found ${match.word}.`;
+    document.getElementById('hintCard').textContent=`Great find: ${match.word}. Keep searching for the remaining words.`;
+    renderWordList();
+    refreshFoundCells();
+    updateStats();
+    if(foundWords.size===placedWords.length) completeGame();
+  }else if(currentSelection.length>1){
+    document.getElementById('statusMsg').textContent='That selection is not one of the hidden words.';
+  }
+  currentSelection=[];
+  startCell=null;
+}
+
+function refreshFoundCells(){
+  gridEl.querySelectorAll('.cell').forEach(el=>el.classList.remove('found'));
+  placedWords.forEach(item=>{
+    if(foundWords.has(item.word)){
+      item.cells.forEach(([r,c])=>cellAt(r,c)?.classList.add('found'));
+    }
+  });
+}
+
+function eventCellFromPoint(x,y){
+  const el=document.elementFromPoint(x,y);
+  return el?.closest?.('.cell') || null;
+}
+
+function beginSelection(cell){
+  if(gameFinished || !cell) return;
+  selecting=true;
+  startCell={row:Number(cell.dataset.row),col:Number(cell.dataset.col)};
+  previewSelection(startCell.row,startCell.col);
+}
+
+gridEl.addEventListener('pointerdown',e=>{
+  const cell=e.target.closest('.cell');
+  if(!cell) return;
+  e.preventDefault();
+  gridEl.setPointerCapture?.(e.pointerId);
+  beginSelection(cell);
+});
+
+gridEl.addEventListener('pointermove',e=>{
+  if(!selecting) return;
+  const cell=eventCellFromPoint(e.clientX,e.clientY);
+  if(!cell) return;
+  previewSelection(Number(cell.dataset.row),Number(cell.dataset.col));
+});
+
+gridEl.addEventListener('pointerup',e=>{
+  if(selecting) finishSelection();
+  try{gridEl.releasePointerCapture?.(e.pointerId)}catch{}
+});
+gridEl.addEventListener('pointercancel',finishSelection);
+
+function updateStats(){
+  document.getElementById('foundStat').textContent=`${foundWords.size} / ${placedWords.length}`;
+  document.getElementById('foundCount').textContent=foundWords.size;
+  document.getElementById('remainingCount').textContent=placedWords.length-foundWords.size;
+}
+
+function formatTime(seconds){
+  const m=Math.floor(seconds/60).toString().padStart(2,'0');
+  const s=(seconds%60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function startTimer(){
+  clearInterval(timerId);
+  timerSeconds=0;
+  document.getElementById('timeStat').textContent='00:00';
+  timerId=setInterval(()=>{
+    if(gameFinished) return;
+    timerSeconds++;
+    document.getElementById('timeStat').textContent=formatTime(timerSeconds);
+  },1000);
+}
+
+function newGame(){
+  gameFinished=false;
+  foundWords=new Set();
+  generatePuzzle();
+  renderGrid();
+  renderWordList();
+  updateStats();
+  document.getElementById('statusMsg').textContent='Select letters in a straight line to find a word.';
+  document.getElementById('hintCard').textContent='Tip: drag from the first letter to the last letter of a word. You can drag in any straight direction.';
+  winModal.classList.remove('open');
+  document.body.style.overflow='';
+  startTimer();
+}
+
+function showHint(){
+  const remaining=placedWords.filter(x=>!foundWords.has(x.word));
+  if(!remaining.length) return;
+  const item=remaining[Math.floor(Math.random()*remaining.length)];
+  const [r,c]=item.cells[0];
+  document.getElementById('hintCard').textContent=`Hint: ${item.word} starts with ${item.word[0]} at row ${r+1}, column ${c+1}.`;
+  const cell=cellAt(r,c);
+  if(cell){
+    cell.classList.add('selecting');
+    setTimeout(()=>cell.classList.remove('selecting'),1100);
+  }
+}
+
+function completeGame(){
+  gameFinished=true;
+  clearInterval(timerId);
+  document.getElementById('statusMsg').textContent='Puzzle complete. You found every hidden word.';
+  document.getElementById('winSummary').textContent=`Completed in ${formatTime(timerSeconds)}.`;
+  setTimeout(()=>{
+    winModal.classList.add('open');
+    document.body.style.overflow='hidden';
+  },250);
+}
+
+function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function closeWinAndRestart(){winModal.classList.remove('open');document.body.style.overflow='';newGame()}
+function goBack(){window.location.href='index.html'}
+
+helpPanel.addEventListener('click',e=>{if(e.target===helpPanel) closeHelp()});
+winModal.addEventListener('click',e=>{if(e.target===winModal) closeWinAndRestart()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(helpPanel.classList.contains('open')) closeHelp();
+    else if(winModal.classList.contains('open')) closeWinAndRestart();
+  }
+});
+
+function updatePhilippineTime(){
+  const formatter=new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true
+  });
+  document.getElementById('phTime').textContent=formatter.format(new Date());
+}
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+newGame();
+</script>
 </body>
 </html>
