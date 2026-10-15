@@ -146,24 +146,131 @@ canvas{
 .result-mark{width:88px;height:88px;border-radius:22px;margin:0 auto 14px;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.18),rgba(94,246,255,.07) 60%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}
 .result-mark svg{width:48px;height:48px}
 
-/* index-style footer */
-.site-footer{max-width:1180px;width:calc(100% - 28px);margin:34px auto 20px;padding:22px;border-radius:24px;background:linear-gradient(145deg,rgba(17,23,51,.72),rgba(8,13,31,.72));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(16px);box-shadow:var(--shadow)}
-.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
-.footer-brand{display:flex;align-items:center;gap:12px}
-.footer-logo{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-weight:950;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
-.footer-brand-copy{display:grid;gap:3px}.footer-brand-copy strong{font-size:17px;letter-spacing:.05em}.footer-brand-copy span{font-size:12px;color:var(--muted);line-height:1.5}
-.footer-clock{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:13px;color:#dfe7ff}
-.footer-clock-label{display:flex;justify-content:center;align-items:center;gap:7px;color:var(--cyan);font-weight:850;margin-bottom:3px}
-.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
-.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
-.footer-links a,.footer-link-button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px}.footer-links a:hover,.footer-link-button:hover{color:var(--cyan)}
-.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}.footer-status{color:#b9c5e4}
+/* Footer */
+.site-footer{
+  margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.footer-inner{
+  max-width:1180px;
+  margin:auto;
+  padding:26px 18px 18px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:24px;
+  align-items:center;
+}
+
+.footer-brand{text-align:left}
+
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.footer-logo-mark{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#041019;
+  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  box-shadow:0 0 22px rgba(94,246,255,.18);
+}
+
+.footer-tagline{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.footer-time{
+  text-align:center;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  color:#dfe7ff;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer-time strong{
+  color:var(--cyan);
+  display:block;
+  margin-bottom:2px;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px 14px;
+}
+
+.footer-links a,.footer-links button{
+  border:0;
+  padding:0;
+  background:none;
+  color:#c8d1eb;
+  text-decoration:none;
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  transition:.2s ease;
+}
+
+.footer-links a:hover,.footer-links button:hover{
+  color:var(--cyan);
+}
+
+.footer-bottom{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#7f8aa9;
+  font-size:12px;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 12px rgba(105,255,189,.65);
+}
 
 @media(max-width:900px){
   .hero,.game-shell{grid-template-columns:1fr}
   .stats-card{grid-template-columns:repeat(3,1fr)}
   .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
-  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-links{justify-content:center}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .footer-brand{text-align:center}
+  .footer-logo{justify-content:center}
+  .footer-links{justify-content:center}
   .mobile-controls{display:grid}
 }
 @media(max-width:640px){
@@ -173,7 +280,7 @@ canvas{
   .stats-card{padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
   .game-top{grid-template-columns:1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
   .board-wrap{padding:8px}.side-panel{grid-template-columns:1fr 1fr}.info-card:last-child{grid-column:1/-1}
-  .site-footer{width:calc(100% - 20px);padding:18px}
+  
 }
 @media(max-width:430px){
   .stats-card{grid-template-columns:1fr 1fr}.stats-card .stat:last-child{grid-column:1/-1}
@@ -266,22 +373,36 @@ canvas{
 </main>
 
 <footer class="site-footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="footer-logo" aria-hidden="true">G</div>
-      <div class="footer-brand-copy"><strong>G-GAMES</strong><span>Quick games. Futuristic vibes. Built for play on any screen.</span></div>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">G</span>
+          <span>G-GAMES</span>
+        </div>
+        <div class="footer-tagline">
+          Fast, casual mini-games built for desktop, tablet, and mobile.
+        </div>
+      </div>
+
+      <div class="footer-time" aria-live="polite">
+        <strong>Philippine Standard Time</strong>
+        <span id="phTime">Loading Philippine Standard Time…</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <button type="button" onclick="openHelp()">How to Play</button>
+        <a href="index.html">Game Lobby</a>
+      </nav>
     </div>
-    <div class="footer-clock" aria-live="polite">
-      <div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div>
-      <div id="philippineTime">Philippine Standard Time</div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Accxs Creations. All rights reserved.</span>
+      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
     </div>
-    <nav class="footer-links" aria-label="Footer navigation">
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="terms-of-service.html">Terms of Service</a>
-      <button type="button" class="footer-link-button" onclick="openAbout()">About</button>
-    </nav>
   </div>
-  <div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="footer-status">G-GAMES Online</span></div>
 </footer>
 </div>
 
@@ -483,10 +604,19 @@ window.addEventListener('resize',draw);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&!finished)togglePause()});
 
 function updatePhilippineTime(){
-  document.getElementById('philippineTime').textContent=new Intl.DateTimeFormat('en-US',{
-    timeZone:'Asia/Manila',weekday:'short',year:'numeric',month:'short',day:'numeric',
-    hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true
-  }).format(new Date());
+  const formatter = new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric',
+    hour:'numeric',
+    minute:'2-digit',
+    second:'2-digit',
+    hour12:true
+  });
+
+  document.getElementById('phTime').textContent = formatter.format(new Date());
 }
 updatePhilippineTime();setInterval(updatePhilippineTime,1000);
 newGame();
