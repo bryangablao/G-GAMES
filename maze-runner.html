@@ -1,1 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
+<title>Maze Runner</title>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%23060816"/%3E%3Cpath d="M10 10h44v12H28v8h16v24H10V42h22v-8H20V22h20" fill="none" stroke="%235ef6ff" stroke-width="5" stroke-linejoin="round"/%3E%3Ccircle cx="47" cy="47" r="5" fill="%23ff5fd7"/%3E%3C/svg%3E'>
+<style>
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.80);
+  --panel-strong:rgba(8,13,31,.95);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; z-index:-4; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+body::after{
+  content:""; position:fixed; inset:-30%; z-index:-5; pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px); animation:ambientSpin 30s linear infinite;
+}
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{width:34px;height:34px;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.icon-btn,.btn{
+  border:1px solid rgba(255,255,255,.09);color:#fff;cursor:pointer;font-weight:850;
+  background:rgba(255,255,255,.055);transition:.22s ease
+}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.icon-btn:hover,.btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
+.icon-btn svg{width:20px;height:20px}
+.btn{min-height:42px;padding:10px 15px;border-radius:12px}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
+
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)
+}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{content:"";position:absolute;right:-40px;top:-30px;width:190px;height:190px;border:28px solid rgba(94,246,255,.035);box-shadow:inset 0 0 0 22px rgba(155,92,255,.025)}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(14px,2.5vw,24px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:16px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:5px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+
+.game-shell{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;align-items:start}
+.board-wrap{
+  position:relative;border-radius:22px;padding:14px;overflow:hidden;
+  background:radial-gradient(circle at 50% 45%,rgba(94,246,255,.08),transparent 45%),rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07)
+}
+canvas{
+  display:block;width:100%;max-width:780px;aspect-ratio:1/1;margin:auto;border-radius:16px;
+  background:#050915;box-shadow:inset 0 0 0 1px rgba(94,246,255,.08),0 0 40px rgba(0,0,0,.28);
+  touch-action:none
+}
+.side-panel{display:grid;gap:12px}
+.info-card{padding:16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.info-card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.info-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.info-row:last-child{border-bottom:0}
+.info-row span{color:var(--muted);font-size:13px}
+.info-row strong{font-size:14px}
+.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.diff-btn{padding:9px 6px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#dfe7ff;cursor:pointer;font-weight:800;font-size:12px}
+.diff-btn.active{border-color:rgba(94,246,255,.38);background:linear-gradient(135deg,rgba(94,246,255,.13),rgba(155,92,255,.15));color:#fff}
+.mobile-controls{display:none;margin-top:14px;gap:8px;grid-template-columns:repeat(3,1fr);grid-template-areas:". up ." "left down right"}
+.ctrl{
+  min-height:58px;border-radius:14px;border:1px solid rgba(94,246,255,.17);
+  background:linear-gradient(145deg,rgba(94,246,255,.08),rgba(155,92,255,.09));
+  color:#fff;font-weight:900;touch-action:manipulation
+}
+.ctrl svg{width:22px;height:22px;pointer-events:none}
+.ctrl-up{grid-area:up}.ctrl-left{grid-area:left}.ctrl-down{grid-area:down}.ctrl-right{grid-area:right}
+
+.help-panel,.end-modal{
+  position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;
+  background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+}
+.help-panel.open,.end-modal.open{display:flex}
+.modal-card{width:min(540px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-card h2{margin:0;font-size:25px}.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}.modal-card ol{padding-left:20px}
+.end-card{text-align:center}
+.result-mark{width:88px;height:88px;border-radius:22px;margin:0 auto 14px;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.18),rgba(94,246,255,.07) 60%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}
+.result-mark svg{width:48px;height:48px}
+
+/* index-style footer */
+.site-footer{max-width:1180px;width:calc(100% - 28px);margin:34px auto 20px;padding:22px;border-radius:24px;background:linear-gradient(145deg,rgba(17,23,51,.72),rgba(8,13,31,.72));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:12px}
+.footer-logo{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-weight:950;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-brand-copy{display:grid;gap:3px}.footer-brand-copy strong{font-size:17px;letter-spacing:.05em}.footer-brand-copy span{font-size:12px;color:var(--muted);line-height:1.5}
+.footer-clock{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:13px;color:#dfe7ff}
+.footer-clock-label{display:flex;justify-content:center;align-items:center;gap:7px;color:var(--cyan);font-weight:850;margin-bottom:3px}
+.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
+.footer-links a,.footer-link-button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px}.footer-links a:hover,.footer-link-button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}.footer-status{color:#b9c5e4}
+
+@media(max-width:900px){
+  .hero,.game-shell{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
+  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-links{justify-content:center}
+  .mobile-controls{display:grid}
+}
+@media(max-width:640px){
+  .brand span:last-child,.page-title span{display:none}.title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .game-top{grid-template-columns:1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .board-wrap{padding:8px}.side-panel{grid-template-columns:1fr 1fr}.info-card:last-child{grid-column:1/-1}
+  .site-footer{width:calc(100% - 20px);padding:18px}
+}
+@media(max-width:430px){
+  .stats-card{grid-template-columns:1fr 1fr}.stats-card .stat:last-child{grid-column:1/-1}
+  .side-panel{grid-template-columns:1fr}.info-card:last-child{grid-column:auto}
+  .toolbar{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+    <div class="title-wrap">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="mazeG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5ef6ff"/><stop offset=".55" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff5fd7"/></linearGradient></defs>
+        <rect x="7" y="7" width="50" height="50" rx="9" fill="none" stroke="url(#mazeG)" stroke-width="4"/>
+        <path d="M16 16h30v9H27v8h18v15H16V39h19v-7H16z" fill="none" stroke="url(#mazeG)" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="47" cy="47" r="4" fill="#69ffbd"/>
+      </svg>
+      <div class="page-title"><strong>Maze Runner</strong><span>Classic Maze • Speed Challenge</span></div>
+    </div>
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-1 .7-1.6 1.2-1.6 2.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Maze Challenge</div>
+      <h1>Escape the <span>Neon Maze</span></h1>
+      <p>Navigate from the glowing cyan start point to the green exit as quickly as possible. Every new round generates a fresh maze, so no two runs are exactly the same.</p>
+    </div>
+    <aside class="stats-card">
+      <div class="stat"><span>Moves</span><strong id="movesStat">0</strong></div>
+      <div class="stat"><span>Time</span><strong id="timeStat">00:00</strong></div>
+      <div class="stat"><span>Best</span><strong id="bestStat">—</strong></div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg">Find the exit. Use arrow keys, WASD, swipe, or the mobile controls.</div></div>
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="newGame()">New Maze</button>
+        <button class="btn" type="button" onclick="togglePause()" id="pauseBtn">Pause</button>
+        <button class="btn" type="button" onclick="location.href='index.html'">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-shell">
+      <div class="board-wrap">
+        <canvas id="mazeCanvas" width="720" height="720" aria-label="Maze Runner game board"></canvas>
+        <div class="mobile-controls" aria-label="Mobile movement controls">
+          <button class="ctrl ctrl-up" data-dir="up" aria-label="Move up"><svg viewBox="0 0 24 24"><path d="M12 5l-7 8h4v6h6v-6h4z" fill="currentColor"/></svg></button>
+          <button class="ctrl ctrl-left" data-dir="left" aria-label="Move left"><svg viewBox="0 0 24 24"><path d="M5 12l8-7v4h6v6h-6v4z" fill="currentColor"/></svg></button>
+          <button class="ctrl ctrl-down" data-dir="down" aria-label="Move down"><svg viewBox="0 0 24 24"><path d="M12 19l7-8h-4V5H9v6H5z" fill="currentColor"/></svg></button>
+          <button class="ctrl ctrl-right" data-dir="right" aria-label="Move right"><svg viewBox="0 0 24 24"><path d="M19 12l-8 7v-4H5V9h6V5z" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="info-card">
+          <h3>Run Details</h3>
+          <div class="info-row"><span>Difficulty</span><strong id="difficultyLabel">Medium</strong></div>
+          <div class="info-row"><span>Grid</span><strong id="gridLabel">17 × 17</strong></div>
+          <div class="info-row"><span>Moves</span><strong id="movesSide">0</strong></div>
+        </div>
+        <div class="info-card">
+          <h3>Difficulty</h3>
+          <div class="difficulty">
+            <button class="diff-btn" data-size="11" data-name="Easy">Easy</button>
+            <button class="diff-btn active" data-size="17" data-name="Medium">Medium</button>
+            <button class="diff-btn" data-size="23" data-name="Hard">Hard</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <h3>Controls</h3>
+          <div class="info-row"><span>Desktop</span><strong>WASD / Arrows</strong></div>
+          <div class="info-row"><span>Mobile</span><strong>Swipe / Buttons</strong></div>
+          <div class="info-row"><span>Pause</span><strong>P Key</strong></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo" aria-hidden="true">G</div>
+      <div class="footer-brand-copy"><strong>G-GAMES</strong><span>Quick games. Futuristic vibes. Built for play on any screen.</span></div>
+    </div>
+    <div class="footer-clock" aria-live="polite">
+      <div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div>
+      <div id="philippineTime">Philippine Standard Time</div>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <button type="button" class="footer-link-button" onclick="openAbout()">About</button>
+    </nav>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="footer-status">G-GAMES Online</span></div>
+</footer>
+</div>
+
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="helpTitle">How to Play Maze Runner</h2><button class="icon-btn" onclick="closeHelp()" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+    <ol>
+      <li>Start at the cyan square in the upper-left area of the maze.</li>
+      <li>Move through open paths using WASD, arrow keys, swipes, or the on-screen direction buttons.</li>
+      <li>Reach the green exit square to complete the run.</li>
+      <li>Choose Easy, Medium, or Hard to change the maze size.</li>
+      <li>Your best completion time is saved in the browser for each difficulty.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="aboutTitle">About G-GAMES</h2><button class="icon-btn" onclick="closeAbout()" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
+  </div>
+</div>
+
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true">
+  <div class="modal-card end-card">
+    <div class="result-mark"><svg viewBox="0 0 64 64"><path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/></svg></div>
+    <h2>Maze Complete</h2>
+    <p id="endSummary">You escaped the maze.</p>
+    <button class="btn btn-primary" type="button" onclick="closeEnd()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('mazeCanvas');
+const ctx = canvas.getContext('2d');
+const helpPanel = document.getElementById('helpPanel');
+const aboutPanel = document.getElementById('aboutPanel');
+const endModal = document.getElementById('endModal');
+
+let size = 17, difficultyName = 'Medium';
+let cells = [], player = {r:0,c:0}, end = {r:0,c:0};
+let moves = 0, startedAt = 0, elapsed = 0, timer = null;
+let paused = false, finished = false, touchStart = null;
+
+function buildMaze(n){
+  cells = Array.from({length:n},(_,r)=>Array.from({length:n},(_,c)=>({r,c,visited:false,walls:{t:true,r:true,b:true,l:true}})));
+  const stack = [];
+  let current = cells[0][0]; current.visited = true;
+  let visitedCount = 1;
+  while(visitedCount < n*n){
+    const candidates = [];
+    const {r,c}=current;
+    if(r>0 && !cells[r-1][c].visited) candidates.push(['t',cells[r-1][c]]);
+    if(c<n-1 && !cells[r][c+1].visited) candidates.push(['r',cells[r][c+1]]);
+    if(r<n-1 && !cells[r+1][c].visited) candidates.push(['b',cells[r+1][c]]);
+    if(c>0 && !cells[r][c-1].visited) candidates.push(['l',cells[r][c-1]]);
+    if(candidates.length){
+      const [dir,next] = candidates[Math.floor(Math.random()*candidates.length)];
+      const opposite = {t:'b',r:'l',b:'t',l:'r'}[dir];
+      current.walls[dir]=false; next.walls[opposite]=false;
+      stack.push(current); current=next; current.visited=true; visitedCount++;
+    } else current = stack.pop();
+  }
+  cells.flat().forEach(cell=>cell.visited=false);
+}
+
+function newGame(){
+  stopTimer();
+  buildMaze(size);
+  player={r:0,c:0}; end={r:size-1,c:size-1}; moves=0; elapsed=0; paused=false; finished=false;
+  updateUI(); draw();
+  document.getElementById('statusMsg').textContent='Find the exit. Use arrow keys, WASD, swipe, or the mobile controls.';
+  document.getElementById('pauseBtn').textContent='Pause';
+  startedAt = performance.now();
+  timer=setInterval(updateTime,250);
+}
+
+function updateTime(){
+  if(paused||finished) return;
+  elapsed = performance.now()-startedAt;
+  document.getElementById('timeStat').textContent=formatTime(elapsed);
+}
+
+function formatTime(ms){
+  const total=Math.floor(ms/1000), m=Math.floor(total/60), s=total%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function stopTimer(){ if(timer){clearInterval(timer);timer=null;} }
+
+function move(dir){
+  if(paused||finished) return;
+  const cell=cells[player.r][player.c];
+  let nr=player.r,nc=player.c;
+  if(dir==='up'&&!cell.walls.t)nr--;
+  if(dir==='right'&&!cell.walls.r)nc++;
+  if(dir==='down'&&!cell.walls.b)nr++;
+  if(dir==='left'&&!cell.walls.l)nc--;
+  if(nr===player.r&&nc===player.c) return;
+  player={r:nr,c:nc}; moves++; updateUI(); draw();
+  if(player.r===end.r&&player.c===end.c) finishGame();
+}
+function finishGame(){
+  finished=true; elapsed=performance.now()-startedAt; stopTimer();
+  const key='mazeBest_'+difficultyName;
+  const prev=Number(localStorage.getItem(key)||0);
+  if(!prev||elapsed<prev) localStorage.setItem(key,String(Math.round(elapsed)));
+  updateUI();
+  document.getElementById('statusMsg').textContent='Maze complete.';
+  document.getElementById('endSummary').textContent=`Completed in ${formatTime(elapsed)} with ${moves} moves.`;
+  setTimeout(()=>{endModal.classList.add('open');document.body.style.overflow='hidden';},180);
+}
+function bestValue(){
+  const v=Number(localStorage.getItem('mazeBest_'+difficultyName)||0);
+  return v?formatTime(v):'—';
+}
+function updateUI(){
+  document.getElementById('movesStat').textContent=moves;
+  document.getElementById('movesSide').textContent=moves;
+  document.getElementById('timeStat').textContent=formatTime(elapsed);
+  document.getElementById('bestStat').textContent=bestValue();
+  document.getElementById('difficultyLabel').textContent=difficultyName;
+  document.getElementById('gridLabel').textContent=`${size} × ${size}`;
+}
+function draw(){
+  const dpr=Math.min(devicePixelRatio||1,2);
+  const cssSize=Math.max(280,Math.min(canvas.parentElement.clientWidth-28,760));
+  canvas.style.width=cssSize+'px'; canvas.style.height=cssSize+'px';
+  canvas.width=Math.floor(cssSize*dpr); canvas.height=Math.floor(cssSize*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssSize,cssSize);
+  const cell=cssSize/size;
+
+  const grd=ctx.createLinearGradient(0,0,cssSize,cssSize);
+  grd.addColorStop(0,'#061020');grd.addColorStop(1,'#070718');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,cssSize,cssSize);
+
+  ctx.strokeStyle='rgba(94,246,255,.56)';ctx.lineWidth=Math.max(1.2,2.2*(17/size));ctx.lineCap='round';
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++){
+    const x=c*cell,y=r*cell,w=cells[r][c].walls;
+    ctx.beginPath();
+    if(w.t){ctx.moveTo(x,y);ctx.lineTo(x+cell,y)}
+    if(w.r){ctx.moveTo(x+cell,y);ctx.lineTo(x+cell,y+cell)}
+    if(w.b){ctx.moveTo(x+cell,y+cell);ctx.lineTo(x,y+cell)}
+    if(w.l){ctx.moveTo(x,y+cell);ctx.lineTo(x,y)}
+    ctx.stroke();
+  }
+  // start
+  ctx.fillStyle='rgba(94,246,255,.22)';ctx.fillRect(cell*.16,cell*.16,cell*.68,cell*.68);
+  // exit
+  ctx.save();ctx.shadowColor='#69ffbd';ctx.shadowBlur=18;ctx.fillStyle='#69ffbd';
+  ctx.fillRect(end.c*cell+cell*.22,end.r*cell+cell*.22,cell*.56,cell*.56);ctx.restore();
+  // player
+  const px=player.c*cell+cell/2, py=player.r*cell+cell/2;
+  ctx.save();ctx.shadowColor='#ff5fd7';ctx.shadowBlur=18;ctx.fillStyle='#ff5fd7';
+  ctx.beginPath();ctx.arc(px,py,Math.max(3.8,cell*.26),0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px-cell*.07,py-cell*.06,Math.max(1.2,cell*.055),0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+function togglePause(){
+  if(finished) return;
+  paused=!paused;
+  document.getElementById('pauseBtn').textContent=paused?'Resume':'Pause';
+  document.getElementById('statusMsg').textContent=paused?'Game paused.':'Find the exit.';
+  if(!paused) startedAt=performance.now()-elapsed;
+}
+document.addEventListener('keydown',e=>{
+  const key=e.key.toLowerCase();
+  if(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','p'].includes(key)) e.preventDefault();
+  if(key==='p'){togglePause();return}
+  if(key==='arrowup'||key==='w')move('up');
+  if(key==='arrowright'||key==='d')move('right');
+  if(key==='arrowdown'||key==='s')move('down');
+  if(key==='arrowleft'||key==='a')move('left');
+  if(key==='escape'){ if(helpPanel.classList.contains('open'))closeHelp(); else if(aboutPanel.classList.contains('open'))closeAbout(); }
+});
+document.querySelectorAll('.ctrl').forEach(btn=>{
+  btn.addEventListener('pointerdown',e=>{e.preventDefault();move(btn.dataset.dir)});
+});
+canvas.addEventListener('pointerdown',e=>{touchStart={x:e.clientX,y:e.clientY}});
+canvas.addEventListener('pointerup',e=>{
+  if(!touchStart)return;
+  const dx=e.clientX-touchStart.x,dy=e.clientY-touchStart.y;
+  if(Math.max(Math.abs(dx),Math.abs(dy))>18) move(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+  touchStart=null;
+});
+document.querySelectorAll('.diff-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');size=Number(btn.dataset.size);difficultyName=btn.dataset.name;newGame();
+  });
+});
+function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function openAbout(){aboutPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeAbout(){aboutPanel.classList.remove('open');document.body.style.overflow=''}
+function closeEnd(){endModal.classList.remove('open');document.body.style.overflow='';newGame()}
+[helpPanel,aboutPanel,endModal].forEach(p=>p.addEventListener('click',e=>{if(e.target===p){p.classList.remove('open');document.body.style.overflow=''}}));
+window.addEventListener('resize',draw);
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&!finished)togglePause()});
+
+function updatePhilippineTime(){
+  document.getElementById('philippineTime').textContent=new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',weekday:'short',year:'numeric',month:'short',day:'numeric',
+    hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true
+  }).format(new Date());
+}
+updatePhilippineTime();setInterval(updatePhilippineTime,1000);
+newGame();
+</script>
+</body>
+</html>
