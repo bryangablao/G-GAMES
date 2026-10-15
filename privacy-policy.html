@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070816" />
+  <meta name="description" content="Privacy Policy for G-GAMES by Accxs Creations." />
+  <title>Privacy Policy | G-GAMES</title>
+  <link rel="icon" type="image/png" href="/G-GAMES/image/G-GAMES.png" />
+
+  <style>
+    :root {
+      --bg-1: #05060d;
+      --bg-2: #0b1025;
+      --bg-3: #12082d;
+      --panel: rgba(15, 20, 45, 0.72);
+      --panel-strong: rgba(10, 15, 35, 0.94);
+      --border: rgba(111, 231, 255, 0.24);
+      --text: #f5fbff;
+      --muted: #9bb3c7;
+      --cyan: #62efff;
+      --cyan-2: #13c7ff;
+      --purple: #9f6cff;
+      --pink: #ff4fd8;
+      --green: #52f5aa;
+      --danger: #ff607e;
+      --warning: #ffd166;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 10%, rgba(98, 239, 255, 0.15), transparent 32%),
+        radial-gradient(circle at 82% 14%, rgba(159, 108, 255, 0.15), transparent 32%),
+        radial-gradient(circle at 52% 95%, rgba(255, 79, 216, 0.10), transparent 38%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(98, 239, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98, 239, 255, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), transparent 90%);
+    }
+
+    a { color: inherit; }
+
+    .lucide-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+      object-fit: contain;
+      filter: brightness(0) saturate(100%) invert(90%) sepia(24%) saturate(1040%) hue-rotate(155deg);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(45px);
+      opacity: 0.34;
+      pointer-events: none;
+      z-index: -2;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one { width: 230px; height: 230px; background: var(--cyan-2); top: 8%; left: -80px; }
+    .orb.two { width: 280px; height: 280px; background: var(--purple); right: -100px; top: 28%; animation-delay: -4s; }
+    .orb.three { width: 220px; height: 220px; background: var(--pink); left: 35%; bottom: -100px; animation-delay: -8s; }
+
+    @keyframes floatOrb {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(30px, -20px, 0) scale(1.08); }
+    }
+
+    .progress-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      z-index: 500;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+      box-shadow: 0 0 18px rgba(98,239,255,.45);
+    }
+
+    .site-shell {
+      width: min(1500px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 34px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(5, 9, 22, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.28);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #041018;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 26px rgba(98, 239, 255, 0.34);
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+
+    .icon-btn,
+    .ghost-btn,
+    .primary-btn {
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+      color: var(--text);
+      transition: .22s ease;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .icon-btn:hover {
+      background: rgba(98,239,255,.13);
+      border-color: rgba(98,239,255,.32);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap: 18px;
+    }
+
+    .hero-card,
+    .summary-card,
+    .content-card,
+    .toc-card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(16,23,52,.84), rgba(8,13,31,.8));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero-card {
+      border-radius: 28px;
+      padding: clamp(26px, 4vw, 48px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -100px;
+      bottom: -140px;
+      border-radius: 50%;
+      border: 1px solid rgba(98,239,255,.22);
+      box-shadow: 0 0 0 35px rgba(98,239,255,.025), 0 0 0 70px rgba(159,108,255,.025);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(98,239,255,.2);
+      background: rgba(98,239,255,.07);
+      color: #c9faff;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    .hero h1 {
+      margin: 18px 0 12px;
+      max-width: 780px;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--cyan), #ffffff 45%, var(--purple) 76%, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(.95rem, 2vw, 1.08rem);
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: #d8e9f4;
+      font-size: .82rem;
+    }
+
+    .meta-pill .lucide-icon { width: 16px; height: 16px; }
+
+    .summary-card {
+      border-radius: 24px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .summary-card h2 { margin: 0; font-size: 1.2rem; }
+    .summary-card p { margin: 0; color: var(--muted); line-height: 1.7; font-size: .9rem; }
+
+    .summary-list { display: grid; gap: 10px; }
+    .summary-item {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.035);
+    }
+    .summary-item strong { display: block; margin-bottom: 4px; color: #eafcff; font-size: .85rem; }
+    .summary-item span { color: #93aabd; font-size: .78rem; line-height: 1.55; }
+
+    .notice {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,209,102,.18);
+      background: rgba(255,209,102,.055);
+      color: #d9cfac;
+      font-size: .84rem;
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .toc-card {
+      position: sticky;
+      top: 96px;
+      border-radius: 22px;
+      padding: 18px;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+    }
+
+    .toc-card h2 { margin: 0 0 12px; font-size: 1rem; }
+
+    .toc-search {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .toc-search input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid rgba(98,239,255,.15);
+      border-radius: 13px;
+      outline: none;
+      color: var(--text);
+      background: rgba(8,13,30,.78);
+      padding: 0 12px 0 40px;
+      font: inherit;
+      font-size: .84rem;
+    }
+
+    .toc-search input:focus { border-color: rgba(98,239,255,.48); box-shadow: 0 0 0 4px rgba(98,239,255,.06); }
+    .toc-search .lucide-icon { position: absolute; width: 17px; height: 17px; left: 13px; top: 50%; transform: translateY(-50%); opacity: .8; }
+
+    .toc-list { display: grid; gap: 6px; }
+    .toc-link {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 11px;
+      border-radius: 12px;
+      color: #9fb6c8;
+      text-decoration: none;
+      font-size: .79rem;
+      line-height: 1.45;
+      transition: .2s ease;
+      border: 1px solid transparent;
+    }
+    .toc-link:hover,
+    .toc-link.active {
+      color: #eaffff;
+      background: rgba(98,239,255,.06);
+      border-color: rgba(98,239,255,.15);
+    }
+    .toc-number {
+      color: var(--cyan);
+      font-weight: 800;
+      min-width: 22px;
+      opacity: .9;
+    }
+
+    .policy-content { display: grid; gap: 14px; }
+
+    .content-card {
+      border-radius: 22px;
+      padding: clamp(20px, 3vw, 30px);
+      scroll-margin-top: 105px;
+    }
+
+    .section-kicker {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: .7rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .content-card h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.28rem, 3vw, 1.85rem);
+    }
+
+    .content-card h3 {
+      margin: 22px 0 8px;
+      font-size: 1rem;
+      color: #e9fbff;
+    }
+
+    .content-card p,
+    .content-card li {
+      color: #adc0cf;
+      line-height: 1.8;
+      font-size: .93rem;
+    }
+
+    .content-card p { margin: 10px 0; }
+    .content-card ul { margin: 10px 0 0; padding-left: 22px; }
+    .content-card li + li { margin-top: 8px; }
+
+    .info-box {
+      margin-top: 16px;
+      padding: 15px 16px;
+      border-radius: 16px;
+      background: rgba(98,239,255,.045);
+      border: 1px solid rgba(98,239,255,.12);
+      color: #bcd9e4;
+      font-size: .86rem;
+      line-height: 1.7;
+    }
+
+    .table-wrap {
+      margin-top: 14px;
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    table { width: 100%; border-collapse: collapse; min-width: 760px; background: rgba(3,8,20,.3); }
+    th, td { padding: 13px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.055); }
+    th { color: #dffcff; background: rgba(98,239,255,.05); font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+    td { color: #a8bdcc; font-size: .84rem; line-height: 1.6; }
+    tr:last-child td { border-bottom: 0; }
+
+    .back-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .ghost-btn,
+    .primary-btn {
+      min-height: 44px;
+      border-radius: 13px;
+      padding: 0 14px;
+      font-weight: 800;
+    }
+
+    .ghost-btn {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .ghost-btn:hover { background: rgba(255,255,255,.08); }
+
+    .primary-btn {
+      color: #051018;
+      background: linear-gradient(135deg, var(--cyan), #aef7ff);
+      box-shadow: 0 12px 30px rgba(98,239,255,.14);
+    }
+    .primary-btn:hover { transform: translateY(-2px); }
+
+    .site-footer {
+      position: relative;
+      margin-top: 42px;
+      padding: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(98,239,255,.13);
+      border-radius: 26px 26px 0 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(98,239,255,.09), transparent 30%),
+        radial-gradient(circle at 90% 100%, rgba(159,108,255,.10), transparent 34%),
+        linear-gradient(180deg, rgba(11,18,39,.88), rgba(4,8,20,.96));
+      box-shadow: 0 -18px 60px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.025);
+      color: #8299ab;
+      text-align: left;
+    }
+
+    .site-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(98,239,255,.68), rgba(159,108,255,.72), transparent);
+      box-shadow: 0 0 20px rgba(98,239,255,.32);
+    }
+
+    .footer-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(230px, 1.25fr) minmax(260px, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .footer-brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .footer-logo {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #eaffff;
+      border: 1px solid rgba(98,239,255,.22);
+      background: linear-gradient(145deg, rgba(98,239,255,.14), rgba(159,108,255,.13));
+      box-shadow: 0 0 24px rgba(98,239,255,.09);
+    }
+    .footer-brand-copy strong { display: block; margin-bottom: 4px; color: #eefcff; font-size: .92rem; }
+    .footer-brand-copy span { display: block; font-size: .75rem; line-height: 1.55; color: #71899d; }
+
+    .footer-clock {
+      justify-self: center;
+      width: min(100%, 440px);
+      padding: 13px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(98,239,255,.12);
+      background: rgba(98,239,255,.035);
+      text-align: center;
+    }
+    .footer-clock-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 5px;
+      color: #87a7ba;
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+    .footer-clock-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #62efff;
+      box-shadow: 0 0 12px rgba(98,239,255,.9);
+      animation: footerPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes footerPulse { 50% { opacity: .38; transform: scale(.78); } }
+    #philippineTime { color: #dffcff; font-size: .78rem; font-weight: 650; line-height: 1.5; }
+
+    .footer-links { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px 16px; }
+    .footer-links a,
+    .footer-link-button {
+      position: relative;
+      border: 0;
+      padding: 4px 0;
+      background: transparent;
+      color: #8aa2b5;
+      font: inherit;
+      font-size: .75rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color .2s ease, text-shadow .2s ease;
+    }
+    .footer-links a:hover,
+    .footer-link-button:hover { color: #dffcff; text-shadow: 0 0 14px rgba(98,239,255,.34); }
+
+    .footer-bottom {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,.055);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: .72rem;
+      color: #61788d;
+    }
+    .footer-status { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .footer-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #62efff;
+      box-shadow: 0 0 10px rgba(98,239,255,.7);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(2,5,13,.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .modal.show { display: flex; animation: modalFade .2s ease; }
+    @keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
+    .modal-panel {
+      width: min(560px, 100%);
+      max-height: min(720px, 92vh);
+      overflow: auto;
+      border-radius: 26px;
+      padding: 22px;
+      background: radial-gradient(circle at 85% 5%, rgba(159,108,255,.14), transparent 30%), linear-gradient(160deg, rgba(18,26,58,.98), rgba(7,12,30,.98));
+      border: 1px solid rgba(98,239,255,.24);
+      box-shadow: 0 35px 90px rgba(0,0,0,.6), 0 0 55px rgba(98,239,255,.06);
+    }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .modal-title-wrap { display: flex; gap: 13px; align-items: center; min-width: 0; }
+    .modal-title-wrap h3 { margin: 0; font-size: 1.45rem; }
+    .modal-title-wrap span { color: var(--muted); font-size: .78rem; }
+    .modal-icon {
+      width: 54px; height: 54px; flex: 0 0 54px; border-radius: 16px; display: grid; place-items: center; font-weight: 900;
+      background: linear-gradient(135deg, rgba(98,239,255,.18), rgba(159,108,255,.22));
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .modal-desc { margin: 20px 0 0; color: #b9cad8; line-height: 1.7; font-size: .94rem; }
+    .about-list { margin: 18px 0 0; display: grid; gap: 9px; }
+    .about-item { padding: 11px 12px; border-radius: 14px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.06); color: #b8c9d8; font-size: .87rem; line-height: 1.5; }
+    .modal-actions { margin-top: 20px; display: flex; justify-content: flex-end; }
+
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 80;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(98,239,255,.2);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(7,12,28,.86);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .22s ease;
+      cursor: pointer;
+    }
+    .back-to-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    @media (max-width: 1180px) {
+      .hero { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 280px minmax(0, 1fr); }
+    }
+
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc-card { position: static; max-height: none; }
+      .toc-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      body::before { background-size: 34px 34px; }
+      .site-shell { width: calc(100% - 16px); padding-top: 8px; }
+      .topbar { top: 6px; border-radius: 16px; padding: 10px; }
+      .brand-mark { width: 40px; height: 40px; flex-basis: 40px; border-radius: 12px; }
+      .brand-copy strong { font-size: .9rem; }
+      .brand-copy span { max-width: 170px; font-size: .7rem; }
+      .hero { margin-top: 12px; }
+      .hero-card, .summary-card { border-radius: 22px; }
+      .hero-card { padding: 24px 18px; }
+      .hero h1 { font-size: clamp(2.15rem, 11vw, 3.4rem); }
+      .layout { margin-top: 14px; }
+      .toc-list { grid-template-columns: 1fr; }
+      .content-card { padding: 20px 17px; }
+      .site-footer { padding: 24px 18px; text-align: center; }
+      .footer-grid { grid-template-columns: 1fr; gap: 18px; }
+      .footer-brand { justify-content: center; }
+      .footer-clock { justify-self: stretch; width: 100%; }
+      .footer-links { justify-content: center; }
+      .footer-bottom { flex-direction: column; justify-content: center; }
+      .modal { align-items: flex-end; padding: 10px; }
+      .modal-panel { width: 100%; border-radius: 24px 24px 18px 18px; padding: 18px; max-height: 88vh; }
+      .back-to-top { right: 12px; bottom: 12px; }
+    }
+
+    @media (max-width: 390px) {
+      .brand-copy span { display: none; }
+      .hero-meta { gap: 7px; }
+      .meta-pill { font-size: .72rem; padding: 8px 9px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-line" id="progressLine"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Return to G-GAMES home">
+        <div class="brand-mark">G</div>
+        <div class="brand-copy">
+          <strong>G-GAMES</strong>
+          <span>Futuristic Mini Games Hub</span>
+        </div>
+      </a>
+
+      <div class="top-actions">
+        <a class="icon-btn" href="index.html" aria-label="Back to home" title="Back to Home">
+          <img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/house.svg" alt="">
+        </a>
+        <button class="icon-btn" id="aboutBtn" type="button" aria-label="About G-GAMES" title="About G-GAMES">
+          <img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/info.svg" alt="">
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow"><span class="pulse-dot"></span> Privacy and data transparency</div>
+        <h1>Your privacy in the <span class="gradient-text">G-GAMES</span> universe.</h1>
+        <p>
+          This Privacy Policy explains how G-GAMES and Accxs Creations may collect, use, store, protect, and disclose information when you access our website, browse the game library, play available mini games, or interact with related site features.
+        </p>
+
+        <div class="hero-meta">
+          <span class="meta-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/calendar-days.svg" alt=""> Effective: October 15, 2026</span>
+          <span class="meta-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt=""> Privacy focused</span>
+          <span class="meta-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/smartphone.svg" alt=""> Mobile friendly</span>
+          <span class="meta-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg" alt=""> Detailed policy</span>
+        </div>
+
+        <div class="notice">
+          This document is a general website privacy-policy template tailored to the G-GAMES design and functionality shown in your existing site. Before publishing it as a binding legal policy, review it against your actual data practices, hosting setup, analytics tools, advertising tools, payment systems, contact methods, and applicable laws.
+        </div>
+      </div>
+
+      <aside class="summary-card" aria-label="Privacy Policy quick summary">
+        <div>
+          <h2>Quick privacy summary</h2>
+          <p>This overview highlights the key ideas. The full sections below provide the complete details.</p>
+        </div>
+
+        <div class="summary-list">
+          <div class="summary-item">
+            <strong>Data collection</strong>
+            <span>We may collect technical, usage, device, and information you voluntarily provide.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Primary purpose</strong>
+            <span>Operate the website, improve games, maintain security, troubleshoot issues, and respond to requests.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Cookies</strong>
+            <span>Cookies or similar technologies may be used for preferences, functionality, security, or analytics.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Your choices</strong>
+            <span>You may have rights to access, correct, delete, restrict, or object to certain processing depending on your location.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="layout">
+      <aside class="toc-card" aria-label="Privacy Policy contents">
+        <h2>Privacy Policy Contents</h2>
+        <div class="toc-search">
+          <img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/search.svg" alt="">
+          <input id="policySearch" type="search" placeholder="Search policy sections..." autocomplete="off" />
+        </div>
+        <nav class="toc-list" id="tocList"></nav>
+      </aside>
+
+      <article class="policy-content" id="policyContent">
+        <section class="content-card policy-section" id="section-1" data-title="Introduction and Scope">
+          <div class="section-kicker">Section 01</div>
+          <h2>Introduction and Scope</h2>
+          <p>
+            This Privacy Policy describes how G-GAMES, operated under Accxs Creations, handles information in connection with the G-GAMES website, its mini-game pages, interactive features, and related online services collectively referred to in this Policy as the “Service.”
+          </p>
+          <p>
+            By accessing or using the Service, you acknowledge that information may be processed as described in this Privacy Policy. This Policy applies to information collected through the Service and does not automatically apply to third-party websites, third-party services, external advertisements, social platforms, browser extensions, hosting providers, or other websites that may be linked from G-GAMES.
+          </p>
+          <div class="info-box">If a specific game or future G-GAMES feature introduces a different data practice, additional privacy information may be displayed at the point where that feature is used.</div>
+        </section>
+
+        <section class="content-card policy-section" id="section-2" data-title="Information We May Collect">
+          <div class="section-kicker">Section 02</div>
+          <h2>Information We May Collect</h2>
+          <p>Depending on how the Service is configured and how you interact with it, we may collect several categories of information.</p>
+
+          <h3>Information you provide voluntarily</h3>
+          <ul>
+            <li>Name, username, display name, or other identifier if a future account or profile feature is offered.</li>
+            <li>Email address or other contact information if you send us a message, submit feedback, report an issue, or request support.</li>
+            <li>Content you submit through forms, surveys, feedback fields, bug reports, support requests, or other communication features.</li>
+            <li>Any attachments, screenshots, technical descriptions, or other information you choose to provide when contacting us.</li>
+          </ul>
+
+          <h3>Information collected automatically</h3>
+          <ul>
+            <li>IP address or approximate network location, when made available by the hosting or infrastructure provider.</li>
+            <li>Browser type, browser version, operating system, device category, language setting, and screen information.</li>
+            <li>Date and time of access, referring page, pages viewed, buttons clicked, games opened, and session activity.</li>
+            <li>Technical logs, crash information, page-load timing, error messages, and security-related events.</li>
+            <li>Cookie identifiers, local storage values, or similar browser-based identifiers where such technologies are used.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-3" data-title="Game and Interaction Data">
+          <div class="section-kicker">Section 03</div>
+          <h2>Game and Interaction Data</h2>
+          <p>
+            G-GAMES is designed around casual mini games. Depending on how each game is coded, gameplay information may exist only temporarily in your browser, may be stored locally on your device, or may be processed by a server if a future online feature is introduced.
+          </p>
+          <p>Examples of game-related information may include:</p>
+          <ul>
+            <li>Scores, levels, move counts, completion status, streaks, attempts, reaction times, or elapsed time.</li>
+            <li>Game preferences, difficulty selections, sound settings, theme settings, or last-played game.</li>
+            <li>Saved progress stored using browser local storage or similar client-side storage.</li>
+            <li>Leaderboard entries if a future public leaderboard or competitive mode is introduced.</li>
+          </ul>
+          <p>
+            If gameplay data is stored only in your browser, clearing browser storage may permanently remove that information. G-GAMES may not be able to restore data that was never transmitted to or stored on a G-GAMES-controlled server.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-4" data-title="How We Use Information">
+          <div class="section-kicker">Section 04</div>
+          <h2>How We Use Information</h2>
+          <p>Information may be used for purposes that are reasonably necessary to provide, protect, understand, and improve the Service.</p>
+          <ul>
+            <li>To load website pages, games, assets, interface elements, and other requested content.</li>
+            <li>To remember preferences or locally saved progress where those features exist.</li>
+            <li>To improve game balance, website usability, mobile responsiveness, accessibility, and performance.</li>
+            <li>To detect crashes, broken pages, coding errors, abuse, suspicious traffic, or security threats.</li>
+            <li>To measure general traffic patterns and understand which games or pages are most frequently used.</li>
+            <li>To respond to support requests, questions, feedback, complaints, and technical reports.</li>
+            <li>To enforce site rules, protect our systems, and investigate misuse or harmful activity.</li>
+            <li>To comply with legal obligations, court orders, lawful requests, or regulatory requirements where applicable.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-5" data-title="Legal Bases for Processing">
+          <div class="section-kicker">Section 05</div>
+          <h2>Legal Bases for Processing</h2>
+          <p>
+            Where data-protection law requires a legal basis for processing personal information, the basis may depend on the context and the type of information involved.
+          </p>
+          <ul>
+            <li><strong>Performance of a service:</strong> Processing may be necessary to provide features that you request.</li>
+            <li><strong>Legitimate interests:</strong> We may process information to maintain security, prevent abuse, improve performance, understand usage, and operate the Service efficiently.</li>
+            <li><strong>Consent:</strong> Certain optional technologies or communications may rely on your consent where required by law.</li>
+            <li><strong>Legal obligation:</strong> We may process or retain information where necessary to comply with applicable law.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-6" data-title="Cookies and Similar Technologies">
+          <div class="section-kicker">Section 06</div>
+          <h2>Cookies and Similar Technologies</h2>
+          <p>
+            G-GAMES may use cookies, local storage, session storage, device storage, pixels, tags, or similar technologies. These technologies can support basic website functions, remember settings, help detect technical problems, or provide aggregate usage information.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Technology Type</th><th>Possible Purpose</th><th>Typical Duration</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Essential storage</td><td>Maintain required site functionality, security, or session state.</td><td>Session or limited duration.</td></tr>
+                <tr><td>Preference storage</td><td>Remember game settings, interface preferences, or previously selected options.</td><td>Until cleared or expired.</td></tr>
+                <tr><td>Analytics technologies</td><td>Understand general website traffic, performance, and feature usage.</td><td>Depends on the analytics provider and configuration.</td></tr>
+                <tr><td>Security technologies</td><td>Detect abuse, automated attacks, or suspicious activity.</td><td>Depends on the security provider and threat context.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            You may be able to control or delete cookies and local storage through your browser settings. Disabling certain technologies may affect site functionality, saved game progress, or preferences.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-7" data-title="Local Storage and Browser Data">
+          <div class="section-kicker">Section 07</div>
+          <h2>Local Storage and Browser Data</h2>
+          <p>
+            Some G-GAMES features may save information directly in your browser rather than transmitting it to an external server. This can include settings, progress, high scores, last-played information, or temporary interface state.
+          </p>
+          <p>
+            Browser-stored information generally remains on the specific device and browser where it was created. It may not synchronize across devices unless a future account or cloud-save feature is specifically provided.
+          </p>
+          <p>
+            You can typically remove this information by clearing site data, cookies, or local storage in your browser. Doing so may reset preferences, scores, progress, or other saved information.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-8" data-title="Analytics and Performance Measurement">
+          <div class="section-kicker">Section 08</div>
+          <h2>Analytics and Performance Measurement</h2>
+          <p>
+            We may use analytics or performance-measurement services to understand how visitors use G-GAMES. These services may process information such as page views, game launches, approximate device information, referring websites, session duration, and technical performance data.
+          </p>
+          <p>
+            Analytics information may be aggregated or pseudonymized where reasonably possible. If third-party analytics tools are added, those providers may process information under their own privacy policies and contractual terms.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-9" data-title="Advertising and Promotional Technologies">
+          <div class="section-kicker">Section 09</div>
+          <h2>Advertising and Promotional Technologies</h2>
+          <p>
+            G-GAMES may in the future display advertisements, sponsorships, or promotional content. Advertising partners may use cookies, device identifiers, contextual information, or similar technologies where permitted by law and by your settings.
+          </p>
+          <p>
+            If personalized advertising is used, additional consent or preference controls may be required depending on your location. We recommend clearly identifying advertising services in a cookie banner or consent manager if such tools are added.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-10" data-title="Third Party Links and Services">
+          <div class="section-kicker">Section 10</div>
+          <h2>Third-Party Links and Services</h2>
+          <p>
+            The Service may contain links to third-party websites, external content, content delivery networks, icon libraries, hosting infrastructure, analytics providers, or other third-party services. For example, website assets such as icons may be loaded from an external content delivery service.
+          </p>
+          <p>
+            When you interact with a third-party service, that provider may receive information directly from your browser. G-GAMES does not control the privacy practices of independent third parties. You should review their policies before providing personal information or enabling optional third-party features.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-11" data-title="Service Providers and Data Sharing">
+          <div class="section-kicker">Section 11</div>
+          <h2>Service Providers and Data Sharing</h2>
+          <p>
+            We may share limited information with vendors or service providers that help operate the Service. Depending on the site configuration, these may include hosting providers, security services, analytics vendors, content delivery networks, technical support providers, or communication platforms.
+          </p>
+          <p>
+            Service providers should only receive information reasonably necessary to perform services on our behalf and may be subject to contractual or legal obligations regarding confidentiality and security.
+          </p>
+          <p>We may also disclose information:</p>
+          <ul>
+            <li>When required by law, legal process, subpoena, court order, or valid governmental request.</li>
+            <li>To protect the rights, safety, property, or security of G-GAMES, users, or others.</li>
+            <li>To investigate fraud, attacks, abuse, or violations of our Terms of Service.</li>
+            <li>In connection with a merger, acquisition, restructuring, sale, transfer, or similar business transaction involving the Service.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-12" data-title="No Sale of Personal Information">
+          <div class="section-kicker">Section 12</div>
+          <h2>No Sale of Personal Information</h2>
+          <p>
+            G-GAMES does not intend to sell personal information in the traditional sense of exchanging directly identifying information for money. However, certain privacy laws define “sale,” “sharing,” or “targeted advertising” broadly. If advertising or tracking technologies that fall within those definitions are introduced, this Policy and any required privacy controls should be updated accordingly.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-13" data-title="Data Retention">
+          <div class="section-kicker">Section 13</div>
+          <h2>Data Retention</h2>
+          <p>
+            We aim to retain personal information only for as long as reasonably necessary for the purposes described in this Privacy Policy, unless a longer retention period is required or permitted by law.
+          </p>
+          <p>Retention periods may depend on:</p>
+          <ul>
+            <li>The type of information involved.</li>
+            <li>Whether the information is stored locally in your browser or on a server.</li>
+            <li>The reason the information was collected.</li>
+            <li>Security, fraud-prevention, legal, accounting, or dispute-resolution requirements.</li>
+            <li>Whether you have requested deletion and whether an exception applies.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-14" data-title="Data Security">
+          <div class="section-kicker">Section 14</div>
+          <h2>Data Security</h2>
+          <p>
+            We use reasonable administrative, technical, and organizational measures designed to protect information against unauthorized access, misuse, alteration, loss, or disclosure. These measures may include HTTPS, access controls, secure hosting configurations, code updates, monitoring, backups, and security reviews where applicable.
+          </p>
+          <p>
+            No website, network, device, or method of internet transmission can be guaranteed to be completely secure. Users should avoid sending unnecessary sensitive information through general contact forms or support channels.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-15" data-title="International Data Transfers">
+          <div class="section-kicker">Section 15</div>
+          <h2>International Data Transfers</h2>
+          <p>
+            Hosting, content delivery, analytics, security, or other technical services may operate in countries different from your own. As a result, information may be processed or stored in jurisdictions with different privacy laws.
+          </p>
+          <p>
+            Where required, appropriate safeguards may be used for cross-border transfers, such as contractual protections, adequacy mechanisms, or other lawful transfer methods.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-16" data-title="Children's Privacy">
+          <div class="section-kicker">Section 16</div>
+          <h2>Children's Privacy</h2>
+          <p>
+            G-GAMES is intended as a general-audience mini-games website. We do not knowingly intend to collect personal information from children in a manner prohibited by applicable law.
+          </p>
+          <p>
+            If a parent or legal guardian believes that a child has provided personal information through the Service, they may contact us so that the situation can be reviewed and appropriate action can be taken.
+          </p>
+          <div class="info-box">If G-GAMES is specifically marketed to children or includes child-directed features, a specialized child-privacy review may be required before launch.</div>
+        </section>
+
+        <section class="content-card policy-section" id="section-17" data-title="Your Privacy Rights and Choices">
+          <div class="section-kicker">Section 17</div>
+          <h2>Your Privacy Rights and Choices</h2>
+          <p>
+            Depending on your location and applicable law, you may have one or more rights regarding personal information associated with you.
+          </p>
+          <ul>
+            <li>Request access to certain personal information we hold about you.</li>
+            <li>Request correction of inaccurate or incomplete personal information.</li>
+            <li>Request deletion of personal information, subject to legal exceptions.</li>
+            <li>Request restriction of certain processing activities.</li>
+            <li>Object to certain processing based on legitimate interests.</li>
+            <li>Withdraw consent where processing is based on consent.</li>
+            <li>Request a portable copy of certain information where legally required.</li>
+            <li>Opt out of certain targeted advertising, sale, or sharing practices where applicable.</li>
+            <li>Lodge a complaint with a relevant privacy or data-protection authority.</li>
+          </ul>
+        </section>
+
+        <section class="content-card policy-section" id="section-18" data-title="How to Submit a Privacy Request">
+          <div class="section-kicker">Section 18</div>
+          <h2>How to Submit a Privacy Request</h2>
+          <p>
+            If G-GAMES provides a dedicated contact address or privacy request form, you may use that channel to submit an applicable privacy request. To protect users, we may need to verify your identity or authority before processing certain requests.
+          </p>
+          <p>
+            A privacy request should clearly describe the right you wish to exercise and provide enough information for us to identify the relevant records. Avoid including passwords, full payment card details, government identification numbers, or other unnecessary sensitive information in an ordinary request.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-19" data-title="Browser Privacy Controls and Do Not Track">
+          <div class="section-kicker">Section 19</div>
+          <h2>Browser Privacy Controls and Do Not Track</h2>
+          <p>
+            Modern browsers may offer privacy controls such as cookie blocking, tracking prevention, local-storage controls, private browsing, global privacy signals, or “Do Not Track” settings.
+          </p>
+          <p>
+            Because privacy signals are not implemented uniformly across all websites and jurisdictions, G-GAMES may not respond to every browser-based signal in the same way. Where law requires recognition of a legally valid opt-out signal, site configurations should be adjusted accordingly.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-20" data-title="Account Security and Future Accounts">
+          <div class="section-kicker">Section 20</div>
+          <h2>Account Security and Future Accounts</h2>
+          <p>
+            If G-GAMES later introduces optional user accounts, saved profiles, cloud saves, multiplayer features, leaderboards, or account-based purchases, additional personal information may be required. Any such feature should provide appropriate security controls and updated privacy disclosures before or when the feature becomes available.
+          </p>
+          <p>
+            Users would be responsible for protecting passwords and for activity performed through their accounts, subject to applicable law and any account-security procedures provided by the Service.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-21" data-title="Payments and Purchases">
+          <div class="section-kicker">Section 21</div>
+          <h2>Payments and Purchases</h2>
+          <p>
+            The current G-GAMES mini-game interface may not require payment. If purchases, subscriptions, donations, premium features, virtual items, or other paid services are added in the future, payment information should generally be processed through a qualified payment service provider rather than directly stored by G-GAMES unless appropriate security requirements are met.
+          </p>
+          <p>
+            Payment providers may collect billing details, payment card information, transaction identifiers, fraud-prevention information, and other data under their own privacy policies.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-22" data-title="Communications and Support Messages">
+          <div class="section-kicker">Section 22</div>
+          <h2>Communications and Support Messages</h2>
+          <p>
+            If you contact G-GAMES by email, contact form, social media, or another support channel, we may retain the communication and related information for purposes such as responding to your inquiry, improving the Service, documenting technical issues, preventing abuse, and maintaining appropriate business records.
+          </p>
+          <p>
+            Marketing messages, if introduced, should include any opt-out method required by applicable law. Transactional or service-related messages may still be sent when reasonably necessary to operate a requested service.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-23" data-title="Security Logs and Abuse Prevention">
+          <div class="section-kicker">Section 23</div>
+          <h2>Security Logs and Abuse Prevention</h2>
+          <p>
+            To maintain the integrity of the Service, technical information may be used to detect suspicious traffic, automated requests, attacks, unauthorized attempts to access restricted areas, malicious code, manipulation of game functionality, or other forms of abuse.
+          </p>
+          <p>
+            Security logs may be retained longer than ordinary usage data when reasonably necessary to investigate incidents, prevent recurring threats, maintain legal evidence, or comply with security obligations.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-24" data-title="Aggregated and De-identified Information">
+          <div class="section-kicker">Section 24</div>
+          <h2>Aggregated and De-identified Information</h2>
+          <p>
+            We may create aggregated, statistical, or de-identified information from usage data. This information may be used to understand general engagement, prioritize improvements, compare game popularity, identify performance trends, or plan future development.
+          </p>
+          <p>
+            Where information is truly de-identified and cannot reasonably be linked back to an individual, it may not be treated as personal information under certain privacy laws.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-25" data-title="Changes to This Privacy Policy">
+          <div class="section-kicker">Section 25</div>
+          <h2>Changes to This Privacy Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time to reflect changes in the Service, technology, legal requirements, business practices, hosting arrangements, analytics tools, or other operational needs.
+          </p>
+          <p>
+            When material changes are made, we may update the effective date shown near the top of this page and, where appropriate, provide an additional notice through the website. Your continued use of the Service after an updated policy becomes effective is subject to applicable law and the updated terms of this Policy.
+          </p>
+        </section>
+
+        <section class="content-card policy-section" id="section-26" data-title="Contact and Privacy Questions">
+          <div class="section-kicker">Section 26</div>
+          <h2>Contact and Privacy Questions</h2>
+          <p>
+            If you have questions about this Privacy Policy, the handling of information, a privacy request, or a possible privacy issue, please use the official contact method published by G-GAMES or Accxs Creations.
+          </p>
+          <p>
+            If no dedicated privacy email address is currently displayed on the website, add one before public launch if you expect to collect personal information, operate user accounts, use analytics or advertising tools, or receive formal privacy requests.
+          </p>
+          <div class="info-box">
+            Recommended contact information to add before publication: business or operator name, privacy email address, country or region of operation, and any legally required representative or data-protection contact details.
+          </div>
+
+          <div class="back-row">
+            <a class="ghost-btn" href="terms-of-service.html" style="display:inline-flex;align-items:center;text-decoration:none;">View Terms of Service</a>
+            <a class="primary-btn" href="index.html" style="display:inline-flex;align-items:center;text-decoration:none;">Return to G-GAMES</a>
+          </div>
+        </section>
+      </article>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo" aria-hidden="true">G</div>
+          <div class="footer-brand-copy">
+            <strong>G-GAMES</strong>
+            <span>Quick games. Futuristic vibes. Built for play on any screen.</span>
+          </div>
+        </div>
+
+        <div class="footer-clock" aria-live="polite">
+          <div class="footer-clock-label">
+            <span class="footer-clock-dot" aria-hidden="true"></span>
+            Live Clock
+          </div>
+          <div id="philippineTime">Philippine Standard Time</div>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <button type="button" class="footer-link-button" id="footerAboutBtn">About</button>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Accxs Creations. All rights reserved.</span>
+        <span class="footer-status">G-GAMES Online</span>
+      </div>
+    </footer>
+  </main>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top" title="Back to top">
+    <img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-up.svg" alt="">
+  </button>
+
+  <div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon">G</div>
+          <div>
+            <h3 id="aboutModalTitle">About G-GAMES</h3>
+            <span>Mini Games Lobby</span>
+          </div>
+        </div>
+        <button class="icon-btn" id="closeAboutModal" type="button" aria-label="Close">
+          <img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/x.svg" alt="">
+        </button>
+      </div>
+
+      <p class="modal-desc">
+        G-GAMES is a responsive online mini-games lobby designed for desktop, tablet, and mobile devices. Choose from puzzle, arcade, brain, and classic mini games in one futuristic interface.
+      </p>
+
+      <div class="about-list">
+        <div class="about-item"><strong>Responsive:</strong> Optimized for phones, tablets, laptops, and large desktop screens.</div>
+        <div class="about-item"><strong>Fast loading:</strong> Designed for quick access to casual mini games.</div>
+        <div class="about-item"><strong>Simple navigation:</strong> Search, filters, policy pages, and consistent site-wide styling.</div>
+        <div class="about-item"><strong>Designed for fun:</strong> Casual games that are easy to open and play.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="primary-btn" id="aboutOkayBtn" type="button">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [...document.querySelectorAll('.policy-section')];
+    const tocList = document.getElementById('tocList');
+    const policySearch = document.getElementById('policySearch');
+    const progressLine = document.getElementById('progressLine');
+    const backToTop = document.getElementById('backToTop');
+
+    function buildToc() {
+      tocList.innerHTML = sections.map((section, index) => `
+        <a class="toc-link" href="#${section.id}" data-section="${section.id}" data-title="${section.dataset.title.toLowerCase()}">
+          <span class="toc-number">${String(index + 1).padStart(2, '0')}</span>
+          <span>${section.dataset.title}</span>
+        </a>
+      `).join('');
+    }
+
+    function filterPolicy() {
+      const query = policySearch.value.trim().toLowerCase();
+      const links = [...document.querySelectorAll('.toc-link')];
+
+      sections.forEach(section => {
+        const text = `${section.dataset.title} ${section.textContent}`.toLowerCase();
+        const match = !query || text.includes(query);
+        section.style.display = match ? '' : 'none';
+      });
+
+      links.forEach(link => {
+        const section = document.getElementById(link.dataset.section);
+        link.style.display = section && section.style.display !== 'none' ? '' : 'none';
+      });
+    }
+
+    function updateScrollProgress() {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - doc.clientHeight;
+      const percent = scrollable > 0 ? (doc.scrollTop / scrollable) * 100 : 0;
+      progressLine.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      backToTop.classList.toggle('show', doc.scrollTop > 500);
+    }
+
+    function updateActiveToc() {
+      let current = null;
+      const visibleSections = sections.filter(section => section.style.display !== 'none');
+
+      visibleSections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 150) current = section.id;
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.toggle('active', link.dataset.section === current);
+      });
+    }
+
+    function updatePhilippineTime() {
+      const now = new Date();
+      const dateFormatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Manila',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      const timeFormatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Manila',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+      document.getElementById('philippineTime').textContent =
+        `Philippine Standard Time — ${dateFormatter.format(now)} at ${timeFormatter.format(now)}`;
+    }
+
+    const aboutModal = document.getElementById('aboutModal');
+
+    function openAbout() {
+      aboutModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAbout() {
+      aboutModal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    buildToc();
+    updatePhilippineTime();
+    updateScrollProgress();
+    updateActiveToc();
+    setInterval(updatePhilippineTime, 1000);
+
+    policySearch.addEventListener('input', filterPolicy);
+    window.addEventListener('scroll', () => {
+      updateScrollProgress();
+      updateActiveToc();
+    }, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('aboutBtn').addEventListener('click', openAbout);
+    document.getElementById('footerAboutBtn').addEventListener('click', openAbout);
+    document.getElementById('closeAboutModal').addEventListener('click', closeAbout);
+    document.getElementById('aboutOkayBtn').addEventListener('click', closeAbout);
+
+    aboutModal.addEventListener('click', event => {
+      if (event.target === aboutModal) closeAbout();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && aboutModal.classList.contains('show')) closeAbout();
+    });
+  </script>
+</body>
+</html>
