@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
+<title>Color Matching Dot</title>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%23060816"/%3E%3Ccircle cx="22" cy="24" r="10" fill="%235ef6ff"/%3E%3Ccircle cx="42" cy="24" r="10" fill="%23ff5fd7"/%3E%3Ccircle cx="32" cy="42" r="10" fill="%239b5cff"/%3E%3C/svg%3E'>
+<style>
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.80);
+  --panel-strong:rgba(8,13,31,.95);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-4;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+body::after{
+  content:"";position:fixed;inset:-30%;z-index:-5;pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);animation:ambientSpin 30s linear infinite;
+}
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);
+  background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{width:34px;height:34px;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.icon-btn,.btn{
+  border:1px solid rgba(255,255,255,.09);color:#fff;cursor:pointer;font-weight:850;
+  background:rgba(255,255,255,.055);transition:.22s ease
+}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.icon-btn:hover,.btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
+.icon-btn svg{width:20px;height:20px}
+.btn{min-height:42px;padding:10px 15px;border-radius:12px}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
+
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.hero-card,.stats-card,.game-panel{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)
+}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{
+  content:"";position:absolute;right:22px;top:20px;width:120px;height:120px;border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 30%,rgba(94,246,255,.18) 0 13%,transparent 14%),
+    radial-gradient(circle at 70% 30%,rgba(255,95,215,.16) 0 13%,transparent 14%),
+    radial-gradient(circle at 50% 70%,rgba(155,92,255,.16) 0 13%,transparent 14%);
+  opacity:.55
+}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}.stat strong{font-size:16px}
+
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(14px,2.5vw,24px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:16px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:5px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+
+.game-shell{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:start}
+.arena{
+  position:relative;min-height:520px;border-radius:22px;padding:clamp(16px,3vw,28px);
+  background:
+    radial-gradient(circle at 50% 45%,rgba(94,246,255,.08),transparent 42%),
+    linear-gradient(145deg,rgba(6,12,30,.88),rgba(5,8,21,.88));
+  border:1px solid rgba(255,255,255,.07);
+  overflow:hidden
+}
+.arena::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1.5px);
+  background-size:36px 36px;opacity:.15
+}
+.round-bar{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:18px}
+.progress-track{height:9px;border-radius:999px;background:rgba(255,255,255,.055);overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.progress-fill{height:100%;width:100%;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));transform-origin:left center;transition:width .08s linear}
+.timer-text{min-width:56px;text-align:right;color:var(--gold);font-weight:900;font-variant-numeric:tabular-nums}
+
+.challenge{position:relative;z-index:2;display:grid;place-items:center;text-align:center;gap:12px}
+.prompt-label{font-size:11px;color:var(--muted);font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.target-dot{
+  width:clamp(94px,18vw,138px);height:clamp(94px,18vw,138px);border-radius:50%;
+  border:7px solid rgba(255,255,255,.10);box-shadow:0 0 55px rgba(94,246,255,.12),inset 0 0 28px rgba(255,255,255,.10);
+  transition:.18s ease
+}
+.target-name{font-size:clamp(22px,4vw,34px);font-weight:950;letter-spacing:-.02em}
+.target-sub{color:var(--muted);font-size:13px;line-height:1.5}
+
+.choices{
+  position:relative;z-index:2;
+  width:min(720px,100%);
+  margin:26px auto 0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px
+}
+.color-choice{
+  min-height:112px;border-radius:18px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);cursor:pointer;display:grid;place-items:center;gap:8px;padding:12px;color:#fff;
+  transition:.18s ease;touch-action:manipulation
+}
+.color-choice:hover{transform:translateY(-3px);border-color:rgba(94,246,255,.28);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.color-choice:active{transform:scale(.97)}
+.choice-dot{width:58px;height:58px;border-radius:50%;border:4px solid rgba(255,255,255,.13);box-shadow:0 0 20px rgba(255,255,255,.06)}
+.choice-name{font-size:12px;font-weight:850;color:#dce5ff}
+
+.side-panel{display:grid;gap:12px}
+.info-card{padding:16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.info-card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.info-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.info-row:last-child{border-bottom:0}.info-row span{color:var(--muted);font-size:13px}.info-row strong{font-size:14px}
+.difficulty-meter{display:grid;gap:8px}
+.diff-step{padding:10px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.diff-step strong{font-size:12px}.diff-step span{font-size:11px;color:var(--muted)}
+.diff-step.active{border-color:rgba(94,246,255,.35);background:linear-gradient(135deg,rgba(94,246,255,.08),rgba(155,92,255,.09))}
+.lives{display:flex;gap:8px;justify-content:flex-end}
+.life-dot{width:11px;height:11px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.5)}
+.life-dot.lost{background:rgba(255,255,255,.12);box-shadow:none}
+
+.help-panel,.end-modal{
+  position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;
+  background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+}
+.help-panel.open,.end-modal.open{display:flex}
+.modal-card{width:min(560px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.modal-card h2{margin:0;font-size:25px}.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}.modal-card ol{padding-left:20px}
+.end-card{text-align:center}.result-mark{width:88px;height:88px;border-radius:22px;margin:0 auto 14px;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.18),rgba(94,246,255,.07) 60%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}.result-mark svg{width:48px;height:48px}
+
+/* index-style footer */
+.site-footer{max-width:1180px;width:calc(100% - 28px);margin:34px auto 20px;padding:22px;border-radius:24px;background:linear-gradient(145deg,rgba(17,23,51,.72),rgba(8,13,31,.72));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:12px}.footer-logo{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-weight:950;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-brand-copy{display:grid;gap:3px}.footer-brand-copy strong{font-size:17px;letter-spacing:.05em}.footer-brand-copy span{font-size:12px;color:var(--muted);line-height:1.5}
+.footer-clock{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:13px;color:#dfe7ff}
+.footer-clock-label{display:flex;justify-content:center;align-items:center;gap:7px;color:var(--cyan);font-weight:850;margin-bottom:3px}.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}.footer-links a,.footer-link-button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px}.footer-links a:hover,.footer-link-button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}.footer-status{color:#b9c5e4}
+
+@media(max-width:930px){
+  .hero,.game-shell{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
+  .side-panel{grid-template-columns:1fr 1fr}.info-card:last-child{grid-column:1/-1}
+  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-links{justify-content:center}
+}
+@media(max-width:700px){.choices{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){
+  .brand span:last-child,.page-title span{display:none}.title-icon{width:30px;height:30px}
+  .main{padding-left:10px;padding-right:10px}.hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .game-top{grid-template-columns:1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .arena{min-height:470px;padding:14px}.side-panel{grid-template-columns:1fr}.info-card:last-child{grid-column:auto}
+  .site-footer{width:calc(100% - 20px);padding:18px}
+}
+@media(max-width:430px){
+  .stats-card{grid-template-columns:1fr 1fr}.stats-card .stat:last-child{grid-column:1/-1}
+  .toolbar{grid-template-columns:1fr}.choices{gap:9px}.color-choice{min-height:94px;padding:9px}.choice-dot{width:48px;height:48px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+    <div class="title-wrap">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="dotG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5ef6ff"/><stop offset=".55" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff5fd7"/></linearGradient></defs>
+        <circle cx="21" cy="23" r="10" fill="#5ef6ff"/><circle cx="43" cy="23" r="10" fill="#ff5fd7"/><circle cx="32" cy="43" r="10" fill="#9b5cff"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#dotG)" stroke-width="3"/>
+      </svg>
+      <div class="page-title"><strong>Color Matching Dot</strong><span>Reaction Challenge • 1000 Levels</span></div>
+    </div>
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-1 .7-1.6 1.2-1.6 2.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Color Reaction</div>
+      <h1>Match the <span>Correct Dot</span></h1>
+      <p>Match the large target dot with the correct color option before the timer expires. Progress through 1,000 increasingly demanding levels across five difficulty tiers.</p>
+    </div>
+    <aside class="stats-card">
+      <div class="stat"><span>Level</span><strong id="levelStat">1 / 1000</strong></div>
+      <div class="stat"><span>Difficulty</span><strong id="difficultyStat">Easy</strong></div>
+      <div class="stat"><span>Score</span><strong id="scoreStat">0</strong></div>
+    </aside>
+  </section>
+
+  <section class="game-panel">
+    <div class="game-top">
+      <div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg">Match the target color before time runs out.</div></div>
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="restartRun()">Restart</button>
+        <button class="btn" type="button" onclick="togglePause()" id="pauseBtn">Pause</button>
+        <button class="btn" type="button" onclick="location.href='index.html'">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-shell">
+      <section class="arena">
+        <div class="round-bar">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="timer-text" id="timerText">5.0s</div>
+        </div>
+
+        <div class="challenge">
+          <div class="prompt-label">Target Color</div>
+          <div class="target-dot" id="targetDot"></div>
+          <div class="target-name" id="targetName">Cyan</div>
+          <div class="target-sub" id="targetSub">Choose the matching color below.</div>
+        </div>
+
+        <div class="choices" id="choices"></div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="info-card">
+          <h3>Run Details</h3>
+          <div class="info-row"><span>Level</span><strong id="levelSide">1</strong></div>
+          <div class="info-row"><span>Combo</span><strong id="comboSide">0</strong></div>
+          <div class="info-row"><span>Best Level</span><strong id="bestSide">1</strong></div>
+          <div class="info-row"><span>Lives</span><div class="lives" id="livesView"></div></div>
+        </div>
+
+        <div class="info-card">
+          <h3>Difficulty Progression</h3>
+          <div class="difficulty-meter">
+            <div class="diff-step active" data-tier="Easy"><strong>Easy</strong><span>1–200</span></div>
+            <div class="diff-step" data-tier="Normal"><strong>Normal</strong><span>201–400</span></div>
+            <div class="diff-step" data-tier="Hard"><strong>Hard</strong><span>401–600</span></div>
+            <div class="diff-step" data-tier="Expert"><strong>Expert</strong><span>601–800</span></div>
+            <div class="diff-step" data-tier="Master"><strong>Master</strong><span>801–1000</span></div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3>How Difficulty Changes</h3>
+          <div class="info-row"><span>Choices</span><strong id="choiceCountLabel">4</strong></div>
+          <div class="info-row"><span>Time Limit</span><strong id="timeLimitLabel">5.0s</strong></div>
+          <div class="info-row"><span>Color Similarity</span><strong id="similarityLabel">Low</strong></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo" aria-hidden="true">G</div>
+      <div class="footer-brand-copy"><strong>G-GAMES</strong><span>Quick games. Futuristic vibes. Built for play on any screen.</span></div>
+    </div>
+    <div class="footer-clock" aria-live="polite">
+      <div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div>
+      <div id="philippineTime">Philippine Standard Time</div>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <button type="button" class="footer-link-button" onclick="openAbout()">About</button>
+    </nav>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="footer-status">G-GAMES Online</span></div>
+</footer>
+</div>
+
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="helpTitle">How to Play Color Matching Dot</h2><button class="icon-btn" onclick="closeHelp()" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+    <ol>
+      <li>Look at the large target dot in the center.</li>
+      <li>Tap or click the matching color from the choices below before the timer reaches zero.</li>
+      <li>Correct answers advance you to the next level and build your combo.</li>
+      <li>Wrong answers or timeouts remove one life. The run ends after all three lives are lost.</li>
+      <li>Difficulty increases automatically: Easy 1–200, Normal 201–400, Hard 401–600, Expert 601–800, and Master 801–1000.</li>
+      <li>Complete Level 1000 to finish the full challenge.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-top"><h2>About G-GAMES</h2><button class="icon-btn" onclick="closeAbout()" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
+  </div>
+</div>
+
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true">
+  <div class="modal-card end-card">
+    <div class="result-mark"><svg viewBox="0 0 64 64"><path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/></svg></div>
+    <h2 id="endTitle">Run Complete</h2>
+    <p id="endSummary">You reached Level 1.</p>
+    <button class="btn btn-primary" type="button" onclick="closeEnd()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const colors = [
+  {name:'Cyan',hex:'#5ef6ff'},
+  {name:'Blue',hex:'#69a8ff'},
+  {name:'Violet',hex:'#9b5cff'},
+  {name:'Pink',hex:'#ff5fd7'},
+  {name:'Gold',hex:'#ffd76a'},
+  {name:'Green',hex:'#69ffbd'},
+  {name:'Red',hex:'#ff607d'},
+  {name:'Orange',hex:'#ff9b5f'},
+  {name:'Lime',hex:'#baff68'},
+  {name:'Indigo',hex:'#6e68ff'},
+  {name:'Rose',hex:'#ff78a8'},
+  {name:'Teal',hex:'#43e6d0'}
+];
+
+const helpPanel = document.getElementById('helpPanel');
+const aboutPanel = document.getElementById('aboutPanel');
+const endModal = document.getElementById('endModal');
+
+let level = 1;
+let score = 0;
+let combo = 0;
+let lives = 3;
+let target = null;
+let running = true;
+let paused = false;
+let timerRAF = null;
+let roundStart = 0;
+let roundLimit = 5000;
+let remainingWhenPaused = 0;
+let accepting = false;
+
+function difficultyForLevel(lvl){
+  if(lvl <= 200) return {name:'Easy',choices:4,time:5000,similarity:'Low'};
+  if(lvl <= 400) return {name:'Normal',choices:4,time:4200,similarity:'Moderate'};
+  if(lvl <= 600) return {name:'Hard',choices:6,time:3400,similarity:'High'};
+  if(lvl <= 800) return {name:'Expert',choices:6,time:2800,similarity:'Very High'};
+  return {name:'Master',choices:8,time:2200,similarity:'Extreme'};
+}
+
+function levelSpeedAdjustment(lvl, base){
+  const bandStart = Math.floor((lvl - 1) / 200) * 200 + 1;
+  const progress = (lvl - bandStart) / 199;
+  return Math.max(1200, base - progress * 900);
+}
+
+function getDifficulty(){
+  const d = difficultyForLevel(level);
+  return {...d,time:levelSpeedAdjustment(level,d.time)};
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function adjustedColor(hex, amount){
+  const n=parseInt(hex.slice(1),16);
+  let r=(n>>16)+amount,g=((n>>8)&255)+amount,b=(n&255)+amount;
+  r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+
+function makeChoices(){
+  const d=getDifficulty();
+  const basePool=[...colors];
+  target=basePool[Math.floor(Math.random()*basePool.length)];
+  let picks=[target];
+
+  const tier=d.name;
+  if(['Expert','Master'].includes(tier)){
+    const variants = tier==='Master' ? [-18,-12,12,18] : [-26,26];
+    variants.forEach((amt,idx)=>{
+      if(picks.length<d.choices){
+        picks.push({name:`Shade ${idx+1}`,hex:adjustedColor(target.hex,amt),decoy:true});
+      }
+    });
+  }
+
+  shuffle(basePool.filter(c=>c.name!==target.name)).forEach(c=>{
+    if(picks.length<d.choices)picks.push(c);
+  });
+
+  picks=shuffle(picks);
+  const wrap=document.getElementById('choices');
+  wrap.innerHTML='';
+  picks.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='color-choice';
+    btn.setAttribute('aria-label',`Choose ${c.name}`);
+    btn.innerHTML=`<span class="choice-dot" style="background:${c.hex};box-shadow:0 0 26px ${c.hex}55"></span><span class="choice-name">${c.name}</span>`;
+    btn.addEventListener('click',()=>chooseColor(c));
+    wrap.appendChild(btn);
+  });
+
+  const dot=document.getElementById('targetDot');
+  dot.style.background=target.hex;
+  dot.style.boxShadow=`0 0 55px ${target.hex}55,inset 0 0 28px rgba(255,255,255,.10)`;
+  document.getElementById('targetName').textContent=target.name;
+}
+
+function startRound(){
+  if(!running)return;
+  const d=getDifficulty();
+  roundLimit=d.time;
+  accepting=true;
+  makeChoices();
+  updateUI();
+  roundStart=performance.now();
+  cancelAnimationFrame(timerRAF);
+  tickTimer();
+}
+
+function tickTimer(){
+  if(!running||paused)return;
+  const elapsed=performance.now()-roundStart;
+  const remaining=Math.max(0,roundLimit-elapsed);
+  const pct=remaining/roundLimit*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('timerText').textContent=(remaining/1000).toFixed(1)+'s';
+  if(remaining<=0){
+    accepting=false;
+    loseLife('Time ran out.');
+    return;
+  }
+  timerRAF=requestAnimationFrame(tickTimer);
+}
+
+function chooseColor(choice){
+  if(!accepting||paused||!running)return;
+  accepting=false;
+  cancelAnimationFrame(timerRAF);
+
+  if(choice.hex.toLowerCase()===target.hex.toLowerCase() && !choice.decoy){
+    combo++;
+    score += 100 + Math.min(combo*10,500) + level;
+    document.getElementById('statusMsg').textContent='Correct match. Moving to the next level.';
+    if(level>=1000){
+      completeGame();
+      return;
+    }
+    level++;
+    saveBest();
+    setTimeout(startRound,220);
+  }else{
+    combo=0;
+    loseLife('Incorrect color match.');
+  }
+  updateUI();
+}
+
+function loseLife(message){
+  lives--;
+  combo=0;
+  document.getElementById('statusMsg').textContent=message;
+  updateUI();
+  if(lives<=0){
+    endGame(false);
+  }else{
+    setTimeout(startRound,500);
+  }
+}
+
+function completeGame(){
+  running=false;
+  cancelAnimationFrame(timerRAF);
+  saveBest(true);
+  document.getElementById('endTitle').textContent='Level 1000 Complete';
+  document.getElementById('endSummary').textContent=`You completed all 1000 levels with a score of ${score.toLocaleString()}.`;
+  endModal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function endGame(){
+  running=false;
+  cancelAnimationFrame(timerRAF);
+  saveBest();
+  document.getElementById('endTitle').textContent='Run Over';
+  document.getElementById('endSummary').textContent=`You reached Level ${level} with a score of ${score.toLocaleString()}.`;
+  endModal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function restartRun(){
+  cancelAnimationFrame(timerRAF);
+  level=1;score=0;combo=0;lives=3;running=true;paused=false;accepting=false;
+  document.getElementById('pauseBtn').textContent='Pause';
+  document.getElementById('statusMsg').textContent='Match the target color before time runs out.';
+  startRound();
+}
+
+function closeEnd(){
+  endModal.classList.remove('open');
+  document.body.style.overflow='';
+  restartRun();
+}
+
+function togglePause(){
+  if(!running)return;
+  if(!paused){
+    paused=true;
+    accepting=false;
+    const elapsed=performance.now()-roundStart;
+    remainingWhenPaused=Math.max(0,roundLimit-elapsed);
+    cancelAnimationFrame(timerRAF);
+    document.getElementById('pauseBtn').textContent='Resume';
+    document.getElementById('statusMsg').textContent='Game paused.';
+  }else{
+    paused=false;
+    accepting=true;
+    roundLimit=remainingWhenPaused;
+    roundStart=performance.now();
+    document.getElementById('pauseBtn').textContent='Pause';
+    document.getElementById('statusMsg').textContent='Match the target color before time runs out.';
+    tickTimer();
+  }
+}
+
+function saveBest(completed=false){
+  const previous=Number(localStorage.getItem('colorDotBestLevel')||1);
+  if(level>previous)localStorage.setItem('colorDotBestLevel',String(level));
+  if(completed)localStorage.setItem('colorDotCompleted','1');
+}
+
+function updateUI(){
+  const d=getDifficulty();
+  document.getElementById('levelStat').textContent=`${level} / 1000`;
+  document.getElementById('difficultyStat').textContent=d.name;
+  document.getElementById('scoreStat').textContent=score.toLocaleString();
+  document.getElementById('levelSide').textContent=level;
+  document.getElementById('comboSide').textContent=combo;
+  document.getElementById('bestSide').textContent=Math.max(level,Number(localStorage.getItem('colorDotBestLevel')||1));
+  document.getElementById('choiceCountLabel').textContent=d.choices;
+  document.getElementById('timeLimitLabel').textContent=(d.time/1000).toFixed(1)+'s';
+  document.getElementById('similarityLabel').textContent=d.similarity;
+
+  document.querySelectorAll('.diff-step').forEach(el=>el.classList.toggle('active',el.dataset.tier===d.name));
+  const livesView=document.getElementById('livesView');
+  livesView.innerHTML='';
+  for(let i=0;i<3;i++){
+    const dot=document.createElement('span');
+    dot.className='life-dot'+(i>=lives?' lost':'');
+    livesView.appendChild(dot);
+  }
+}
+
+function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function openAbout(){aboutPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeAbout(){aboutPanel.classList.remove('open');document.body.style.overflow=''}
+[helpPanel,aboutPanel].forEach(p=>p.addEventListener('click',e=>{if(e.target===p){p.classList.remove('open');document.body.style.overflow=''}}));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(aboutPanel.classList.contains('open'))closeAbout()}
+  if(e.key.toLowerCase()==='p')togglePause();
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)togglePause()});
+
+function updatePhilippineTime(){
+  document.getElementById('philippineTime').textContent=new Intl.DateTimeFormat('en-US',{
+    timeZone:'Asia/Manila',weekday:'short',year:'numeric',month:'short',day:'numeric',
+    hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true
+  }).format(new Date());
+}
+updatePhilippineTime();
+setInterval(updatePhilippineTime,1000);
+restartRun();
+</script>
+</body>
+</html>
