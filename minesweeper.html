@@ -13,7 +13,23 @@ body:before{content:"";position:fixed;inset:0;z-index:-4;pointer-events:none;bac
 </style>
 </head>
 <body><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
-<div class="app"><header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><span class="brand-mark">G</span><span>G-GAMES</span></a><div class="title-wrap"><img class="title-icon" src="image/Minesweeper.png" alt="" onerror="this.style.display='none';document.getElementById('fallbackIcon').style.display='block'"><svg id="fallbackIcon" style="display:none;width:30px;height:30px;color:#5ef6ff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 2v5m0 10v5M2 12h5m10 0h5M5 5l4 4m6 6 4 4M19 5l-4 4m-6 6-4 4"/></svg><div class="page-title"><strong>Minesweeper</strong><span>Logic Challenge • Puzzle Game</span></div></div><button class="icon-btn" id="helpButton" aria-label="How to play" type="button">?</button></div></header>
+<div class="app"><header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><span class="brand-mark">G</span><span>G-GAMES</span></a><div class="title-wrap">
+  <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+    <defs>
+      <linearGradient id="mineIconGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#5ef6ff"/>
+        <stop offset="55%" stop-color="#9b5cff"/>
+        <stop offset="100%" stop-color="#ff5fd7"/>
+      </linearGradient>
+    </defs>
+    <circle cx="32" cy="32" r="14" fill="url(#mineIconGradient)"/>
+    <circle cx="32" cy="32" r="7" fill="#060816"/>
+    <path d="M32 7v10M32 47v10M7 32h10M47 32h10M14 14l7 7M43 43l7 7M50 14l-7 7M21 43l-7 7"
+          fill="none" stroke="url(#mineIconGradient)" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="27" cy="27" r="2.5" fill="#ffffff" opacity=".9"/>
+  </svg>
+  <div class="page-title"><strong>Minesweeper</strong><span>Logic Challenge • Puzzle Game</span></div>
+</div><button class="icon-btn" id="helpButton" aria-label="How to play" type="button">?</button></div></header>
 <main class="main"><section class="hero"><div class="hero-card"><div class="eyebrow">G-GAMES • Logic Challenge</div><h1>Clear the <span>Minefield</span></h1><p>Reveal safe tiles, follow the number clues, and flag hidden mines. Clear every safe tile without triggering a mine to win.</p></div><aside class="stats-card"><div class="stat"><span>Difficulty</span><strong id="difficultyStat">Beginner</strong></div><div class="stat"><span>Mines</span><strong id="minesStat">10</strong></div><div class="stat"><span>Best Time</span><strong id="bestStat">—</strong></div></aside></section>
 <section class="game-panel"><div class="game-top"><div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg" role="status" aria-live="polite">Select a tile to begin. Your first move is safe.</div></div><div class="toolbar"><select id="difficulty" aria-label="Choose difficulty"><option value="beginner">Beginner · 9×9</option><option value="intermediate">Intermediate · 16×16</option><option value="expert">Expert · 16×30</option></select><button class="btn btn-primary" id="newGame" type="button">New Game</button><button class="btn" id="backButton" type="button">Back to Lobby</button></div></div>
 <div class="game-layout"><section class="board-panel"><div class="board-controls"><div class="pill"><small>Mines Left</small><strong id="minesLeft">10</strong></div><div class="pill"><small>Time</small><strong id="timer">000</strong></div><div class="pill"><small>Safe Tiles</small><strong id="progress">0/71</strong></div></div><div class="board-scroller" id="boardScroller"><div class="board" id="board" role="grid" aria-label="Minesweeper board"></div></div><div class="mobile-tools"><button class="btn active" id="revealMode" type="button" aria-pressed="true">Reveal Tiles</button><button class="btn" id="flagMode" type="button" aria-pressed="false">Place Flags</button></div><p class="hint">Tap to reveal, or choose Place Flags to mark mines. On desktop, right-click to flag. Double-click a revealed number to open its neighbors when flags match.</p></section><aside class="side-panel"><div class="panel-label">Round Progress</div><div class="metric"><span>Tiles Revealed</span><strong id="revealedStat">0</strong></div><div class="metric"><span>Flags Placed</span><strong id="flagsStat">0</strong></div><div class="metric"><span>Games Won</span><strong id="winsStat">0</strong></div><p class="side-note"><strong>How clues work:</strong> Each number tells you how many mines touch that tile, including diagonals. Mark suspected mines, then reveal all remaining safe tiles.</p></aside></div></section></main>
