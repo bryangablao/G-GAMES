@@ -1,0 +1,1271 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070816"><meta name="description" content="Read the G-GAMES Terms of Service, including gameplay rules, acceptable use, privacy, intellectual property, and service disclaimers."><title>Terms of Service | G-GAMES</title><link rel="icon" type="image/png" href="/G-GAMES/image/G-GAMES.png"><style>
+    .lucide-icon { width: 22px; height: 22px; display: block; object-fit: contain; filter: brightness(0) saturate(100%) invert(90%) sepia(24%) saturate(1040%) hue-rotate(155deg); }
+    .feature-pill .lucide-icon { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; margin-right: 5px; }
+    .arrow .lucide-icon, .search-icon .lucide-icon { width: 18px; height: 18px; }
+
+    :root {
+      --bg-1: #05060d;
+      --bg-2: #0b1025;
+      --bg-3: #12082d;
+      --panel: rgba(15, 20, 45, 0.72);
+      --panel-strong: rgba(10, 15, 35, 0.94);
+      --border: rgba(111, 231, 255, 0.24);
+      --text: #f5fbff;
+      --muted: #9bb3c7;
+      --cyan: #62efff;
+      --cyan-2: #13c7ff;
+      --purple: #9f6cff;
+      --pink: #ff4fd8;
+      --green: #52f5aa;
+      --danger: #ff607e;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 10%, rgba(98, 239, 255, 0.15), transparent 32%),
+        radial-gradient(circle at 82% 14%, rgba(159, 108, 255, 0.15), transparent 32%),
+        radial-gradient(circle at 52% 95%, rgba(255, 79, 216, 0.10), transparent 38%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(98, 239, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98, 239, 255, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), transparent 90%);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(45px);
+      opacity: 0.34;
+      pointer-events: none;
+      z-index: -2;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      width: 230px;
+      height: 230px;
+      background: var(--cyan-2);
+      top: 8%;
+      left: -80px;
+    }
+
+    .orb.two {
+      width: 280px;
+      height: 280px;
+      background: var(--purple);
+      right: -100px;
+      top: 28%;
+      animation-delay: -4s;
+    }
+
+    .orb.three {
+      width: 220px;
+      height: 220px;
+      background: var(--pink);
+      left: 35%;
+      bottom: -100px;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatOrb {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(30px, -20px, 0) scale(1.08); }
+    }
+
+    .site-shell {
+      width: min(1500px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 34px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(5, 9, 22, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.28);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #041018;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 26px rgba(98, 239, 255, 0.34);
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn,
+    .primary-btn,
+    .secondary-btn,
+    .filter-btn {
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+      color: var(--text);
+      transition: .22s ease;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .icon-btn:hover {
+      background: rgba(98,239,255,.13);
+      border-color: rgba(98,239,255,.32);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: 1.45fr .75fr;
+      gap: 18px;
+    }
+
+    .hero-card,
+    .stat-card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(16,23,52,.84), rgba(8,13,31,.8));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero-card {
+      min-height: 285px;
+      border-radius: 28px;
+      padding: clamp(24px, 4vw, 48px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -90px;
+      bottom: -120px;
+      border-radius: 50%;
+      border: 1px solid rgba(98,239,255,.22);
+      box-shadow:
+        0 0 0 35px rgba(98,239,255,.025),
+        0 0 0 70px rgba(159,108,255,.025);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(98,239,255,.2);
+      background: rgba(98,239,255,.07);
+      color: #c9faff;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    .hero h1 {
+      margin: 18px 0 12px;
+      max-width: 780px;
+      font-size: clamp(2.15rem, 5vw, 4.9rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--cyan), #ffffff 45%, var(--purple) 76%, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(.95rem, 2vw, 1.08rem);
+      line-height: 1.7;
+    }
+
+    .hero-features {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .feature-pill {
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: #d8e9f4;
+      font-size: .82rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-card {
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .stat-card strong {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+
+    .stat-card small {
+      color: #bfeff7;
+      opacity: .8;
+    }
+
+    .controls {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 50px;
+      border: 1px solid rgba(98,239,255,.16);
+      border-radius: 16px;
+      outline: none;
+      color: var(--text);
+      background: rgba(8,13,30,.78);
+      padding: 0 16px 0 46px;
+      font: inherit;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    }
+
+    .search-box input:focus {
+      border-color: rgba(98,239,255,.48);
+      box-shadow: 0 0 0 4px rgba(98,239,255,.06);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .filter-btn {
+      padding: 10px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #cfe1ef;
+      font-size: .84rem;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: #061018;
+      background: linear-gradient(135deg, var(--cyan), #a9f8ff);
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(98,239,255,.18);
+    }
+
+    .section-heading {
+      margin-top: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .games-grid {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .game-card {
+      position: relative;
+      min-width: 0;
+      min-height: 178px;
+      border-radius: 22px;
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(21,29,64,.88), rgba(8,14,34,.92));
+      border: 1px solid rgba(98,239,255,.13);
+      box-shadow: 0 14px 40px rgba(0,0,0,.24);
+      transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
+      isolation: isolate;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -40px -70px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(98,239,255,.20), transparent 70%);
+      z-index: -1;
+      transition: .24s ease;
+    }
+
+    .game-card:hover,
+    .game-card:focus-visible {
+      transform: translateY(-6px);
+      border-color: rgba(98,239,255,.42);
+      box-shadow: 0 20px 55px rgba(0,0,0,.36), 0 0 30px rgba(98,239,255,.08);
+      outline: none;
+    }
+
+    .game-card:hover::before {
+      transform: scale(1.2);
+    }
+
+    .game-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .game-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 48px;
+      font-size: 1.45rem;
+      background: linear-gradient(135deg, rgba(98,239,255,.18), rgba(159,108,255,.22));
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: inset 0 0 24px rgba(255,255,255,.03);
+    }
+
+    .game-badge {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.07);
+      color: #a9c3d6;
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .game-card h3 {
+      margin: 18px 0 7px;
+      font-size: 1rem;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .game-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.48;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .game-launch {
+      margin-top: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #d7faff;
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(98,239,255,.08);
+      border: 1px solid rgba(98,239,255,.16);
+    }
+
+    .empty-state {
+      display: none;
+      margin-top: 16px;
+      padding: 26px;
+      text-align: center;
+      border: 1px dashed rgba(98,239,255,.22);
+      border-radius: 20px;
+      color: var(--muted);
+      background: rgba(7,12,28,.5);
+    }
+
+    /* Premium futuristic footer */
+    .site-footer {
+      position: relative;
+      margin-top: 42px;
+      padding: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(98,239,255,.13);
+      border-radius: 26px 26px 0 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(98,239,255,.09), transparent 30%),
+        radial-gradient(circle at 90% 100%, rgba(159,108,255,.10), transparent 34%),
+        linear-gradient(180deg, rgba(11,18,39,.88), rgba(4,8,20,.96));
+      box-shadow: 0 -18px 60px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.025);
+      color: #8299ab;
+      text-align: left;
+    }
+
+    .site-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(98,239,255,.68), rgba(159,108,255,.72), transparent);
+      box-shadow: 0 0 20px rgba(98,239,255,.32);
+    }
+
+    .footer-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(230px, 1.25fr) minmax(260px, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+
+    .footer-logo {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #eaffff;
+      border: 1px solid rgba(98,239,255,.22);
+      background: linear-gradient(145deg, rgba(98,239,255,.14), rgba(159,108,255,.13));
+      box-shadow: 0 0 24px rgba(98,239,255,.09);
+    }
+
+    .footer-brand-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #eefcff;
+      font-size: .92rem;
+      letter-spacing: .02em;
+    }
+
+    .footer-brand-copy span {
+      display: block;
+      font-size: .75rem;
+      line-height: 1.55;
+      color: #71899d;
+    }
+
+    .footer-clock {
+      justify-self: center;
+      width: min(100%, 440px);
+      padding: 13px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(98,239,255,.12);
+      background: rgba(98,239,255,.035);
+      text-align: center;
+    }
+
+    .footer-clock-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 5px;
+      color: #87a7ba;
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    .footer-clock-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #62efff;
+      box-shadow: 0 0 12px rgba(98,239,255,.9);
+      animation: footerPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes footerPulse {
+      50% { opacity: .38; transform: scale(.78); }
+    }
+
+    #philippineTime {
+      color: #dffcff;
+      font-size: .78rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+    }
+
+    .footer-links a,
+    .footer-link-button {
+      position: relative;
+      border: 0;
+      padding: 4px 0;
+      background: transparent;
+      color: #8aa2b5;
+      font: inherit;
+      font-size: .75rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color .2s ease, text-shadow .2s ease;
+    }
+
+    .footer-links a:hover,
+    .footer-link-button:hover {
+      color: #dffcff;
+      text-shadow: 0 0 14px rgba(98,239,255,.34);
+    }
+
+    .footer-bottom {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,.055);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: .72rem;
+      color: #61788d;
+    }
+
+    .footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .footer-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #62efff;
+      box-shadow: 0 0 10px rgba(98,239,255,.7);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(2,5,13,.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .modal.show {
+      display: flex;
+      animation: modalFade .2s ease;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-panel {
+      width: min(520px, 100%);
+      max-height: min(700px, 92vh);
+      overflow: auto;
+      border-radius: 26px;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 85% 5%, rgba(159,108,255,.14), transparent 30%),
+        linear-gradient(160deg, rgba(18,26,58,.98), rgba(7,12,30,.98));
+      border: 1px solid rgba(98,239,255,.24);
+      box-shadow: 0 35px 90px rgba(0,0,0,.6), 0 0 55px rgba(98,239,255,.06);
+      animation: modalPop .26s cubic-bezier(.2,.85,.35,1.1);
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(16px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .modal-title-wrap {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .modal-title-wrap .game-icon {
+      width: 54px;
+      height: 54px;
+      flex-basis: 54px;
+    }
+
+    .modal-title-wrap h3 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .modal-title-wrap span {
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .modal-desc {
+      margin: 20px 0 0;
+      color: #b9cad8;
+      line-height: 1.7;
+      font-size: .94rem;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      min-height: 48px;
+      border-radius: 14px;
+      padding: 0 15px;
+      font-weight: 800;
+    }
+
+    .primary-btn {
+      color: #051018;
+      background: linear-gradient(135deg, var(--cyan), #aef7ff);
+      box-shadow: 0 12px 30px rgba(98,239,255,.14);
+    }
+
+    .primary-btn:hover { transform: translateY(-2px); }
+
+    .secondary-btn {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255,255,255,.08);
+    }
+
+    /* Game loading overlay */
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at center, rgba(28,40,87,.75), rgba(3,6,15,.96) 52%, rgba(1,3,10,.99));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .loading-screen.show {
+      display: flex;
+      animation: modalFade .16s ease;
+    }
+
+    .loading-box {
+      width: min(430px, 100%);
+      text-align: center;
+      padding: 28px 24px 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(98,239,255,.24);
+      background: rgba(8,14,32,.92);
+      box-shadow: 0 30px 85px rgba(0,0,0,.55);
+    }
+
+    .loader-ring {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 18px;
+      position: relative;
+    }
+
+    .loader-ring::before,
+    .loader-ring::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    .loader-ring::before {
+      border: 3px solid rgba(98,239,255,.12);
+    }
+
+    .loader-ring::after {
+      border: 3px solid transparent;
+      border-top-color: var(--cyan);
+      border-right-color: var(--purple);
+      box-shadow: 0 0 20px rgba(98,239,255,.18);
+      animation: spin 1s linear infinite;
+    }
+
+    .loader-core {
+      position: absolute;
+      inset: 19px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #041018;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 28px rgba(98,239,255,.18);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-box h3 {
+      margin: 0 0 7px;
+      font-size: 1.35rem;
+    }
+
+    .loading-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .progress-track {
+      height: 8px;
+      margin-top: 20px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.06);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+      transition: width .08s linear;
+      box-shadow: 0 0 16px rgba(98,239,255,.24);
+    }
+
+    .progress-row {
+      margin-top: 9px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #9db5c7;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .loading-cancel {
+      margin-top: 16px;
+      border: 0;
+      background: transparent;
+      color: #8ea7b8;
+      cursor: pointer;
+      font: inherit;
+      font-size: .8rem;
+    }
+
+    .loading-cancel:hover { color: #fff; }
+
+    /* About modal special */
+    .about-list {
+      margin: 18px 0 0;
+      display: grid;
+      gap: 9px;
+    }
+
+    .about-item {
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.06);
+      color: #b8c9d8;
+      font-size: .87rem;
+      line-height: 1.5;
+    }
+
+    /* Tablet */
+    @media (max-width: 1180px) {
+      .games-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-shell {
+        width: min(100% - 22px, 1500px);
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 3px;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+      }
+
+      .filters::-webkit-scrollbar { display: none; }
+
+      .filter-btn {
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 680px) {
+      body::before {
+        background-size: 34px 34px;
+      }
+
+      .site-shell {
+        width: calc(100% - 16px);
+        padding-top: 8px;
+      }
+
+      .topbar {
+        top: 6px;
+        border-radius: 16px;
+        padding: 10px;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+        border-radius: 12px;
+      }
+
+      .brand-copy strong {
+        font-size: .9rem;
+      }
+
+      .brand-copy span {
+        max-width: 170px;
+        font-size: .7rem;
+      }
+
+      .hero {
+        margin-top: 12px;
+      }
+
+      .hero-card {
+        min-height: unset;
+        border-radius: 22px;
+        padding: 22px 18px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 11vw, 3.2rem);
+      }
+
+      .hero p {
+        font-size: .9rem;
+      }
+
+      .hero-features {
+        margin-top: 18px;
+      }
+
+      .feature-pill {
+        font-size: .75rem;
+        padding: 8px 10px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-card {
+        min-height: 105px;
+        padding: 15px;
+        border-radius: 18px;
+      }
+
+      .controls {
+        margin-top: 16px;
+      }
+
+      .search-box input {
+        height: 48px;
+      }
+
+      .section-heading {
+        margin-top: 20px;
+      }
+
+      .section-heading .count-text {
+        display: none;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .game-card {
+        min-height: 164px;
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .game-icon {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        border-radius: 13px;
+        font-size: 1.2rem;
+      }
+
+      .game-badge {
+        font-size: .58rem;
+        padding: 4px 6px;
+      }
+
+      .game-card h3 {
+        margin-top: 14px;
+        font-size: .9rem;
+      }
+
+      .game-card p {
+        font-size: .7rem;
+        -webkit-line-clamp: 2;
+      }
+
+      .game-launch {
+        margin-top: 10px;
+        font-size: .65rem;
+      }
+
+      .arrow {
+        width: 27px;
+        height: 27px;
+        border-radius: 9px;
+      }
+
+      .modal {
+        align-items: flex-end;
+        padding: 10px;
+      }
+
+      .modal-panel {
+        width: 100%;
+        border-radius: 24px 24px 18px 18px;
+        padding: 18px;
+        max-height: 88vh;
+      }
+
+      .modal-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .primary-btn { order: -1; }
+
+      .loading-box {
+        border-radius: 22px;
+        padding: 24px 18px 20px;
+      }
+
+      .site-footer {
+        padding: 24px 18px;
+        text-align: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .footer-brand { justify-content: center; }
+      .footer-clock { justify-self: stretch; width: 100%; }
+      .footer-links { justify-content: center; }
+      .footer-bottom {
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    /* Very small phones */
+    @media (max-width: 390px) {
+      .brand-copy span { display: none; }
+      .games-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .game-card { min-height: 154px; padding: 12px; }
+      .game-card p { display: none; }
+      .game-card h3 { margin-bottom: 0; }
+      .game-launch { margin-top: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  
+:root{color-scheme:dark}a{color:var(--cyan)}.brand{text-decoration:none;color:inherit}.terms-hero{margin-top:24px;padding:clamp(25px,5vw,55px);border:1px solid var(--border);border-radius:28px;background:linear-gradient(150deg,rgba(16,23,52,.89),rgba(8,13,31,.82));box-shadow:var(--shadow);position:relative;overflow:hidden}.terms-hero:after{content:"";position:absolute;width:270px;height:270px;border-radius:50%;border:1px solid rgba(98,239,255,.17);right:-100px;top:-110px;pointer-events:none}.terms-hero h1{font-size:clamp(2.2rem,6vw,4.6rem);letter-spacing:-.045em;line-height:1.08;margin:20px 0 15px}.terms-hero p{max-width:850px;color:var(--muted);line-height:1.8}.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:23px}.meta-pill{border:1px solid rgba(98,239,255,.17);background:rgba(98,239,255,.05);padding:10px 13px;border-radius:12px;font-size:.8rem;color:#c5e7f2}.terms-layout{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:20px;align-items:start;margin-top:22px}.toc{position:sticky;top:102px;border:1px solid var(--border);border-radius:22px;background:rgba(9,15,34,.89);padding:18px;max-height:calc(100vh - 120px);display:flex;flex-direction:column}.toc h2{font-size:1rem;margin:0 0 13px}.toc-search{width:100%;min-height:43px;border:1px solid rgba(98,239,255,.2);border-radius:12px;padding:10px 12px;background:rgba(0,0,0,.2);color:white;font:inherit;outline:none}.toc-search:focus{border-color:var(--cyan)}.toc-list{overflow:auto;margin-top:12px;display:grid;gap:3px;scrollbar-width:thin}.toc-list a{display:flex;gap:10px;align-items:baseline;padding:9px 10px;border-radius:10px;text-decoration:none;color:#a8bfd0;font-size:.8rem;line-height:1.35}.toc-list a span{font-size:.68rem;color:var(--cyan);font-variant-numeric:tabular-nums}.toc-list a:hover,.toc-list a.active{background:rgba(98,239,255,.1);color:#edffff}.terms-content{min-width:0}.notice{border:1px solid rgba(98,239,255,.25);border-radius:18px;padding:19px 22px;background:rgba(98,239,255,.055);line-height:1.7;color:#c4dce9;margin-bottom:16px}.notice strong{color:#efffff}.term-section{scroll-margin-top:110px;padding:clamp(21px,3vw,32px);border:1px solid rgba(98,239,255,.14);border-radius:20px;background:linear-gradient(150deg,rgba(17,25,53,.8),rgba(7,12,29,.84));margin-bottom:13px;box-shadow:0 12px 35px rgba(0,0,0,.13)}.section-kicker{font-size:.69rem;color:var(--cyan);letter-spacing:.14em;font-weight:800}.term-section h2{font-size:clamp(1.13rem,2.5vw,1.5rem);margin:10px 0 12px}.term-section p{margin:0;color:#b5c9d8;line-height:1.85;font-size:.94rem}.term-section a{overflow-wrap:anywhere}.end-note{color:var(--muted);text-align:center;padding:20px;line-height:1.7}.back-top{position:fixed;bottom:22px;right:22px;z-index:70;border:1px solid rgba(98,239,255,.4);background:#0c1c36;color:var(--cyan);border-radius:15px;width:46px;height:46px;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s}.back-top.visible{opacity:1;pointer-events:auto;transform:none}.reading-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));z-index:100}.top-actions a{text-decoration:none}.top-actions .home-link{padding:12px 15px;border-radius:12px;background:rgba(98,239,255,.09);border:1px solid rgba(98,239,255,.2);color:#d9fbff;font-size:.83rem;font-weight:700}.top-actions .home-link:hover{background:rgba(98,239,255,.18)}.toc-empty{display:none;color:var(--muted);font-size:.8rem;padding:12px}.icon-btn img{width:22px;height:22px;filter:brightness(0) invert(1)}.modal .game-icon{font-weight:900;color:var(--cyan)}.modal{display:none}.modal.show{display:flex}@media(max-width:900px){.terms-layout{grid-template-columns:1fr}.toc{position:relative;top:auto;max-height:340px}.toc-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.terms-hero{margin-top:12px;padding:24px 18px;border-radius:21px}.terms-layout{gap:12px;margin-top:13px}.toc{padding:15px;max-height:300px}.toc-list{grid-template-columns:1fr}.term-section{padding:20px 17px}.top-actions .home-link{font-size:.75rem;padding:11px}.topbar{gap:8px}.brand{gap:8px}.brand-copy span{max-width:110px}.site-footer{margin-top:25px}}@media print{body{background:white;color:black}body:before,.orb,.topbar,.toc,.site-footer,.back-top,.reading-progress,.modal{display:none!important}.terms-layout{display:block}.terms-hero,.term-section{background:white;color:black;border:1px solid #ccc;box-shadow:none;break-inside:avoid}.term-section p,.terms-hero p{color:#222}}
+</style></head><body><div class="reading-progress" id="readingProgress" aria-hidden="true"></div><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><main class="site-shell"><header class="topbar"><a class="brand" href="index.html" aria-label="G-GAMES home"><div class="brand-mark">G</div><div class="brand-copy"><strong>G-GAMES</strong><span>Futuristic Mini Games Hub</span></div></a><div class="top-actions"><a class="home-link" href="index.html">Back to Games</a><button class="icon-btn" id="aboutBtn" type="button" aria-label="About G-GAMES" title="About G-GAMES"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/info.svg" alt=""></button></div></header><section class="terms-hero"><div class="eyebrow"><span class="pulse-dot"></span> G-GAMES • Legal information</div><h1>Terms of <span class="gradient-text">Service</span></h1><p>Understand the rules, responsibilities, and important conditions for using the G-GAMES mini-games platform. We've organized the information into easy-to-navigate sections so you can find what matters to you.</p><div class="meta-row"><span class="meta-pill">Effective: October 15, 2026</span><span class="meta-pill">22 Detailed Sections</span><span class="meta-pill">Desktop &amp; Mobile Friendly</span></div></section><div class="terms-layout"><aside class="toc" aria-label="Terms of Service table of contents"><h2>On this page</h2><input class="toc-search" id="tocSearch" type="search" placeholder="Search sections..." aria-label="Search terms sections"><nav class="toc-list" aria-label="Terms sections"><a href="#acceptance" data-nav="acceptance"><span>01</span>Acceptance of Terms</a><a href="#service" data-nav="service"><span>02</span>Description of the Service</a><a href="#eligibility" data-nav="eligibility"><span>03</span>Eligibility and Younger Users</a><a href="#license" data-nav="license"><span>04</span>Limited Permission to Use</a><a href="#conduct" data-nav="conduct"><span>05</span>Acceptable Use and Fair Play</a><a href="#gameplay" data-nav="gameplay"><span>06</span>Gameplay, Scores, and Progress</a><a href="#availability" data-nav="availability"><span>07</span>Availability, Updates, and Maintenance</a><a href="#devices" data-nav="devices"><span>08</span>Devices, Browsers, and Connectivity</a><a href="#accounts" data-nav="accounts"><span>09</span>Accounts and User Submissions</a><a href="#ownership" data-nav="ownership"><span>10</span>Intellectual Property and Branding</a><a href="#thirdparty" data-nav="thirdparty"><span>11</span>Third-Party Tools, Links, and Assets</a><a href="#privacy" data-nav="privacy"><span>12</span>Privacy and Browser Storage</a><a href="#security" data-nav="security"><span>13</span>Security and Responsible Reporting</a><a href="#accessibility" data-nav="accessibility"><span>14</span>Accessibility and Player Well-Being</a><a href="#costs" data-nav="costs"><span>15</span>Fees, Purchases, and Advertising</a><a href="#disclaimer" data-nav="disclaimer"><span>16</span>Service Disclaimer</a><a href="#liability" data-nav="liability"><span>17</span>Limitations of Liability</a><a href="#indemnity" data-nav="indemnity"><span>18</span>Responsibility for Misuse</a><a href="#termination" data-nav="termination"><span>19</span>Suspension and Termination</a><a href="#law" data-nav="law"><span>20</span>Applicable Law and Disputes</a><a href="#changes" data-nav="changes"><span>21</span>Changes to These Terms</a><a href="#contact" data-nav="contact"><span>22</span>Contact and Questions</a><div class="toc-empty" id="tocEmpty">No matching sections.</div></nav></aside><div class="terms-content"><div class="notice"><strong>Important:</strong> Please read these Terms carefully before using G-GAMES. This page is a detailed draft based on the features shown in your supplied homepage. The website operator should review it and verify business, contact, and jurisdiction details before publishing.</div><section class="term-section" id="acceptance" data-title="Acceptance of Terms"><div class="section-kicker">SECTION 01</div><h2>Acceptance of Terms</h2><p>By accessing or using G-GAMES, including its homepage, mini games, and related pages (collectively, the “Service”), you agree to these Terms of Service. If you do not agree, please stop using the Service. These Terms apply to visitors and players whether they access the Service through a desktop browser, tablet, or mobile device. Your use must also comply with applicable law.</p></section><section class="term-section" id="service" data-title="Description of the Service"><div class="section-kicker">SECTION 02</div><h2>Description of the Service</h2><p>G-GAMES is a browser-based collection of casual mini games, including puzzle, arcade, brain, and classic games. Games and features may be added, changed, paused, or removed. Game availability, performance, controls, difficulty, and results may differ depending on the device, browser, connection, and individual game. We do not guarantee uninterrupted access or that every game will be available at all times.</p></section><section class="term-section" id="eligibility" data-title="Eligibility and Younger Users"><div class="section-kicker">SECTION 03</div><h2>Eligibility and Younger Users</h2><p>You must be legally permitted to use the Service in your location. If you are under the age of majority, use the Service with permission and supervision from a parent or legal guardian where required. Parents and guardians should evaluate whether particular games and online content are appropriate for younger users. Do not submit personal information about children through unsolicited messages.</p></section><section class="term-section" id="license" data-title="Limited Permission to Use"><div class="section-kicker">SECTION 04</div><h2>Limited Permission to Use</h2><p>Subject to compliance with these Terms, you receive a limited, personal, non-exclusive, non-transferable, revocable permission to access and play available games for lawful, non-commercial entertainment. This permission does not transfer ownership of software, artwork, design, content, trademarks, or any other intellectual property. You may not sell, sublicense, or commercially exploit any part of the Service without authorization.</p></section><section class="term-section" id="conduct" data-title="Acceptable Use and Fair Play"><div class="section-kicker">SECTION 05</div><h2>Acceptable Use and Fair Play</h2><p>Use the Service respectfully and lawfully. Do not attempt to disrupt games, interfere with other visitors, exploit security vulnerabilities, manipulate scores or game logic through unauthorized tools, distribute malicious code, scrape the Service in a way that harms availability, or circumvent technical restrictions. Do not use the Service for harassment, fraud, infringement, or other unlawful activity. We may restrict access or take other proportionate action when misuse is detected.</p></section><section class="term-section" id="gameplay" data-title="Gameplay, Scores, and Progress"><div class="section-kicker">SECTION 06</div><h2>Gameplay, Scores, and Progress</h2><p>Game scores, timers, achievements, and results are intended primarily for entertainment. They may be calculated locally in your browser and can be lost when you refresh the page, clear browser data, change devices, or close a session. Unless a particular game explicitly states otherwise, scores and progress are not guaranteed to be stored, backed up, synchronized, or recoverable. We may correct errors or reset inaccurate game results.</p></section><section class="term-section" id="availability" data-title="Availability, Updates, and Maintenance"><div class="section-kicker">SECTION 07</div><h2>Availability, Updates, and Maintenance</h2><p>We may update the Service, change game mechanics, perform maintenance, fix bugs, introduce accessibility improvements, or retire features at any time. Some changes may occur without advance notice. Temporary interruptions can result from hosting issues, software updates, device incompatibility, internet outages, or events beyond our reasonable control. We may suspend access when reasonably necessary to protect the Service or its users.</p></section><section class="term-section" id="devices" data-title="Devices, Browsers, and Connectivity"><div class="section-kicker">SECTION 08</div><h2>Devices, Browsers, and Connectivity</h2><p>You are responsible for obtaining a compatible device, supported browser, and internet connection, and for any associated data charges. We aim for responsive use across common screen sizes, but certain controls or effects may not work identically everywhere. Keep your browser updated and avoid modifying or disabling essential browser features if doing so prevents games from functioning properly.</p></section><section class="term-section" id="accounts" data-title="Accounts and User Submissions"><div class="section-kicker">SECTION 09</div><h2>Accounts and User Submissions</h2><p>The current mini-games experience may be accessible without an account. If account features, comments, submissions, or leaderboards are introduced, additional instructions or terms may apply. Do not impersonate another person or provide misleading information. Do not submit content that infringes rights or contains harmful code. If you voluntarily contact us, provide only information needed to address your request.</p></section><section class="term-section" id="ownership" data-title="Intellectual Property and Branding"><div class="section-kicker">SECTION 10</div><h2>Intellectual Property and Branding</h2><p>The G-GAMES name, visual identity, original page designs, written materials, and original code or artwork are protected to the extent permitted by applicable law. Some games may draw on longstanding gameplay concepts, and third-party icons, fonts, libraries, or other assets remain subject to their respective licenses and owners. No permission to use another party’s trademarks or assets is granted by these Terms.</p></section><section class="term-section" id="thirdparty" data-title="Third-Party Tools, Links, and Assets"><div class="section-kicker">SECTION 11</div><h2>Third-Party Tools, Links, and Assets</h2><p>The Service may use external content delivery networks, icon libraries, hosting providers, or links to websites outside our control. Those services may have separate terms and privacy practices. We are not responsible for third-party content, availability, security, or policies. A link or technical integration does not necessarily mean endorsement. Review external terms before using third-party websites or services.</p></section><section class="term-section" id="privacy" data-title="Privacy and Browser Storage"><div class="section-kicker">SECTION 12</div><h2>Privacy and Browser Storage</h2><p>Your use of the Service may involve browser storage, technical request data, or information you choose to provide. How information is collected and handled should be described in our separate Privacy Policy. Game data may be stored locally by individual games, if implemented. You can often manage local data through your browser settings, although deleting it may erase saved progress. Please read the <a href="privacy-policy.html">Privacy Policy</a> for further details.</p></section><section class="term-section" id="security" data-title="Security and Responsible Reporting"><div class="section-kicker">SECTION 13</div><h2>Security and Responsible Reporting</h2><p>Do not probe, attack, overload, or attempt unauthorized access to the Service, its hosting infrastructure, or connected systems. If you discover a potential security issue, avoid exploiting it or accessing other users’ information. Report the concern privately through the official contact method published on the website, if available. We may investigate and respond according to the nature of the report.</p></section><section class="term-section" id="accessibility" data-title="Accessibility and Player Well-Being"><div class="section-kicker">SECTION 14</div><h2>Accessibility and Player Well-Being</h2><p>We aim to make the experience usable on different devices and with common accessibility features, but cannot promise that every game is accessible for every individual. Some games may include motion, flashing effects, time pressure, or rapid interactions. Take breaks, adjust device settings when needed, and stop playing if you experience discomfort. Players with photosensitivity should exercise appropriate caution.</p></section><section class="term-section" id="costs" data-title="Fees, Purchases, and Advertising"><div class="section-kicker">SECTION 15</div><h2>Fees, Purchases, and Advertising</h2><p>Access to the mini games shown in the current G-GAMES lobby is presented as casual browser entertainment. These Terms do not authorize charges or subscriptions. If paid features, advertising, sponsorships, or purchases are introduced later, relevant pricing, disclosures, and any additional purchase terms should be presented before a transaction. Never provide payment information to an unofficial page claiming to represent G-GAMES.</p></section><section class="term-section" id="disclaimer" data-title="Service Disclaimer"><div class="section-kicker">SECTION 16</div><h2>Service Disclaimer</h2><p>To the extent permitted by applicable law, the Service is provided on an “as is” and “as available” basis, without warranties of uninterrupted operation, error-free gameplay, fitness for a particular purpose, or compatibility with every device. We do not promise that scores, outcomes, or content will always be accurate or preserved. Nothing in these Terms excludes warranties or protections that cannot lawfully be excluded.</p></section><section class="term-section" id="liability" data-title="Limitations of Liability"><div class="section-kicker">SECTION 17</div><h2>Limitations of Liability</h2><p>To the maximum extent permitted by applicable law, the Service operator will not be liable for indirect, incidental, special, consequential, or punitive losses arising from use or inability to use the Service, including loss of saved game progress, interruption, or device-related issues. Any limitations apply only where legally enforceable and do not restrict liability or consumer rights that cannot lawfully be limited.</p></section><section class="term-section" id="indemnity" data-title="Responsibility for Misuse"><div class="section-kicker">SECTION 18</div><h2>Responsibility for Misuse</h2><p>Where permitted by applicable law, you agree to be responsible for losses or claims resulting from your unlawful use of the Service, deliberate security interference, or infringement of third-party rights. This provision does not apply where prohibited by consumer protection law and does not require you to accept responsibility for conduct outside your control.</p></section><section class="term-section" id="termination" data-title="Suspension and Termination"><div class="section-kicker">SECTION 19</div><h2>Suspension and Termination</h2><p>You may stop using the Service at any time. We may limit, suspend, or discontinue access when reasonably necessary for security, maintenance, legal compliance, or a serious breach of these Terms. Provisions that by their nature should continue, including ownership, disclaimers, and legally permissible liability provisions, may survive termination.</p></section><section class="term-section" id="law" data-title="Applicable Law and Disputes"><div class="section-kicker">SECTION 20</div><h2>Applicable Law and Disputes</h2><p>These Terms are subject to applicable laws and mandatory consumer protections. The identity and legal location of the website operator should be confirmed before publishing a specific governing-law or court-jurisdiction clause. If a disagreement arises, we encourage you to contact the operator through the official website contact channel first so the matter can be reviewed informally. Nothing here removes any non-waivable right to seek relief.</p></section><section class="term-section" id="changes" data-title="Changes to These Terms"><div class="section-kicker">SECTION 21</div><h2>Changes to These Terms</h2><p>We may revise these Terms to reflect new features, operational changes, security practices, or legal requirements. The latest published version will appear on this page with an updated effective date. Where legally required, material changes will be communicated through an appropriate notice. Continued use after revised Terms take effect may constitute acceptance where permitted by law.</p></section><section class="term-section" id="contact" data-title="Contact and Questions"><div class="section-kicker">SECTION 22</div><h2>Contact and Questions</h2><p>If you have questions about these Terms, intellectual property, accessibility, or operation of G-GAMES, use the official contact information published on the website. Before launching this page publicly, the site operator should add a verified contact email or contact page here. Do not send passwords, payment card numbers, or other sensitive information in an ordinary message.</p></section><p class="end-note">Thanks for reading the G-GAMES Terms of Service. <a href="index.html">Return to the game library</a>.</p></div></div><footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo" aria-hidden="true">G</div>
+          <div class="footer-brand-copy">
+            <strong>G-GAMES</strong>
+            <span>Quick games. Futuristic vibes. Built for play on any screen.</span>
+          </div>
+        </div>
+
+        <div class="footer-clock" aria-live="polite">
+          <div class="footer-clock-label">
+            <span class="footer-clock-dot" aria-hidden="true"></span>
+            Live Clock
+          </div>
+          <div id="philippineTime">Philippine Standard Time</div>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <button type="button" class="footer-link-button" id="footerAboutBtn">About</button>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Accxs Creations. All rights reserved.</span>
+        <span class="footer-status">G-GAMES Online</span>
+      </div>
+    </footer></main><!-- About Modal -->
+  <div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="game-icon">G</div>
+          <div>
+            <h3 id="aboutModalTitle">About G-GAMES</h3>
+            <span>Mini Games Lobby</span>
+          </div>
+        </div>
+        <button class="icon-btn" id="closeAboutModal" type="button" aria-label="Close"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/x.svg" alt=""></button>
+      </div>
+
+      <p class="modal-desc">
+        G-GAMES is a responsive online mini-games lobby designed for desktop, tablet, and mobile devices. Choose from puzzle, arcade, brain, and classic mini games in one futuristic interface.
+      </p>
+
+      <div class="about-list">
+        <div class="about-item"><strong>Responsive:</strong> Optimized for phones, tablets, laptops, and large desktop screens.</div>
+        <div class="about-item"><strong>Fast loading:</strong> Game launch animation lasts only around 1.4 seconds.</div>
+        <div class="about-item"><strong>Search and filters:</strong> Quickly locate the game you want to play.</div>
+        <div class="about-item"><strong>Designed for fun:</strong> Casual mini games that are easy to access and play.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="primary-btn" id="aboutOkayBtn" type="button">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-top" id="backTop" type="button" aria-label="Back to top" title="Back to top">↑</button><script>
+const aboutModal=document.getElementById('aboutModal');const aboutBtn=document.getElementById('aboutBtn');const footerAboutBtn=document.getElementById('footerAboutBtn');let previousFocus=null;
+function openAbout(){previousFocus=document.activeElement;aboutModal.classList.add('show');document.body.style.overflow='hidden';document.getElementById('closeAboutModal').focus()}
+function closeAbout(){aboutModal.classList.remove('show');document.body.style.overflow='';previousFocus?.focus()}
+aboutBtn.addEventListener('click',openAbout);footerAboutBtn.addEventListener('click',openAbout);document.getElementById('closeAboutModal').addEventListener('click',closeAbout);document.getElementById('aboutOkayBtn').addEventListener('click',closeAbout);aboutModal.addEventListener('click',e=>{if(e.target===aboutModal)closeAbout()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&aboutModal.classList.contains('show'))closeAbout()});
+const dateFormatter=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric'});const timeFormatter=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});function updatePhilippineTime(){const now=new Date();document.getElementById('philippineTime').textContent=`Philippine Standard Time — ${dateFormatter.format(now)} at ${timeFormatter.format(now)}`}updatePhilippineTime();setInterval(updatePhilippineTime,1000);
+const links=[...document.querySelectorAll('[data-nav]')],sections=[...document.querySelectorAll('.term-section')],search=document.getElementById('tocSearch'),backTop=document.getElementById('backTop'),progress=document.getElementById('readingProgress');search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;links.forEach(a=>{const match=a.textContent.toLowerCase().includes(q);a.hidden=!match;if(match)shown++});document.getElementById('tocEmpty').style.display=shown?'none':'block'});const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length){const id=visible[0].target.id;links.forEach(a=>{const active=a.dataset.nav===id;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}},{rootMargin:'-105px 0px -60% 0px'});sections.forEach(s=>observer.observe(s));function onScroll(){const total=document.documentElement.scrollHeight-innerHeight;progress.style.width=(total>0?Math.min(100,scrollY/total*100):0)+'%';backTop.classList.toggle('visible',scrollY>450)}window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);onScroll();backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+</script></body></html>
