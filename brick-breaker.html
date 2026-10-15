@@ -1,1 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
+<title>Brick Breaker</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060816'/%3E%3Crect x='10' y='13' width='17' height='10' rx='2' fill='%235ef6ff'/%3E%3Crect x='30' y='13' width='24' height='10' rx='2' fill='%239b5cff'/%3E%3Crect x='10' y='27' width='24' height='10' rx='2' fill='%23ff5fd7'/%3E%3Crect x='37' y='27' width='17' height='10' rx='2' fill='%23ffd76a'/%3E%3Ccircle cx='40' cy='46' r='6' fill='%2369ffbd'/%3E%3Crect x='18' y='53' width='28' height='4' rx='2' fill='%23f6f8ff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
+}
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{width:36px;height:36px;display:grid;place-items:center;flex:0 0 auto;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.title-icon svg{width:100%;height:100%}
+.page-title{min-width:0;text-align:left}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.icon-btn{width:40px;height:40px;border:none;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:900;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);transition:.22s ease}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{content:"";position:absolute;right:20px;top:12px;width:130px;height:95px;opacity:.05;background:repeating-linear-gradient(0deg,var(--cyan) 0 10px,transparent 10px 16px);border-radius:18px}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(14px,3vw,28px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:16px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:6px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+.btn{min-height:42px;padding:10px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.09);color:#fff;cursor:pointer;font-weight:850;background:rgba(255,255,255,.055);transition:.22s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
+.game-shell{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;align-items:start}
+.canvas-wrap{position:relative;min-width:0;border-radius:22px;padding:10px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);overflow:hidden}
+.canvas-frame{position:relative;width:100%;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 10%,rgba(74,111,255,.12),transparent 35%),linear-gradient(180deg,#040717,#05091a 65%,#02040c);border:1px solid rgba(94,246,255,.12);box-shadow:inset 0 0 50px rgba(0,0,0,.55),0 0 35px rgba(94,246,255,.04)}
+#gameCanvas{display:block;width:100%;height:100%;touch-action:none}
+.scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.012) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+.side-panel{display:grid;gap:12px}
+.info-card{padding:16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.info-card h3{margin:0 0 10px;font-size:14px;letter-spacing:.05em}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.metric{padding:12px 8px;border-radius:14px;text-align:center;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.metric span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em}
+.metric strong{display:block;margin-top:4px;font-size:20px}
+.legend{display:grid;gap:9px;color:var(--muted);font-size:12px;line-height:1.45}
+.legend-row{display:flex;gap:9px;align-items:center}
+.legend-icon{width:30px;height:20px;border-radius:6px;flex:0 0 auto;background:linear-gradient(135deg,rgba(94,246,255,.6),rgba(155,92,255,.6));border:1px solid rgba(255,255,255,.12)}
+.legend-icon.ball{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--cyan) 48%,#2677ff 100%)}
+.legend-icon.paddle{height:8px;width:34px;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.mobile-controls{display:none;margin-top:12px;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.control-btn{min-height:54px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(94,246,255,.04));color:#fff;font-size:13px;font-weight:900;letter-spacing:.06em;touch-action:none}
+.control-btn:active{transform:scale(.98);background:linear-gradient(145deg,rgba(94,246,255,.12),rgba(155,92,255,.12))}
+.control-btn svg{width:22px;height:22px;display:block;margin:auto}
+.help-panel,.end-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.help-panel.open,.end-modal.open{display:flex}
+.modal-card{width:min(560px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+.end-card{text-align:center}
+.result-icon{width:88px;height:88px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.20),rgba(94,246,255,.08) 58%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}
+.result-icon svg{width:48px;height:48px}
+.result-score{font-size:clamp(34px,8vw,54px);font-weight:950;color:var(--success);text-shadow:0 0 26px rgba(105,255,189,.15)}
+.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{text-align:left}
+.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}
+.footer-logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:#dfe7ff;font-size:13px;line-height:1.5}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
+.footer-links a,.footer-links button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px;transition:.2s ease}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}
+.status{display:inline-flex;align-items:center;gap:7px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+@media(max-width:950px){
+  .hero{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}
+  .stat span,.stat strong{display:block}
+  .stat strong{margin-top:5px}
+  .game-shell{grid-template-columns:1fr}
+  .side-panel{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .footer-brand{text-align:center}.footer-logo{justify-content:center}.footer-links{justify-content:center}
+}
+@media(max-width:700px){
+  .brand span:last-child{display:none}
+  .page-title span{display:none}
+  .main{padding-left:10px;padding-right:10px}
+  .hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}
+  .stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .game-top{grid-template-columns:1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .side-panel{grid-template-columns:1fr}
+  .mobile-controls{display:grid}
+  .canvas-wrap{padding:7px}
+  .canvas-frame{aspect-ratio:4/5;min-height:430px}
+}
+@media(max-width:420px){
+  .page-title strong{font-size:14px}
+  .title-icon{width:30px;height:30px}
+  .stats-card{grid-template-columns:1fr 1fr 1fr}
+  .toolbar{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr 1fr}
+  .control-btn{min-height:58px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+    <div class="title-wrap">
+      <div class="title-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64">
+          <defs><linearGradient id="bbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ef6ff"/><stop offset=".55" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff5fd7"/></linearGradient></defs>
+          <rect x="7" y="10" width="22" height="11" rx="3" fill="url(#bbg)"/><rect x="33" y="10" width="24" height="11" rx="3" fill="#ffd76a"/>
+          <rect x="7" y="25" width="28" height="11" rx="3" fill="#ff5fd7"/><rect x="39" y="25" width="18" height="11" rx="3" fill="#5ef6ff"/>
+          <circle cx="42" cy="47" r="6" fill="#69ffbd"/><rect x="16" y="55" width="32" height="4" rx="2" fill="#f6f8ff"/>
+        </svg>
+      </div>
+      <div class="page-title"><strong>Brick Breaker</strong><span>Arcade Challenge • Reflex Game</span></div>
+    </div>
+    <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Brick Breaker">?</button>
+  </div>
+</header>
+<main class="main">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">G-GAMES • Arcade Challenge</div>
+      <h1>Break Every <span>Brick</span></h1>
+      <p>Control the paddle, keep the energy ball in play, clear every brick, and survive increasingly faster levels. Built for keyboard, mouse, touch, and mobile controls.</p>
+    </div>
+    <aside class="stats-card">
+      <div class="stat"><span>Level</span><strong id="heroLevel">1</strong></div>
+      <div class="stat"><span>Score</span><strong id="heroScore">0</strong></div>
+      <div class="stat"><span>Best</span><strong id="heroBest">0</strong></div>
+    </aside>
+  </section>
 
+  <section class="game-panel">
+    <div class="game-top">
+      <div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg">Press Start or tap the game area to begin.</div></div>
+      <div class="toolbar">
+        <button class="btn btn-primary" type="button" onclick="startGame()">Start / Restart</button>
+        <button class="btn" type="button" onclick="togglePause()">Pause</button>
+        <button class="btn" type="button" onclick="location.href='index.html'">Back to Lobby</button>
+      </div>
+    </div>
+
+    <div class="game-shell">
+      <div class="canvas-wrap">
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="gameCanvas" width="960" height="600" aria-label="Brick Breaker game area"></canvas>
+          <div class="scanlines"></div>
+        </div>
+        <div class="mobile-controls" aria-label="Mobile controls">
+          <button class="control-btn" id="leftBtn" type="button" aria-label="Move left"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="control-btn" id="launchBtn" type="button">LAUNCH</button>
+          <button class="control-btn" id="rightBtn" type="button" aria-label="Move right"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="info-card">
+          <h3>Round Progress</h3>
+          <div class="metrics">
+            <div class="metric"><span>Score</span><strong id="scoreText">0</strong></div>
+            <div class="metric"><span>Lives</span><strong id="livesText">3</strong></div>
+            <div class="metric"><span>Level</span><strong id="levelText">1</strong></div>
+            <div class="metric"><span>Bricks</span><strong id="bricksText">0</strong></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <h3>Controls</h3>
+          <div class="legend">
+            <div class="legend-row"><span class="legend-icon paddle"></span><span>Arrow keys, A/D, mouse, or touch to move the paddle.</span></div>
+            <div class="legend-row"><span class="legend-icon ball"></span><span>Space, tap the game, or LAUNCH to release the ball.</span></div>
+            <div class="legend-row"><span class="legend-icon"></span><span>Clear every brick to advance to the next level.</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="footer-logo-mark">G</span><span>G-GAMES</span></div>
+        <div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div>
+      </div>
+      <div class="footer-time" aria-live="polite"><strong>Philippine Standard Time</strong><span id="phTime">Loading Philippine Standard Time…</span></div>
+      <nav class="footer-links" aria-label="Footer links"><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><button type="button" onclick="openHelp()">How to Play</button><a href="index.html">Game Lobby</a></nav>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="status"><span class="status-dot"></span>G-GAMES Online</span></div>
+  </div>
+</footer>
+</div>
+
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="helpTitle">How to Play Brick Breaker</h2><button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button></div>
+    <ol>
+      <li>Move the paddle left or right to keep the ball from falling below the screen.</li>
+      <li>Press Space, tap the play area, or use the LAUNCH button to release the ball.</li>
+      <li>Each brick you destroy adds to your score.</li>
+      <li>Clear every brick to advance to the next level, where the ball moves faster.</li>
+      <li>You have three lives. Losing all lives ends the run.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="modalMessage">
+  <div class="modal-card end-card">
+    <div class="result-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M18 34l9 9 20-22" fill="none" stroke="#69ffbd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="25" fill="none" stroke="rgba(105,255,189,.45)" stroke-width="3"/></svg></div>
+    <h2 id="modalMessage">Game Over</h2>
+    <p id="modalSubtext">Final score</p>
+    <div class="result-score" id="finalScore">0</div>
+    <p id="modalExtra">Level 1 reached.</p>
+    <button class="btn btn-primary" type="button" onclick="closeEndModalAndRestart()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const helpPanel = document.getElementById('helpPanel');
+const endModal = document.getElementById('endModal');
+const statusMsg = document.getElementById('statusMsg');
+
+const W = 960, H = 600;
+let animationId = null;
+let running = false;
+let paused = false;
+let started = false;
+let gameOver = false;
+let level = 1;
+let score = 0;
+let lives = 3;
+let best = Number(localStorage.getItem('ggames_brick_breaker_best') || 0);
+let bricks = [];
+let particles = [];
+let keys = {left:false,right:false};
+let lastTime = 0;
+
+const paddle = {x:W/2-70,y:H-45,w:140,h:14,speed:620};
+const ball = {x:W/2,y:H-70,r:9,vx:260,vy:-320,speed:430,stuck:true};
+
+function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden';}
+function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow='';}
+helpPanel.addEventListener('click',e=>{if(e.target===helpPanel)closeHelp();});
+endModal.addEventListener('click',e=>{if(e.target===endModal)closeEndModalAndRestart();});
+
+function createBricks(){
+  bricks=[];
+  const cols = Math.min(10 + Math.floor((level-1)/2),12);
+  const rows = Math.min(5 + Math.floor((level-1)/3),8);
+  const gap=8, marginX=46, top=58;
+  const bw=(W-marginX*2-gap*(cols-1))/cols;
+  const bh=24;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const hp = level>=4 && (r+c)%7===0 ? 2 : 1;
+      bricks.push({x:marginX+c*(bw+gap),y:top+r*(bh+gap),w:bw,h:bh,hp,maxHp:hp,alive:true,row:r,col:c});
+    }
+  }
+  updateUI();
+}
+
+function resetBall(stuck=true){
+  paddle.x=W/2-paddle.w/2;
+  ball.x=paddle.x+paddle.w/2;
+  ball.y=paddle.y-ball.r-3;
+  const dir=Math.random()<.5?-1:1;
+  ball.speed=430+(level-1)*34;
+  ball.vx=dir*ball.speed*.62;
+  ball.vy=-Math.sqrt(Math.max(1,ball.speed*ball.speed-ball.vx*ball.vx));
+  ball.stuck=stuck;
+}
+
+function startGame(){
+  cancelAnimationFrame(animationId);
+  level=1;score=0;lives=3;gameOver=false;paused=false;started=true;running=true;particles=[];
+  createBricks();resetBall(true);statusMsg.textContent='Move the paddle and launch the ball.';lastTime=performance.now();loop(lastTime);
+}
+
+function togglePause(){
+  if(!started || gameOver)return;
+  paused=!paused;
+  statusMsg.textContent=paused?'Game paused.':'Game resumed.';
+  if(!paused){lastTime=performance.now();loop(lastTime);} else cancelAnimationFrame(animationId);
+}
+
+function launchBall(){
+  if(!started){startGame();return;}
+  if(paused||gameOver)return;
+  if(ball.stuck){ball.stuck=false;statusMsg.textContent='Break every brick to advance.';}
+}
+
+function nextLevel(){
+  level++;
+  statusMsg.textContent=`Level ${level}. Ball speed increased.`;
+  createBricks();resetBall(true);spawnBurst(W/2,H/2,'#69ffbd',36);updateUI();
+}
+
+function loseLife(){
+  lives--;updateUI();
+  if(lives<=0){finishGame();return;}
+  statusMsg.textContent=`Life lost. ${lives} ${lives===1?'life':'lives'} remaining.`;
+  resetBall(true);
+}
+
+function finishGame(){
+  gameOver=true;running=false;cancelAnimationFrame(animationId);
+  if(score>best){best=score;localStorage.setItem('ggames_brick_breaker_best',best);}
+  updateUI();
+  document.getElementById('finalScore').textContent=score;
+  document.getElementById('modalExtra').textContent=`Level ${level} reached. Best score: ${best}.`;
+  document.getElementById('modalMessage').textContent='Game Over';
+  endModal.classList.add('open');document.body.style.overflow='hidden';
+}
+
+function closeEndModalAndRestart(){endModal.classList.remove('open');document.body.style.overflow='';startGame();}
+
+function updateUI(){
+  const alive=bricks.filter(b=>b.alive).length;
+  document.getElementById('scoreText').textContent=score;
+  document.getElementById('livesText').textContent=lives;
+  document.getElementById('levelText').textContent=level;
+  document.getElementById('bricksText').textContent=alive;
+  document.getElementById('heroScore').textContent=score;
+  document.getElementById('heroLevel').textContent=level;
+  document.getElementById('heroBest').textContent=best;
+}
+
+function rectCircleCollision(rect,c){
+  const cx=Math.max(rect.x,Math.min(c.x,rect.x+rect.w));
+  const cy=Math.max(rect.y,Math.min(c.y,rect.y+rect.h));
+  const dx=c.x-cx,dy=c.y-cy;
+  return dx*dx+dy*dy<=c.r*c.r;
+}
+
+function update(dt){
+  if(keys.left)paddle.x-=paddle.speed*dt;
+  if(keys.right)paddle.x+=paddle.speed*dt;
+  paddle.x=Math.max(10,Math.min(W-paddle.w-10,paddle.x));
+
+  if(ball.stuck){ball.x=paddle.x+paddle.w/2;ball.y=paddle.y-ball.r-3;return;}
+
+  ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;
+  if(ball.x-ball.r<0){ball.x=ball.r;ball.vx=Math.abs(ball.vx);}
+  if(ball.x+ball.r>W){ball.x=W-ball.r;ball.vx=-Math.abs(ball.vx);}
+  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy=Math.abs(ball.vy);}
+
+  if(ball.y-ball.r>H){loseLife();return;}
+
+  if(ball.vy>0 && rectCircleCollision(paddle,ball)){
+    ball.y=paddle.y-ball.r-1;
+    const relative=((ball.x-(paddle.x+paddle.w/2))/(paddle.w/2));
+    const maxAngle=Math.PI*.39;
+    const angle=relative*maxAngle;
+    ball.vx=ball.speed*Math.sin(angle);
+    ball.vy=-Math.abs(ball.speed*Math.cos(angle));
+    spawnBurst(ball.x,paddle.y,'#5ef6ff',10);
+  }
+
+  for(const b of bricks){
+    if(!b.alive || !rectCircleCollision(b,ball))continue;
+    const overlapLeft=Math.abs((ball.x+ball.r)-b.x);
+    const overlapRight=Math.abs((b.x+b.w)-(ball.x-ball.r));
+    const overlapTop=Math.abs((ball.y+ball.r)-b.y);
+    const overlapBottom=Math.abs((b.y+b.h)-(ball.y-ball.r));
+    const min=Math.min(overlapLeft,overlapRight,overlapTop,overlapBottom);
+    if(min===overlapLeft||min===overlapRight)ball.vx*=-1;else ball.vy*=-1;
+    b.hp--;
+    score+=b.hp<=0?100:40;
+    if(b.hp<=0){b.alive=false;spawnBurst(b.x+b.w/2,b.y+b.h/2,brickColor(b),14);}
+    else spawnBurst(ball.x,ball.y,'#ffd76a',8);
+    updateUI();
+    break;
+  }
+
+  particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=90*dt;p.life-=dt;});
+  particles=particles.filter(p=>p.life>0);
+
+  if(bricks.length && bricks.every(b=>!b.alive))nextLevel();
+}
+
+function brickColor(b){
+  const colors=['#5ef6ff','#69a8ff','#9b5cff','#ff5fd7','#ffd76a','#69ffbd'];
+  return colors[b.row%colors.length];
+}
+function spawnBurst(x,y,color,count){
+  for(let i=0;i<count;i++){
+    const a=Math.random()*Math.PI*2,s=60+Math.random()*180;
+    particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.35+Math.random()*.45,size:2+Math.random()*4,color});
+  }
+}
+
+function drawRoundedRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#05091b');g.addColorStop(1,'#02040b');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  ctx.save();ctx.globalAlpha=.28;ctx.fillStyle='#9fb9ff';
+  for(let i=0;i<65;i++){
+    const x=(i*137)%W,y=(i*83)%H;ctx.fillRect(x,y,(i%3)+1,(i%3)+1);
+  }
+  ctx.restore();
+
+  for(const b of bricks){
+    if(!b.alive)continue;
+    const c=brickColor(b);
+    ctx.save();ctx.shadowColor=c;ctx.shadowBlur=16;ctx.fillStyle=c;ctx.globalAlpha=b.hp===2?.7:1;
+    drawRoundedRect(b.x,b.y,b.w,b.h,6);ctx.fill();
+    ctx.globalAlpha=.22;ctx.fillStyle='#fff';drawRoundedRect(b.x+4,b.y+3,b.w-8,5,3);ctx.fill();ctx.restore();
+  }
+
+  ctx.save();
+  const pg=ctx.createLinearGradient(paddle.x,paddle.y,paddle.x+paddle.w,paddle.y);pg.addColorStop(0,'#5ef6ff');pg.addColorStop(.5,'#9b5cff');pg.addColorStop(1,'#ff5fd7');
+  ctx.fillStyle=pg;ctx.shadowColor='#5ef6ff';ctx.shadowBlur=20;drawRoundedRect(paddle.x,paddle.y,paddle.w,paddle.h,8);ctx.fill();ctx.restore();
+
+  ctx.save();const bg=ctx.createRadialGradient(ball.x-3,ball.y-3,2,ball.x,ball.y,ball.r*1.3);bg.addColorStop(0,'#fff');bg.addColorStop(.38,'#5ef6ff');bg.addColorStop(1,'#3576ff');ctx.fillStyle=bg;ctx.shadowColor='#5ef6ff';ctx.shadowBlur=24;ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();ctx.restore();
+
+  for(const p of particles){ctx.save();ctx.globalAlpha=Math.max(0,p.life*2);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);ctx.restore();}
+
+  if(ball.stuck && started && !gameOver){ctx.save();ctx.font='700 16px Inter, sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(230,240,255,.78)';ctx.fillText('PRESS SPACE OR TAP TO LAUNCH',W/2,H-92);ctx.restore();}
+  if(paused){ctx.save();ctx.fillStyle='rgba(2,4,12,.66)';ctx.fillRect(0,0,W,H);ctx.font='900 36px Inter, sans-serif';ctx.textAlign='center';ctx.fillStyle='#f6f8ff';ctx.fillText('PAUSED',W/2,H/2);ctx.restore();}
+}
+
+function loop(t){
+  if(!running||paused||gameOver)return;
+  const dt=Math.min((t-lastTime)/1000,.025);lastTime=t;update(dt);draw();animationId=requestAnimationFrame(loop);
+}
+
+function pointerToGame(clientX){
+  const rect=canvas.getBoundingClientRect();
+  return (clientX-rect.left)/rect.width*W;
+}
+canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.pointerType==='pen'||e.buttons){paddle.x=pointerToGame(e.clientX)-paddle.w/2;paddle.x=Math.max(10,Math.min(W-paddle.w-10,paddle.x));}});
+canvas.addEventListener('pointerdown',e=>{paddle.x=pointerToGame(e.clientX)-paddle.w/2;paddle.x=Math.max(10,Math.min(W-paddle.w-10,paddle.x));launchBall();});
+
+window.addEventListener('keydown',e=>{
+  if(['ArrowLeft','ArrowRight',' ','a','A','d','D','p','P'].includes(e.key))e.preventDefault();
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')keys.left=true;
+  if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')keys.right=true;
+  if(e.key===' ')launchBall();
+  if(e.key==='p'||e.key==='P')togglePause();
+  if(e.key==='Escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(endModal.classList.contains('open'))closeEndModalAndRestart();}
+});
+window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')keys.left=false;if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')keys.right=false;});
+
+function bindHold(btn,prop){
+  const on=e=>{e.preventDefault();keys[prop]=true;};
+  const off=e=>{e.preventDefault();keys[prop]=false;};
+  btn.addEventListener('pointerdown',on);btn.addEventListener('pointerup',off);btn.addEventListener('pointercancel',off);btn.addEventListener('pointerleave',off);
+}
+bindHold(document.getElementById('leftBtn'),'left');bindHold(document.getElementById('rightBtn'),'right');document.getElementById('launchBtn').addEventListener('click',launchBall);
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden && started && !gameOver && !paused)togglePause();});
+
+function updatePhilippineTime(){
+  const formatter=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});
+  document.getElementById('phTime').textContent=formatter.format(new Date());
+}
+updatePhilippineTime();setInterval(updatePhilippineTime,1000);
+
+createBricks();resetBall(true);updateUI();draw();
+</script>
+</body>
+</html>
