@@ -764,9 +764,9 @@ function renderBoard(){
     line.classList.add('path-line');
     line.setAttribute('points',path.map(p=>`${p.c+.5},${p.r+.5}`).join(' '));
     line.setAttribute('stroke',color);
-    line.setAttribute('stroke-width','0.34');
+    line.setAttribute('stroke-width','0.52');
     line.setAttribute('vector-effect','non-scaling-stroke');
-    line.style.filter=`drop-shadow(0 0 3px ${color}88)`;
+    line.style.filter=`drop-shadow(0 0 4px ${color}aa)`;
     svg.appendChild(line);
   }
 
