@@ -1,1 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060816">
+<title>Pong</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060816'/%3E%3Crect x='10' y='18' width='6' height='28' rx='3' fill='%235ef6ff'/%3E%3Crect x='48' y='18' width='6' height='28' rx='3' fill='%239b5cff'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23ffffff'/%3E%3Cpath d='M32 10v44' stroke='%23ffffff' stroke-opacity='.28' stroke-width='2' stroke-dasharray='5 5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#050816;
+  --panel:rgba(13,19,43,.78);
+  --panel-strong:rgba(8,13,31,.94);
+  --cyan:#5ef6ff;
+  --blue:#69a8ff;
+  --violet:#9b5cff;
+  --pink:#ff5fd7;
+  --gold:#ffd76a;
+  --text:#f6f8ff;
+  --muted:#9da8c8;
+  --success:#69ffbd;
+  --danger:#ff607d;
+  --shadow:0 22px 70px rgba(0,0,0,.44);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
+    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  pointer-events:none;
+  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  filter:blur(70px);
+  animation:ambientSpin 30s linear infinite;
+}
+@keyframes ambientSpin{to{transform:rotate(360deg)}}
+.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
+.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+@keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.title-icon{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.title-icon svg{width:100%;height:100%}
+.page-title{min-width:0;text-align:left}
+.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.icon-btn{width:40px;height:40px;border:none;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:900;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);transition:.22s ease}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
+.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
+.hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
+.hero-card::after{content:"PONG";position:absolute;right:24px;top:8px;font-size:clamp(54px,9vw,110px);font-weight:950;letter-spacing:-.08em;color:rgba(94,246,255,.04)}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
+.stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.stat span{font-size:13px;color:var(--muted)}
+.stat strong{font-size:16px}
+.game-panel{max-width:1180px;margin:0 auto;border-radius:28px;padding:clamp(16px,3vw,28px)}
+.game-top{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:18px}
+.status-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:6px}
+.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
+.btn{min-height:42px;padding:10px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.09);color:#fff;cursor:pointer;font-weight:850;background:rgba(255,255,255,.055);transition:.22s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));border-color:rgba(94,246,255,.28)}
+.game-stage{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;align-items:start}
+.arena-shell{border-radius:22px;padding:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+.canvas-wrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(2,6,19,.98),rgba(4,8,24,.98));border:1px solid rgba(94,246,255,.13);box-shadow:inset 0 0 60px rgba(94,246,255,.03),0 0 30px rgba(94,246,255,.05);touch-action:none}
+canvas{display:block;width:100%;height:100%}
+.scanline{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);mix-blend-mode:screen;opacity:.45}
+.center-prompt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;padding:16px 20px;border-radius:16px;background:rgba(4,9,25,.72);border:1px solid rgba(94,246,255,.15);backdrop-filter:blur(10px);min-width:min(320px,78%)}
+.center-prompt.hidden{display:none}
+.center-prompt strong{display:block;font-size:clamp(18px,3vw,28px);margin-bottom:6px}
+.center-prompt span{color:var(--muted);font-size:13px;line-height:1.5}
+.side-panel{border-radius:22px;padding:18px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);display:grid;gap:12px}
+.panel-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:900}
+.score-box{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{padding:14px;border-radius:15px;text-align:center;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+.metric span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.11em}
+.metric strong{display:block;margin-top:5px;font-size:28px;color:#fff}
+.mode-grid{display:grid;gap:8px}
+.mode-btn{width:100%;text-align:left;padding:12px 13px;border-radius:13px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);color:#fff;cursor:pointer;font-weight:800}
+.mode-btn.active{border-color:rgba(94,246,255,.35);background:linear-gradient(135deg,rgba(94,246,255,.12),rgba(155,92,255,.13));box-shadow:0 0 22px rgba(94,246,255,.06)}
+.hint{padding:12px 13px;border-radius:14px;background:rgba(94,246,255,.045);border:1px solid rgba(94,246,255,.09);color:var(--muted);font-size:12px;line-height:1.55}
+.mobile-controls{display:none;margin-top:14px;grid-template-columns:1fr 1fr;gap:10px}
+.touch-btn{min-height:54px;border-radius:16px;border:1px solid rgba(94,246,255,.18);background:linear-gradient(145deg,rgba(94,246,255,.08),rgba(155,92,255,.10));color:#fff;font-size:16px;font-weight:900;touch-action:none;user-select:none;-webkit-user-select:none}
+.help-panel,.end-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.help-panel.open,.end-modal.open{display:flex}
+.modal-card{width:min(560px,100%);border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-card h2{margin:0;font-size:25px}
+.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}
+.modal-card ol{padding-left:20px;margin-bottom:0}
+.end-card{text-align:center}
+.result-ring{width:92px;height:92px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(94,246,255,.18),rgba(155,92,255,.09) 58%,rgba(255,255,255,.02));border:1px solid rgba(94,246,255,.2)}
+.result-ring svg{width:50px;height:50px}
+.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
+.footer-brand{text-align:left}
+.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}
+.footer-logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff);box-shadow:0 0 22px rgba(94,246,255,.18)}
+.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
+.footer-time{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:#dfe7ff;font-size:13px;line-height:1.5}
+.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}
+.footer-links a,.footer-links button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px;transition:.2s ease}
+.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}
+.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}
+.status{display:inline-flex;align-items:center;gap:7px}.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+@media(max-width:900px){
+  .hero,.game-stage{grid-template-columns:1fr}
+  .stats-card{grid-template-columns:repeat(3,1fr)}
+  .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
+  .game-top{grid-template-columns:1fr}.toolbar{justify-content:flex-start}
+  .side-panel{grid-template-columns:1fr 1fr;align-items:start}.side-panel>.panel-label{grid-column:1/-1}
+  .footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{text-align:center}.footer-logo{justify-content:center}.footer-links{justify-content:center}
+}
+@media(max-width:700px){
+  .mobile-controls{display:grid}
+  .canvas-wrap{aspect-ratio:4/3}
+  .page-title span{display:none}
+  .brand span:last-child{display:none}
+}
+@media(max-width:640px){
+  .title-icon{width:30px;height:30px}.main{padding-left:10px;padding-right:10px}.hero-card,.stats-card,.game-panel{border-radius:20px}
+  .stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
+  .side-panel{grid-template-columns:1fr}.side-panel>.panel-label{grid-column:auto}
+}
+@media(max-width:390px){
+  .page-title strong{font-size:14px}.title-icon{width:27px;height:27px}.stats-card{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.score-box{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app">
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+  <div class="title-wrap">
+    <div class="title-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64"><rect x="8" y="18" width="7" height="28" rx="3.5" fill="#5ef6ff"/><rect x="49" y="18" width="7" height="28" rx="3.5" fill="#9b5cff"/><circle cx="32" cy="32" r="5" fill="#fff"/><path d="M32 8v48" stroke="#fff" stroke-opacity=".26" stroke-width="2" stroke-dasharray="5 5"/></svg>
+    </div>
+    <div class="page-title"><strong>Pong</strong><span>Arcade Classic • Reflex Game</span></div>
+  </div>
+  <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Pong">?</button>
+</div></header>
 
+<main class="main">
+<section class="hero">
+  <div class="hero-card"><div class="eyebrow">G-GAMES • Arcade Classic</div><h1>Master the <span>Neon Court</span></h1><p>Move your paddle, return the ball, and outscore your opponent. Play against adaptive AI or challenge a second player on the same keyboard.</p></div>
+  <aside class="stats-card">
+    <div class="stat"><span>Target Score</span><strong>7</strong></div>
+    <div class="stat"><span>Mode</span><strong id="modeStat">Vs AI</strong></div>
+    <div class="stat"><span>Best Streak</span><strong id="bestStat">0</strong></div>
+  </aside>
+</section>
+
+<section class="game-panel">
+  <div class="game-top">
+    <div><div class="status-label">Game Status</div><div class="status-message" id="statusMsg">Press Start Match to begin.</div></div>
+    <div class="toolbar"><button class="btn btn-primary" type="button" onclick="startMatch()">Start Match</button><button class="btn" type="button" onclick="togglePause()" id="pauseBtn">Pause</button><button class="btn" type="button" onclick="goBack()">Back to Lobby</button></div>
+  </div>
+
+  <div class="game-stage">
+    <div class="arena-shell">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="pongCanvas" width="960" height="540" aria-label="Pong game arena"></canvas>
+        <div class="scanline"></div>
+        <div class="center-prompt" id="centerPrompt"><strong>Ready for Pong</strong><span>Use W/S or Arrow Up/Down. On mobile, drag or use the touch buttons.</span></div>
+      </div>
+      <div class="mobile-controls" aria-label="Mobile controls"><button class="touch-btn" id="upBtn" type="button">Move Up</button><button class="touch-btn" id="downBtn" type="button">Move Down</button></div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="panel-label">Match Console</div>
+      <div class="score-box"><div class="metric"><span>Player</span><strong id="playerScore">0</strong></div><div class="metric"><span id="opponentLabel">AI</span><strong id="aiScore">0</strong></div></div>
+      <div class="panel-label">Game Mode</div>
+      <div class="mode-grid">
+        <button class="mode-btn active" type="button" data-mode="ai" onclick="setMode('ai',this)">Player vs AI</button>
+        <button class="mode-btn" type="button" data-mode="2p" onclick="setMode('2p',this)">Two Players</button>
+      </div>
+      <div class="panel-label">AI Difficulty</div>
+      <div class="mode-grid" id="difficultyGrid">
+        <button class="mode-btn" type="button" onclick="setDifficulty('easy',this)">Easy</button>
+        <button class="mode-btn active" type="button" onclick="setDifficulty('normal',this)">Normal</button>
+        <button class="mode-btn" type="button" onclick="setDifficulty('hard',this)">Hard</button>
+      </div>
+      <div class="hint" id="controlHint"><strong>Controls:</strong><br>Player: W / S or Arrow Up / Down<br>Pause: P<br>Mobile: drag on the court or use buttons</div>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><div class="footer-logo"><span class="footer-logo-mark">G</span><span>G-GAMES</span></div><div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div></div>
+  <div class="footer-time" aria-live="polite"><strong>Philippine Standard Time</strong><span id="phTime">Loading Philippine Standard Time…</span></div>
+  <nav class="footer-links" aria-label="Footer links"><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><button type="button" onclick="openHelp()">How to Play</button><a href="index.html">Game Lobby</a></nav>
+</div><div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="status"><span class="status-dot"></span>G-GAMES Online</span></div></div></footer>
+</div>
+
+<div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="modal-card"><div class="modal-top"><h2 id="helpTitle">How to Play Pong</h2><button class="icon-btn" type="button" onclick="closeHelp()" aria-label="Close help">×</button></div><ol><li>Move your paddle up and down to return the ball.</li><li>The first side to reach 7 points wins the match.</li><li>In Player vs AI mode, use W/S or Arrow Up/Down.</li><li>In Two Players mode, Player 1 uses W/S and Player 2 uses Arrow Up/Down.</li><li>On mobile, drag vertically on the court or use the Move Up and Move Down buttons.</li><li>Press P or use the Pause button to pause or resume the match.</li></ol></div></div>
+
+<div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="modalMessage"><div class="modal-card end-card"><div class="result-ring" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="8" y="18" width="7" height="28" rx="3.5" fill="#5ef6ff"/><rect x="49" y="18" width="7" height="28" rx="3.5" fill="#9b5cff"/><circle cx="32" cy="32" r="6" fill="#fff"/></svg></div><h2 id="modalMessage">Match Complete</h2><p id="modalSubtext">Final score 0–0.</p><button class="btn btn-primary" type="button" onclick="closeModalAndRestart()">Play Again</button></div></div>
+
+<script>
+const canvas=document.getElementById('pongCanvas');
+const ctx=canvas.getContext('2d');
+const helpPanel=document.getElementById('helpPanel');
+const endModal=document.getElementById('endModal');
+const centerPrompt=document.getElementById('centerPrompt');
+const statusMsg=document.getElementById('statusMsg');
+const pauseBtn=document.getElementById('pauseBtn');
+let mode='ai', difficulty='normal';
+let running=false, paused=false, gameOver=false;
+let playerScore=0, opponentScore=0, bestStreak=Number(localStorage.getItem('pongBestStreak')||0), currentStreak=0;
+let lastTime=0, animationId=null;
+const keys={};
+const paddle={w:14,h:96,speed:430};
+const left={x:34,y:222,vy:0};
+const right={x:912,y:222,vy:0};
+const ball={x:480,y:270,r:9,vx:0,vy:0,speed:410};
+const particles=[];
+
+document.getElementById('bestStat').textContent=bestStreak;
+
+function resetPaddles(){left.y=(canvas.height-paddle.h)/2;right.y=(canvas.height-paddle.h)/2;}
+function serve(direction=Math.random()<.5?-1:1){ball.x=canvas.width/2;ball.y=canvas.height/2;ball.speed=410;const angle=(Math.random()*.7-.35);ball.vx=Math.cos(angle)*ball.speed*direction;ball.vy=Math.sin(angle)*ball.speed;}
+function startMatch(){playerScore=0;opponentScore=0;currentStreak=0;gameOver=false;paused=false;running=true;resetPaddles();serve();updateScores();centerPrompt.classList.add('hidden');statusMsg.textContent='Match in progress.';pauseBtn.textContent='Pause';lastTime=performance.now();cancelAnimationFrame(animationId);animationId=requestAnimationFrame(loop);}
+function togglePause(){if(!running||gameOver)return;paused=!paused;pauseBtn.textContent=paused?'Resume':'Pause';statusMsg.textContent=paused?'Match paused.':'Match resumed.';centerPrompt.classList.toggle('hidden',!paused);if(paused){centerPrompt.querySelector('strong').textContent='Paused';centerPrompt.querySelector('span').textContent='Press P or Resume to continue.';}}
+function setMode(next,btn){mode=next;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('modeStat').textContent=mode==='ai'?'Vs AI':'2 Players';document.getElementById('opponentLabel').textContent=mode==='ai'?'AI':'Player 2';document.getElementById('difficultyGrid').style.opacity=mode==='ai'?'1':'.45';document.getElementById('controlHint').innerHTML=mode==='ai'?'<strong>Controls:</strong><br>Player: W / S or Arrow Up / Down<br>Pause: P<br>Mobile: drag on the court or use buttons':'<strong>Controls:</strong><br>Player 1: W / S<br>Player 2: Arrow Up / Down<br>Pause: P';if(running)startMatch();}
+function setDifficulty(next,btn){difficulty=next;document.querySelectorAll('#difficultyGrid .mode-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function loop(t){const dt=Math.min((t-lastTime)/1000,.025);lastTime=t;if(running&&!paused&&!gameOver){update(dt);draw();}else{draw();}animationId=requestAnimationFrame(loop);}
+function update(dt){
+  let leftDir=0,rightDir=0;
+  if(mode==='2p'){if(keys['w'])leftDir--;if(keys['s'])leftDir++;if(keys['arrowup'])rightDir--;if(keys['arrowdown'])rightDir++;}
+  else{if(keys['w']||keys['arrowup'])leftDir--;if(keys['s']||keys['arrowdown'])leftDir++;const aiSpeed=difficulty==='easy'?260:difficulty==='hard'?440:350;const target=ball.y-paddle.h/2;const diff=target-right.y;if(Math.abs(diff)>10) rightDir=Math.sign(diff)*(aiSpeed/paddle.speed);}
+  left.y+=leftDir*paddle.speed*dt;right.y+=rightDir*paddle.speed*dt;
+  left.y=Math.max(0,Math.min(canvas.height-paddle.h,left.y));right.y=Math.max(0,Math.min(canvas.height-paddle.h,right.y));
+  ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;
+  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy=Math.abs(ball.vy);spark(ball.x,ball.y,'cyan')}
+  if(ball.y+ball.r>canvas.height){ball.y=canvas.height-ball.r;ball.vy=-Math.abs(ball.vy);spark(ball.x,ball.y,'violet')}
+  collidePaddle(left.x,left.y,true);collidePaddle(right.x,right.y,false);
+  if(ball.x+ball.r<0){opponentScore++;currentStreak=0;pointScored(false)}
+  else if(ball.x-ball.r>canvas.width){playerScore++;currentStreak++;if(currentStreak>bestStreak){bestStreak=currentStreak;localStorage.setItem('pongBestStreak',bestStreak);document.getElementById('bestStat').textContent=bestStreak;}pointScored(true)}
+  particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt*1.8});for(let i=particles.length-1;i>=0;i--)if(particles[i].life<=0)particles.splice(i,1);
+}
+function collidePaddle(px,py,isLeft){
+  const withinY=ball.y+ball.r>py&&ball.y-ball.r<py+paddle.h;
+  if(isLeft&&ball.vx<0&&ball.x-ball.r<px+paddle.w&&ball.x+ball.r>px&&withinY){bounce(px+paddle.w,py,true)}
+  if(!isLeft&&ball.vx>0&&ball.x+ball.r>px&&ball.x-ball.r<px+paddle.w&&withinY){bounce(px-ball.r,py,false)}
+}
+function bounce(xPos,py,isLeft){const rel=((ball.y-(py+paddle.h/2))/(paddle.h/2));ball.speed=Math.min(ball.speed*1.045,760);const angle=rel*1.0;ball.vx=Math.cos(angle)*ball.speed*(isLeft?1:-1);ball.vy=Math.sin(angle)*ball.speed;ball.x=isLeft?left.x+paddle.w+ball.r:right.x-ball.r;spark(ball.x,ball.y,isLeft?'cyan':'violet')}
+function pointScored(playerWon){updateScores();statusMsg.textContent=playerWon?'Point for Player.':'Point for opponent.';if(playerScore>=7||opponentScore>=7){finishMatch();return;}resetPaddles();serve(playerWon?-1:1)}
+function finishMatch(){gameOver=true;running=false;const won=playerScore>opponentScore;document.getElementById('modalMessage').textContent=won?'You Win':'Opponent Wins';document.getElementById('modalSubtext').textContent=`Final score ${playerScore}–${opponentScore}.`;endModal.classList.add('open');document.body.style.overflow='hidden';statusMsg.textContent='Match complete.';centerPrompt.classList.remove('hidden');centerPrompt.querySelector('strong').textContent='Match Complete';centerPrompt.querySelector('span').textContent=`Final score ${playerScore}–${opponentScore}.`;}
+function updateScores(){document.getElementById('playerScore').textContent=playerScore;document.getElementById('aiScore').textContent=opponentScore;}
+function spark(x,y,type){for(let i=0;i<12;i++){const a=Math.random()*Math.PI*2,s=50+Math.random()*160;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.35+Math.random()*.35,type});}}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);g.addColorStop(0,'#040817');g.addColorStop(.55,'#071024');g.addColorStop(1,'#040714');ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);drawStars();ctx.save();ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=3;ctx.setLineDash([12,14]);ctx.beginPath();ctx.moveTo(canvas.width/2,18);ctx.lineTo(canvas.width/2,canvas.height-18);ctx.stroke();ctx.restore();ctx.fillStyle='rgba(94,246,255,.08)';ctx.fillRect(0,0,canvas.width/2,canvas.height);ctx.fillStyle='rgba(155,92,255,.06)';ctx.fillRect(canvas.width/2,0,canvas.width/2,canvas.height);drawPaddle(left.x,left.y,'#5ef6ff');drawPaddle(right.x,right.y,'#9b5cff');const rg=ctx.createRadialGradient(ball.x-3,ball.y-3,1,ball.x,ball.y,ball.r*2);rg.addColorStop(0,'#ffffff');rg.addColorStop(.4,'#dffcff');rg.addColorStop(1,'rgba(94,246,255,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r*2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.type==='cyan'?'#5ef6ff':'#9b5cff';ctx.fillRect(p.x,p.y,4,4)});ctx.globalAlpha=1;}
+function drawPaddle(x,y,color){ctx.shadowBlur=24;ctx.shadowColor=color;ctx.fillStyle=color;roundRect(ctx,x,y,paddle.w,paddle.h,7);ctx.fill();ctx.shadowBlur=0;}
+function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
+let starSeed=Array.from({length:60},(_,i)=>({x:(i*173)%960,y:(i*97)%540,r:1+(i%3)*.4,a:.18+(i%5)*.08}));
+function drawStars(){starSeed.forEach(s=>{ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();});}
+function goBack(){window.location.href='index.html'}
+function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function closeModalAndRestart(){endModal.classList.remove('open');document.body.style.overflow='';startMatch()}
+helpPanel.addEventListener('click',e=>{if(e.target===helpPanel)closeHelp()});endModal.addEventListener('click',e=>{if(e.target===endModal)closeModalAndRestart()});
+document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;if(['arrowup','arrowdown',' '].includes(k))e.preventDefault();if(k==='p')togglePause();if(k==='escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(endModal.classList.contains('open'))closeModalAndRestart();else goBack();}});
+document.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+function bindHold(id,key){const el=document.getElementById(id);const on=()=>keys[key]=true,off=()=>keys[key]=false;['pointerdown','touchstart'].forEach(ev=>el.addEventListener(ev,on,{passive:true}));['pointerup','pointercancel','pointerleave','touchend'].forEach(ev=>el.addEventListener(ev,off,{passive:true}));}
+bindHold('upBtn','arrowup');bindHold('downBtn','arrowdown');
+const wrap=document.getElementById('canvasWrap');
+function moveFromPointer(e){if(mode==='2p')return;const rect=wrap.getBoundingClientRect();const y=(e.clientY-rect.top)/rect.height*canvas.height;left.y=Math.max(0,Math.min(canvas.height-paddle.h,y-paddle.h/2));}
+let dragging=false;wrap.addEventListener('pointerdown',e=>{dragging=true;wrap.setPointerCapture(e.pointerId);moveFromPointer(e)});wrap.addEventListener('pointermove',e=>{if(dragging)moveFromPointer(e)});wrap.addEventListener('pointerup',()=>dragging=false);wrap.addEventListener('pointercancel',()=>dragging=false);
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)togglePause()});
+function updatePhilippineTime(){const formatter=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});document.getElementById('phTime').textContent=formatter.format(new Date());}
+updatePhilippineTime();setInterval(updatePhilippineTime,1000);resetPaddles();serve();draw();
+</script>
+</body>
+</html>
