@@ -1009,8 +1009,8 @@ body::after{background:conic-gradient(from 0deg,rgba(47,143,255,.07),rgba(139,12
 .orb-left{background:#2f8fff}.orb-right{background:#8b78ff}.orb-bottom{background:#55e6bd}
 .topbar{background:rgba(8,8,9,.82);border-bottom-color:rgba(210,214,220,.12)}
 .brand-mark{background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border-color:rgba(115,183,255,.22);box-shadow:0 0 22px rgba(47,143,255,.18);overflow:hidden}
-.brand-mark img,.footer-logo img,.title-icon{width:100%;height:100%;object-fit:contain;display:block}
-.brand-mark img,.footer-logo img{padding:4px}.title-icon{padding:5px;border-radius:10px}
+.brand-mark img,.footer-logo img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;border-radius:inherit}
+.title-icon{width:34px;height:34px;object-fit:contain;display:block;flex:0 0 34px;padding:4px;border-radius:10px}
 .hero-card,.side-card,.arena{border-color:rgba(210,214,220,.12);background:linear-gradient(145deg,rgba(28,29,32,.88),rgba(12,12,13,.86))}
 .hero-card::after{color:rgba(115,183,255,.05)}
 .choice-panel,.score-panel{background:rgba(255,255,255,.02);border-color:rgba(210,214,220,.10)}
@@ -1028,6 +1028,8 @@ select option{background:#111214}
 .footer-clock{justify-self:center;width:min(100%,440px);padding:13px 16px;border-radius:16px;border:1px solid rgba(210,214,220,.10);background:rgba(255,255,255,.025);text-align:center}.footer-clock-label{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:5px;color:#929499;font-size:.66rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase}.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:#55e6bd;box-shadow:0 0 10px rgba(85,230,189,.48);animation:footerPulse 1.8s ease-in-out infinite}@keyframes footerPulse{50%{opacity:.38;transform:scale(.78)}}#philippineTime{color:#e5e6e8;font-size:.78rem;font-weight:650;line-height:1.5}.footer-links{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px}.footer-links a,.footer-link-button{position:relative;border:0;padding:4px 0;background:transparent;color:#96989c;font:inherit;font-size:.75rem;text-decoration:none;cursor:pointer;transition:color .2s ease,text-shadow .2s ease}.footer-links a:hover,.footer-link-button:hover{color:#e5e6e8;text-shadow:0 0 10px rgba(255,255,255,.10)}.footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#6f7175}.footer-status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.footer-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#55e6bd;box-shadow:0 0 9px rgba(85,230,189,.42)}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}}
 @media(max-width:640px){.site-footer{padding:24px 18px;text-align:center}.footer-bottom{flex-direction:column;justify-content:center}}
+@media(max-width:640px){.title-icon{width:30px;height:30px;flex-basis:30px}}
+@media(max-width:380px){.title-icon{width:27px;height:27px;flex-basis:27px}}
 
 </style>
 </head>
