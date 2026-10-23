@@ -150,6 +150,25 @@
       box-shadow: 0 0 26px rgba(98, 239, 255, 0.34);
     }
 
+    .brand-mark img,
+    .footer-logo img,
+    .game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: inherit;
+    }
+
+    .brand-mark img,
+    .footer-logo img {
+      padding: 4px;
+    }
+
+    .game-icon img {
+      padding: 5px;
+    }
+
     .brand-copy {
       min-width: 0;
     }
@@ -901,6 +920,16 @@
       color: #041018;
       background: linear-gradient(135deg, var(--cyan), var(--purple));
       box-shadow: 0 0 28px rgba(98,239,255,.18);
+      overflow: hidden;
+    }
+
+    .loader-core img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      padding: 4px;
+      border-radius: inherit;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -1218,7 +1247,7 @@
   <main class="site-shell">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-mark">G</div>
+        <div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
         <div class="brand-copy">
           <strong>G-GAMES</strong>
           <span>Futuristic Mini Games Hub</span>
@@ -1298,7 +1327,7 @@
     <footer class="site-footer">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-logo" aria-hidden="true">G</div>
+          <div class="footer-logo"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
           <div class="footer-brand-copy">
             <strong>G-GAMES</strong>
             <span>Quick games. Futuristic vibes. Built for play on any screen.</span>
@@ -1332,7 +1361,7 @@
     <div class="modal-panel">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <div class="game-icon" id="modalIcon"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/gamepad-2.svg" alt=""></div>
+          <div class="game-icon" id="modalIcon"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
           <div>
             <h3 id="gameModalTitle">Game</h3>
             <span id="modalCategory">Mini game</span>
@@ -1355,7 +1384,7 @@
     <div class="modal-panel">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <div class="game-icon">G</div>
+          <div class="game-icon"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
           <div>
             <h3 id="aboutModalTitle">About G-GAMES</h3>
             <span>Mini Games Lobby</span>
@@ -1385,7 +1414,7 @@
   <div class="loading-screen" id="loadingScreen" aria-live="polite">
     <div class="loading-box">
       <div class="loader-ring">
-        <div class="loader-core">G</div>
+        <div class="loader-core"><img src="image/G-GAMES.png" alt="G-GAMES logo"></div>
       </div>
       <h3 id="loadingTitle">Loading Game</h3>
       <p>Preparing your game session...</p>
@@ -1477,7 +1506,7 @@
           data-file="${game.file}"
         >
           <div class="game-top">
-            <div class="game-icon"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${game.icon}.svg" alt="" loading="lazy"></div>
+            <div class="game-icon"><img src="image/GGAMES.ico" alt="G-GAMES logo" loading="lazy"></div>
             <span class="game-badge">${titleCase(game.category)}</span>
           </div>
           <h3>${game.title}</h3>
@@ -1495,7 +1524,7 @@
 
     function openGamePreview(game) {
       selectedGame = game;
-      modalIcon.innerHTML = `<img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${game.icon}.svg" alt="">`;
+      modalIcon.innerHTML = `<img src="image/GGAMES.ico" alt="G-GAMES logo">`;
       gameModalTitle.textContent = game.title;
       modalCategory.textContent = `${titleCase(game.category)} mini game`;
       modalDescription.textContent = game.desc;
