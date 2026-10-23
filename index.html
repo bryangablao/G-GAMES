@@ -524,6 +524,26 @@
     .game-card[data-category="arcade"] { --card-accent: #8b78ff; }
     .game-card[data-category="brain"] { --card-accent: #55e6bd; }
     .game-card[data-category="classic"] { --card-accent: #f0b45a; }
+    .game-card[data-category="upcoming"] { --card-accent: #777b82; }
+
+    .game-card.placeholder {
+      cursor: default;
+      border-style: dashed;
+      opacity: .62;
+    }
+
+    .game-card.placeholder:hover,
+    .game-card.placeholder:focus-visible {
+      transform: none;
+      border-color: rgba(210,214,220,.16);
+      box-shadow: 0 14px 40px rgba(0,0,0,.24);
+      outline: none;
+    }
+
+    .game-card.placeholder .game-icon {
+      opacity: .48;
+      filter: grayscale(1);
+    }
 
     .game-card[data-category]::after {
       content: "";
@@ -1296,7 +1316,7 @@
         <div class="hero-features">
           <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt=""> Fast launch</span>
           <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/smartphone.svg" alt=""> Mobile ready</span>
-          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/gamepad-2.svg" alt=""> 25 mini games</span>
+          <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/gamepad-2.svg" alt=""> <span id="heroGameCount">30 game cards</span></span>
           <span class="feature-pill"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt=""> Futuristic UI</span>
         </div>
       </div>
@@ -1304,13 +1324,13 @@
       <div class="stats">
         <div class="stat-card">
           <span>Games</span>
-          <strong>25</strong>
-          <small>All playable</small>
+          <strong id="gameTotalStat">30</strong>
+          <small id="playableCountStat">28 playable · 2 open slots</small>
         </div>
         <div class="stat-card">
           <span>Layout</span>
-          <strong>5×5</strong>
-          <small>Desktop grid</small>
+          <strong>5 COL</strong>
+          <small>Rows expand automatically</small>
         </div>
         <div class="stat-card">
           <span>Launch</span>
@@ -1343,9 +1363,9 @@
     <section class="section-heading">
       <div>
         <h2>Game Library</h2>
-        <p>Tap any card to preview and launch the game.</p>
+        <p>Tap any playable card to preview and launch the game.</p>
       </div>
-      <p class="count-text" id="resultCount">25 games available</p>
+      <p class="count-text" id="resultCount">30 cards · 28 playable</p>
     </section>
 
     <section class="games-grid" id="gamesGrid"></section>
@@ -1485,7 +1505,12 @@
       { file: 'space-invaders.html', title: 'Space Invaders', icon: 'rocket', category: 'arcade', desc: 'Move, aim, and defeat waves of invading enemies.' },
       { file: 'brick-breaker.html', title: 'Brick Breaker', icon: 'brick-wall', category: 'arcade', desc: 'Bounce the ball, destroy bricks, and clear the board.' },
       { file: 'pong.html', title: 'Pong', icon: 'table-tennis', category: 'classic', desc: 'Control the paddle and keep the ball from getting past you.' },
-      { file: 'maze-runner.html', title: 'Maze Runner', icon: 'milestone', category: 'puzzle', desc: 'Navigate through the maze and reach the exit as quickly as possible.' }
+      { file: 'maze-runner.html', title: 'Maze Runner', icon: 'milestone', category: 'puzzle', desc: 'Navigate through the maze and reach the exit as quickly as possible.' },
+      { file: 'chess.html', title: 'Chess', icon: 'crown', category: 'classic', desc: 'Plan your moves, protect your king, and outplay your opponent in the classic strategy game.' },
+      { file: 'dama.html', title: 'Dama', icon: 'circle-dot', category: 'classic', desc: 'Play the classic Dama board game and capture your opponent pieces with smart diagonal moves.' },
+      { file: 'Color-Matching-Dot.html', title: 'Color Matching Dot', icon: 'circle-dot-dashed', category: 'arcade', desc: 'Match the colored dots quickly and test your visual focus, timing, and reaction speed.' },
+      { file: '', title: 'Coming Soon', icon: 'plus', category: 'upcoming', desc: 'Reserved for a future game.', placeholder: true },
+      { file: '', title: 'Coming Soon', icon: 'plus', category: 'upcoming', desc: 'Reserved for a future game.', placeholder: true }
     ];
 
     const gamesGrid = document.getElementById('gamesGrid');
@@ -1493,6 +1518,9 @@
     const filterButtons = [...document.querySelectorAll('.filter-btn')];
     const resultCount = document.getElementById('resultCount');
     const emptyState = document.getElementById('emptyState');
+    const heroGameCount = document.getElementById('heroGameCount');
+    const gameTotalStat = document.getElementById('gameTotalStat');
+    const playableCountStat = document.getElementById('playableCountStat');
 
     const gameModal = document.getElementById('gameModal');
     const modalIcon = document.getElementById('modalIcon');
@@ -1526,27 +1554,36 @@
 
       gamesGrid.innerHTML = filtered.map(game => `
         <article
-          class="game-card"
-          tabindex="0"
-          role="button"
-          aria-label="Open ${game.title}"
+          class="game-card${game.placeholder ? ' placeholder' : ''}"
+          tabindex="${game.placeholder ? '-1' : '0'}"
+          role="${game.placeholder ? 'presentation' : 'button'}"
+          aria-label="${game.placeholder ? 'Empty game slot' : `Open ${game.title}`}"
+          ${game.placeholder ? 'aria-disabled="true"' : ''}
           data-file="${game.file}"
           data-category="${game.category}"
         >
           <div class="game-top">
             <div class="game-icon"><img src="image/GGAMES.ico" alt="G-GAMES logo" loading="lazy"></div>
-            <span class="game-badge">${titleCase(game.category)}</span>
+            <span class="game-badge">${game.placeholder ? 'Coming Soon' : titleCase(game.category)}</span>
           </div>
           <h3>${game.title}</h3>
           <p>${game.desc}</p>
           <div class="game-launch">
-            <span>View game</span>
-            <span class="arrow"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-up-right.svg" alt=""></span>
+            <span>${game.placeholder ? 'Empty slot' : 'View game'}</span>
+            <span class="arrow"><img class="lucide-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${game.placeholder ? 'plus' : 'arrow-up-right'}.svg" alt=""></span>
           </div>
         </article>
       `).join('');
 
-      resultCount.textContent = `${filtered.length} game${filtered.length === 1 ? '' : 's'} available`;
+      const totalCards = games.length;
+      const playableGames = games.filter(game => !game.placeholder && game.file).length;
+      const openSlots = totalCards - playableGames;
+      const filteredPlayable = filtered.filter(game => !game.placeholder && game.file).length;
+
+      heroGameCount.textContent = `${totalCards} game cards`;
+      gameTotalStat.textContent = totalCards;
+      playableCountStat.textContent = `${playableGames} playable · ${openSlots} open slot${openSlots === 1 ? '' : 's'}`;
+      resultCount.textContent = `${filtered.length} card${filtered.length === 1 ? '' : 's'} · ${filteredPlayable} playable`;
       emptyState.style.display = filtered.length ? 'none' : 'block';
     }
 
@@ -1616,7 +1653,7 @@
 
     gamesGrid.addEventListener('click', (event) => {
       const card = event.target.closest('.game-card');
-      if (!card) return;
+      if (!card || card.classList.contains('placeholder')) return;
       const game = games.find(item => item.file === card.dataset.file);
       if (game) openGamePreview(game);
     });
