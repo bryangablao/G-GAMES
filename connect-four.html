@@ -254,8 +254,31 @@ body::before{background-image:linear-gradient(rgba(255,255,255,.022) 1px,transpa
 body::after{background:conic-gradient(from 0deg,rgba(72,156,255,.055),rgba(126,92,255,.05),rgba(72,215,184,.045),rgba(72,156,255,.055));filter:blur(90px)}
 .orb-a{background:#4b8dff;opacity:.16}.orb-b{background:#8a65ff;opacity:.14}.orb-c{background:#43caa6;opacity:.12}
 .topbar{top:12px;margin:0 auto;width:min(1180px,calc(100% - 28px));border:1px solid var(--border);border-radius:20px;background:rgba(10,10,11,.82);box-shadow:0 12px 45px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.025)}
-.brand-mark{background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border:1px solid rgba(220,223,228,.18);box-shadow:0 0 22px rgba(255,255,255,.08);overflow:hidden}
-.brand-mark img,.footer-logo img,.title-icon{width:100%;height:100%;object-fit:contain;display:block}.brand-mark img,.footer-logo img{padding:4px;border-radius:inherit}.title-icon{padding:2px;border-radius:10px;filter:drop-shadow(0 0 10px rgba(111,214,255,.18))}
+.brand-mark{width:38px;height:38px;flex:0 0 38px;background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border:1px solid rgba(220,223,228,.18);box-shadow:0 0 22px rgba(255,255,255,.08);overflow:hidden}
+/* Keep the G-GAMES artwork contained at the intended UI sizes. */
+.brand-mark img,
+.footer-logo img{
+  width:100%;
+  height:100%;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+  padding:4px;
+  border-radius:inherit;
+}
+.title-icon{
+  width:34px;
+  height:34px;
+  max-width:34px;
+  max-height:34px;
+  flex:0 0 34px;
+  object-fit:contain;
+  display:block;
+  padding:3px;
+  border-radius:10px;
+  filter:drop-shadow(0 0 10px rgba(111,214,255,.18));
+}
 .hero-card,.stats-card,.game-panel{border:1px solid var(--border);background:linear-gradient(180deg,rgba(31,32,35,.94),rgba(12,12,14,.96));box-shadow:var(--shadow)}
 .hero-card::after{opacity:.34}.eyebrow{color:#9edfff}.hero h1 span{background:linear-gradient(90deg,#f7f7f7,#a8dfff 35%,#b89cff 68%,#ff9ecb);-webkit-background-clip:text;background-clip:text;color:transparent}
 .stat,.board-panel,.info-panel,.turn-card,.score-card,.mode-card{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.07)}
@@ -269,7 +292,8 @@ body::after{background:conic-gradient(from 0deg,rgba(72,156,255,.055),rgba(126,9
 .site-footer::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(111,214,255,.42),rgba(154,123,255,.42),transparent);box-shadow:0 0 16px rgba(111,214,255,.08)}
 .footer-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(230px,1.25fr) minmax(260px,1fr) auto;gap:28px;align-items:center}.footer-brand{display:flex;align-items:center;gap:13px;text-align:left}.footer-logo{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(220,223,228,.17);background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(115,118,124,.12));box-shadow:0 0 20px rgba(255,255,255,.04);overflow:hidden}.footer-brand-copy strong{display:block;margin-bottom:4px;color:#eeeeef;font-size:.92rem}.footer-brand-copy span{display:block;font-size:.75rem;line-height:1.55;color:#7f8186}.footer-clock{justify-self:center;width:min(100%,440px);padding:13px 16px;border-radius:16px;border:1px solid rgba(210,214,220,.10);background:rgba(255,255,255,.025);text-align:center}.footer-clock-label{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:5px;color:#929499;font-size:.66rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase}.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:#63e6b7;box-shadow:0 0 9px rgba(99,230,183,.5);animation:footerPulse 1.8s ease-in-out infinite}@keyframes footerPulse{50%{opacity:.38;transform:scale(.78)}}#phTime{color:#e5e6e8;font-size:.78rem;font-weight:650;line-height:1.5}.footer-links{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px}.footer-links a,.footer-link-button{position:relative;border:0;padding:4px 0;background:transparent;color:#96989c;font:inherit;font-size:.75rem;text-decoration:none;cursor:pointer;transition:color .2s ease,text-shadow .2s ease}.footer-links a:hover,.footer-link-button:hover{color:#e5e6e8;text-shadow:0 0 10px rgba(111,214,255,.16)}.footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#6f7175}.footer-status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.footer-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#63e6b7;box-shadow:0 0 8px rgba(99,230,183,.38)}
 @media(max-width:900px){.site-footer{padding:24px 18px}.footer-grid{grid-template-columns:1fr;gap:18px;text-align:center}.footer-brand{justify-content:center;text-align:left}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}}
-@media(max-width:640px){.topbar{top:6px;width:calc(100% - 16px);border-radius:16px;padding:10px}.site-footer{width:calc(100% - 16px);padding:24px 18px;text-align:center}.footer-bottom{flex-direction:column;justify-content:center}}
+@media(max-width:640px){.topbar{top:6px;width:calc(100% - 16px);border-radius:16px;padding:10px}.title-icon{width:30px;height:30px;max-width:30px;max-height:30px;flex-basis:30px}.site-footer{width:calc(100% - 16px);padding:24px 18px;text-align:center}.footer-bottom{flex-direction:column;justify-content:center}}
+@media(max-width:420px){.title-icon{width:27px;height:27px;max-width:27px;max-height:27px;flex-basis:27px}}
 
 </style>
 </head>
