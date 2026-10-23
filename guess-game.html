@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#060816">
+<meta name="theme-color" content="#0b0c10">
 <title>Guess Game</title>
-<link rel="icon" type="image/png" href="image/GuessGame.png">
+<link rel="icon" type="image/x-icon" href="image/GGAMES.ico">
 
 <style>
+
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.78);
-  --panel-strong:rgba(8,13,31,.94);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
-  --warning:#ffd76a;
-  --shadow:0 22px 70px rgba(0,0,0,.44);
+  --bg:#080808;
+  --panel:rgba(20,20,22,.84);
+  --panel-strong:rgba(10,10,11,.96);
+  --cyan:#73b7ff;
+  --blue:#2f8fff;
+  --violet:#8b78ff;
+  --pink:#5fd4ff;
+  --gold:#f0b45a;
+  --text:#f4f4f5;
+  --muted:#9b9da1;
+  --success:#55e6bd;
+  --danger:#ff6f91;
+  --warning:#f0b45a;
+  --shadow:0 18px 50px rgba(0,0,0,.58);
 }
 
 *{box-sizing:border-box}
@@ -35,10 +36,10 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 14% 16%,rgba(47,143,255,.16),transparent 30%),
+    radial-gradient(circle at 86% 18%,rgba(139,120,255,.13),transparent 30%),
+    radial-gradient(circle at 50% 88%,rgba(85,230,189,.07),transparent 34%),
+    linear-gradient(180deg,#080808 0%,#111214 50%,#070708 100%);
 }
 
 body::before{
@@ -48,8 +49,8 @@ body::before{
   z-index:-4;
   pointer-events:none;
   background-image:
-    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
@@ -60,7 +61,7 @@ body::after{
   inset:-30%;
   z-index:-5;
   pointer-events:none;
-  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  background:conic-gradient(from 0deg,rgba(47,143,255,.08),rgba(139,120,255,.06),rgba(85,230,189,.045),rgba(47,143,255,.08));
   filter:blur(70px);
   animation:ambientSpin 30s linear infinite;
 }
@@ -77,9 +78,9 @@ body::after{
   pointer-events:none;
   z-index:-2;
 }
-.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
-.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
-.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+.orb-a{left:-130px;top:26%;background:#2f8fff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#8b78ff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#55e6bd;animation:floatOrb 20s ease-in-out infinite}
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
 .app{
@@ -93,7 +94,7 @@ body::after{
   top:0;
   z-index:50;
   padding:12px clamp(14px,3vw,32px);
-  background:rgba(4,8,21,.74);
+  background:rgba(8,8,9,.82);
   border-bottom:1px solid rgba(255,255,255,.08);
   backdrop-filter:blur(18px) saturate(145%);
   -webkit-backdrop-filter:blur(18px) saturate(145%);
@@ -125,10 +126,13 @@ body::after{
   border-radius:12px;
   display:grid;
   place-items:center;
-  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
-  border:1px solid rgba(94,246,255,.30);
-  box-shadow:0 0 24px rgba(94,246,255,.12);
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(47,143,255,.10));
+  border:1px solid rgba(115,183,255,.28);
+  box-shadow:0 0 24px rgba(47,143,255,.10);
 }
+
+.brand-mark img,.footer-logo-mark img,.title-icon{width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit}
+.brand-mark img,.footer-logo-mark img{padding:4px}
 
 .title-wrap{
   display:flex;
@@ -204,7 +208,7 @@ body::after{
 
 .hero-card,.stats-card,.game-panel{
   border:1px solid rgba(255,255,255,.09);
-  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  background:linear-gradient(145deg,rgba(24,24,27,.88),rgba(10,10,12,.76));
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
   box-shadow:var(--shadow);
@@ -224,7 +228,7 @@ body::after{
   top:4px;
   font-size:120px;
   font-weight:950;
-  color:rgba(94,246,255,.05);
+  color:rgba(115,183,255,.06);
 }
 
 .eyebrow{
@@ -243,7 +247,7 @@ body::after{
 }
 
 .hero h1 span{
-  background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));
+  background:linear-gradient(90deg,#f5f7fa 0%,#bfc5cc 36%,#73b7ff 60%,#8b78ff 82%,#d8dde3 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -272,7 +276,7 @@ body::after{
   gap:16px;
   padding:14px 16px;
   border-radius:16px;
-  background:rgba(255,255,255,.035);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.06);
 }
 
@@ -356,7 +360,7 @@ body::after{
 .guess-panel,.history-panel{
   border-radius:22px;
   padding:clamp(18px,3vw,28px);
-  background:rgba(255,255,255,.025);
+  background:rgba(255,255,255,.028);
   border:1px solid rgba(255,255,255,.07);
 }
 
@@ -437,7 +441,7 @@ body::after{
   border-radius:14px;
   border:1px solid rgba(94,246,255,.18);
   outline:none;
-  background:rgba(255,255,255,.045);
+  background:rgba(255,255,255,.05);
   color:#fff;
   text-align:center;
   font-size:18px;
@@ -472,7 +476,7 @@ body::after{
   color:#dfe8ff;
   background:
     linear-gradient(145deg,rgba(94,246,255,.05),rgba(155,92,255,.06)),
-    rgba(3,8,22,.54);
+    rgba(8,8,10,.64);
   border:1px solid rgba(94,246,255,.10);
   line-height:1.5;
   font-weight:750;
@@ -519,7 +523,7 @@ body::after{
   padding:14px;
   border-radius:15px;
   text-align:center;
-  background:rgba(255,255,255,.035);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.06);
 }
 
@@ -545,7 +549,7 @@ body::after{
   overflow:auto;
   padding:12px;
   border-radius:16px;
-  background:rgba(255,255,255,.025);
+  background:rgba(255,255,255,.028);
   border:1px solid rgba(255,255,255,.06);
 }
 
@@ -575,7 +579,7 @@ body::after{
   display:grid;
   place-items:center;
   border-radius:10px;
-  background:rgba(255,255,255,.045);
+  background:rgba(255,255,255,.05);
   font-weight:900;
 }
 
@@ -680,7 +684,10 @@ body::after{
 .site-footer{
   margin-top:auto;
   border-top:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  background:
+    radial-gradient(circle at 18% 0%,rgba(47,143,255,.08),transparent 30%),
+    radial-gradient(circle at 82% 0%,rgba(139,120,255,.06),transparent 28%),
+    linear-gradient(180deg,rgba(14,14,16,.88),rgba(5,5,6,.98));
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
 }
@@ -715,9 +722,9 @@ body::after{
   display:grid;
   place-items:center;
   border-radius:11px;
-  color:#041019;
-  background:linear-gradient(135deg,var(--cyan),#b795ff);
-  box-shadow:0 0 22px rgba(94,246,255,.18);
+  color:#f4f4f5;
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(47,143,255,.12));
+  box-shadow:0 0 22px rgba(47,143,255,.12);
 }
 
 .footer-tagline{
@@ -731,7 +738,7 @@ body::after{
   text-align:center;
   padding:12px 16px;
   border-radius:14px;
-  background:rgba(255,255,255,.035);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.07);
   color:#dfe7ff;
   font-size:13px;
@@ -755,7 +762,7 @@ body::after{
   border:0;
   padding:0;
   background:none;
-  color:#c8d1eb;
+  color:#c6c8cc;
   text-decoration:none;
   cursor:pointer;
   font:inherit;
@@ -775,7 +782,7 @@ body::after{
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  color:#7f8aa9;
+  color:#85878c;
   font-size:12px;
 }
 
@@ -792,6 +799,27 @@ body::after{
   background:var(--success);
   box-shadow:0 0 12px rgba(105,255,189,.65);
 }
+
+/* G-GAMES index theme refinements */
+.guess-panel{
+  background:
+    radial-gradient(circle at 18% 15%,rgba(47,143,255,.07),transparent 28%),
+    radial-gradient(circle at 82% 82%,rgba(139,120,255,.06),transparent 30%),
+    rgba(255,255,255,.026);
+}
+.history-panel{
+  background:
+    radial-gradient(circle at 78% 18%,rgba(85,230,189,.045),transparent 28%),
+    rgba(255,255,255,.026);
+}
+.range-line{background:linear-gradient(90deg,#73b7ff,#8b78ff,#55e6bd,#f0b45a);}
+.feedback-card.high{box-shadow:0 0 26px rgba(240,180,90,.06)}
+.feedback-card.low{box-shadow:0 0 26px rgba(47,143,255,.06)}
+.feedback-card.correct{box-shadow:0 0 28px rgba(85,230,189,.09)}
+.stat strong,.metric strong{color:#f5f7fa}
+.footer-logo-mark{overflow:hidden}
+.footer-time strong{color:#73b7ff}
+.status-dot{background:#55e6bd;box-shadow:0 0 12px rgba(85,230,189,.58)}
 
 @media(max-width:900px){
   .hero,.game-stage{
@@ -957,12 +985,12 @@ body::after{
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
-      <div class="brand-mark">G</div>
+      <div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
       <span>G-GAMES</span>
     </a>
 
     <div class="title-wrap">
-      <img class="title-icon" src="image/GuessGame.png" alt="Guess Game icon">
+      <img class="title-icon" src="image/GGAMES.ico" alt="G-GAMES logo">
       <div class="page-title">
         <strong>Guess Game</strong>
         <span>Number Challenge • Logic Game</span>
@@ -1089,7 +1117,7 @@ body::after{
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-logo">
-          <span class="footer-logo-mark">G</span>
+          <span class="footer-logo-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></span>
           <span>G-GAMES</span>
         </div>
         <div class="footer-tagline">
@@ -1098,14 +1126,14 @@ body::after{
       </div>
 
       <div class="footer-time" aria-live="polite">
-        <strong>Philippine Standard Time</strong>
+        <strong>Live Clock</strong>
         <span id="phTime">Loading Philippine Standard Time…</span>
       </div>
 
       <nav class="footer-links" aria-label="Footer links">
         <a href="privacy-policy.html">Privacy Policy</a>
         <a href="terms-of-service.html">Terms of Service</a>
-        <button type="button" onclick="openHelp()">How to Play</button>
+        <button type="button" onclick="openAbout()">About</button>
         <a href="index.html">Game Lobby</a>
       </nav>
     </div>
@@ -1135,6 +1163,16 @@ body::after{
   </div>
 </div>
 
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h2 id="aboutTitle">About G-GAMES</h2>
+      <button class="icon-btn" type="button" onclick="closeAbout()" aria-label="Close about">×</button>
+    </div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
+  </div>
+</div>
+
 <div class="end-modal" id="endModal" role="dialog" aria-modal="true" aria-labelledby="modalMessage">
   <div class="modal-card win-card">
     <div class="win-icon" aria-hidden="true">
@@ -1154,6 +1192,7 @@ body::after{
 <script>
 /* ===== Help ===== */
 const helpPanel = document.getElementById('helpPanel');
+const aboutPanel = document.getElementById('aboutPanel');
 const endModal = document.getElementById('endModal');
 
 function openHelp(){
@@ -1166,8 +1205,22 @@ function closeHelp(){
   document.body.style.overflow = '';
 }
 
+function openAbout(){
+  aboutPanel.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAbout(){
+  aboutPanel.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 helpPanel.addEventListener('click',(e)=>{
   if(e.target === helpPanel) closeHelp();
+});
+
+aboutPanel.addEventListener('click',(e)=>{
+  if(e.target === aboutPanel) closeAbout();
 });
 
 endModal.addEventListener('click',(e)=>{
@@ -1177,6 +1230,7 @@ endModal.addEventListener('click',(e)=>{
 document.addEventListener('keydown',(e)=>{
   if(e.key === 'Escape'){
     if(helpPanel.classList.contains('open')) closeHelp();
+    else if(aboutPanel.classList.contains('open')) closeAbout();
     else if(endModal.classList.contains('open')) closeModal();
     else goBack();
   }
