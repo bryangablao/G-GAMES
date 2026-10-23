@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#060816">
 <title>2048 Game</title>
-<link rel="icon" type="image/png" href="image/2048.png">
+<link rel="icon" type="image/png" href="image/GGAMES.ico">
 
 <style>
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.78);
-  --panel-strong:rgba(8,13,31,.94);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
+  --bg:#08090b;
+  --panel:rgba(22,23,27,.84);
+  --panel-strong:rgba(10,11,13,.96);
+  --cyan:#58d8ff;
+  --blue:#6f9dff;
+  --violet:#9f7cff;
+  --pink:#e27abf;
+  --gold:#e4b85c;
+  --text:#f5f6f8;
+  --muted:#9ea2aa;
+  --success:#57e3b4;
+  --danger:#e46f83;
   --shadow:0 22px 70px rgba(0,0,0,.44);
 }
 *{box-sizing:border-box}
@@ -32,24 +32,24 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 14% 14%,rgba(88,216,255,.12),transparent 30%),
+    radial-gradient(circle at 86% 18%,rgba(159,124,255,.11),transparent 30%),
+    radial-gradient(circle at 52% 88%,rgba(226,122,191,.06),transparent 34%),
+    linear-gradient(180deg,#07080a 0%,#101216 48%,#08090b 100%);
 }
 body::before{
   content:"";
   position:fixed;inset:0;z-index:-4;pointer-events:none;
   background-image:
-    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
 body::after{
   content:"";
   position:fixed;inset:-30%;z-index:-5;pointer-events:none;
-  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  background:conic-gradient(from 0deg,rgba(88,216,255,.055),rgba(159,124,255,.05),rgba(226,122,191,.035),rgba(88,216,255,.055));
   filter:blur(70px);
   animation:ambientSpin 30s linear infinite;
 }
@@ -58,15 +58,15 @@ body::after{
   position:fixed;width:280px;height:280px;border-radius:50%;
   filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2;
 }
-.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
-.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
-.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+.orb-a{left:-130px;top:26%;background:#58d8ff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#9f7cff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#e27abf;animation:floatOrb 20s ease-in-out infinite}
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
 .app{min-height:100vh;display:flex;flex-direction:column}
 .topbar{
   position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);
-  background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(9,10,12,.82);border-bottom:1px solid rgba(210,214,220,.14);
   backdrop-filter:blur(18px) saturate(145%);
   -webkit-backdrop-filter:blur(18px) saturate(145%);
 }
@@ -80,14 +80,18 @@ body::after{
 }
 .brand-mark{
   width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
-  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
-  border:1px solid rgba(94,246,255,.30);
-  box-shadow:0 0 24px rgba(94,246,255,.12);
+  background:linear-gradient(145deg,#f0f1f3 0%,#989ca3 46%,#4d5056 100%);
+  border:1px solid rgba(220,224,230,.20);
+  box-shadow:0 0 20px rgba(88,216,255,.09);
+  overflow:hidden;
 }
 .title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+.brand-mark img,.footer-logo-mark img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;border-radius:inherit;}
+.footer-logo-mark{overflow:hidden;}
+
 .title-icon{
   width:34px;height:34px;object-fit:contain;flex:0 0 auto;
-  filter:drop-shadow(0 0 10px rgba(94,246,255,.22));
+  filter:drop-shadow(0 0 10px rgba(88,216,255,.18));
 }
 .page-title{min-width:0;text-align:left}
 .page-title strong{
@@ -99,7 +103,7 @@ body::after{
   width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
   cursor:pointer;color:#fff;font-size:18px;font-weight:900;
   background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.09);transition:.22s ease;
+  border:1px solid rgba(210,214,220,.13);transition:.22s ease;
 }
 .icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
 
@@ -110,14 +114,14 @@ body::after{
 }
 .hero-card,.stats-card,.game-panel{
   border:1px solid rgba(255,255,255,.09);
-  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  background:linear-gradient(145deg,rgba(31,32,36,.92),rgba(12,13,16,.88));
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   box-shadow:var(--shadow);
 }
 .hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
 .hero-card::after{
   content:"2048";position:absolute;right:18px;top:0;
-  font-size:88px;font-weight:950;color:rgba(94,246,255,.035);
+  font-size:88px;font-weight:950;color:rgba(88,216,255,.045);
 }
 .eyebrow{
   color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
@@ -145,7 +149,7 @@ body::after{
   font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;
   color:var(--muted);margin-bottom:6px;
 }
-.status-message{min-height:24px;font-size:15px;color:#dfe8ff}
+.status-message{min-height:24px;font-size:15px;color:#e7e9ed}
 .toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end}
 .btn{
   min-height:42px;padding:10px 15px;border-radius:12px;
@@ -155,8 +159,9 @@ body::after{
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn-primary{
-  background:linear-gradient(135deg,rgba(94,246,255,.18),rgba(114,72,255,.28));
-  border-color:rgba(94,246,255,.28);
+  background:linear-gradient(135deg,rgba(88,216,255,.20),rgba(159,124,255,.24));
+  border-color:rgba(88,216,255,.28);
+  box-shadow:0 0 18px rgba(88,216,255,.06);
 }
 
 .game-stage{
@@ -176,9 +181,9 @@ body::after{
   gap:clamp(7px,1.7vw,12px);
   padding:clamp(8px,1.8vw,14px);
   border-radius:22px;
-  background:linear-gradient(145deg,rgba(4,9,26,.95),rgba(9,14,34,.92));
-  border:1px solid rgba(94,246,255,.12);
-  box-shadow:inset 0 0 32px rgba(94,246,255,.035),0 0 36px rgba(94,246,255,.04);
+  background:linear-gradient(145deg,rgba(14,15,18,.98),rgba(24,25,29,.96));
+  border:1px solid rgba(210,214,220,.12);
+  box-shadow:inset 0 0 34px rgba(255,255,255,.025),0 0 32px rgba(88,216,255,.035);
   touch-action:none;
   user-select:none;
   -webkit-user-select:none;
@@ -252,9 +257,9 @@ body::after{
 .help-panel.open,.end-modal.open,.win-modal.open{display:flex}
 .modal-card{
   width:min(540px,100%);border-radius:24px;padding:24px;
-  background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));
-  border:1px solid rgba(94,246,255,.17);
-  box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07);
+  background:linear-gradient(145deg,rgba(30,31,35,.99),rgba(10,11,13,.99));
+  border:1px solid rgba(210,214,220,.15);
+  box-shadow:0 24px 90px rgba(0,0,0,.65),0 0 36px rgba(88,216,255,.045);
 }
 .modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .modal-card h2{margin:0;font-size:25px}
@@ -269,7 +274,7 @@ body::after{
 
 .site-footer{
   margin-top:auto;border-top:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
+  background:linear-gradient(180deg,rgba(20,21,24,.88),rgba(7,8,10,.98));
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
 }
 .footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
@@ -278,7 +283,7 @@ body::after{
 .footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}
 .footer-logo-mark{
   width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;
-  background:linear-gradient(135deg,var(--cyan),#b795ff);
+  background:linear-gradient(145deg,#f0f1f3 0%,#9ba0a7 45%,#50545a 100%);
   box-shadow:0 0 22px rgba(94,246,255,.18);
 }
 .footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}
@@ -303,6 +308,27 @@ body::after{
   width:7px;height:7px;border-radius:50%;background:var(--success);
   box-shadow:0 0 12px rgba(105,255,189,.65);
 }
+
+
+/* G-GAMES black + silver + color accents */
+.hero-card{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.035);}
+.hero-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(88,216,255,.045),transparent 34%,rgba(159,124,255,.035) 68%,transparent);}
+.stats-card .stat:nth-child(1){border-color:rgba(88,216,255,.15);}
+.stats-card .stat:nth-child(2){border-color:rgba(159,124,255,.15);}
+.stats-card .stat:nth-child(3){border-color:rgba(228,184,92,.14);}
+.stats-card .stat strong{color:#f3f4f6;text-shadow:0 0 16px rgba(255,255,255,.04);}
+.game-panel{box-shadow:var(--shadow),0 0 30px rgba(88,216,255,.025);}
+.board-panel{background:linear-gradient(145deg,rgba(255,255,255,.02),rgba(88,216,255,.018));}
+.side-panel{background:linear-gradient(160deg,rgba(255,255,255,.024),rgba(159,124,255,.018));}
+.metric:first-child{border-color:rgba(88,216,255,.14);}
+.metric:last-child{border-color:rgba(159,124,255,.14);}
+.control-card{border-color:rgba(228,184,92,.10);}
+.status-message{color:#eef2f7;}
+.footer-time{background:linear-gradient(145deg,rgba(255,255,255,.028),rgba(88,216,255,.018));}
+.footer-time strong{color:#7bdfff;}
+.footer-links a:hover,.footer-links button:hover{color:#7bdfff;text-shadow:0 0 12px rgba(88,216,255,.20);}
+.status-dot{background:#57e3b4;box-shadow:0 0 12px rgba(87,227,180,.5);}
+.icon-btn:hover{border-color:rgba(88,216,255,.34);box-shadow:0 0 22px rgba(88,216,255,.08);}
 
 @media(max-width:900px){
   .hero,.game-stage{grid-template-columns:1fr}
@@ -364,12 +390,12 @@ body::after{
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
-      <div class="brand-mark">G</div>
+      <div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
       <span>G-GAMES</span>
     </a>
 
     <div class="title-wrap">
-      <img class="title-icon" src="image/2048.png" alt="2048 Game icon" onerror="this.style.display='none'">
+      <img class="title-icon" src="image/GGAMES.ico" alt="G-GAMES game icon">
       <div class="page-title">
         <strong>2048 Game</strong>
         <span>Number Puzzle • Strategy Game</span>
@@ -450,7 +476,7 @@ body::after{
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-logo">
-          <span class="footer-logo-mark">G</span>
+          <span class="footer-logo-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></span>
           <span>G-GAMES</span>
         </div>
         <div class="footer-tagline">
