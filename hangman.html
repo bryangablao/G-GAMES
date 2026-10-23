@@ -3,24 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#060816">
+<meta name="theme-color" content="#0b0c10">
 <title>Hangman</title>
-<link rel="icon" type="image/png" href="image/Hangman.png">
+<link rel="icon" type="image/x-icon" href="image/GGAMES.ico">
 <style>
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.78);
-  --panel-strong:rgba(8,13,31,.94);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
-  --shadow:0 22px 70px rgba(0,0,0,.44);
+  --bg:#080808;
+  --bg-2:#111214;
+  --bg-3:#18191c;
+  --panel:rgba(20,20,22,.84);
+  --panel-strong:rgba(10,10,11,.96);
+  --border:rgba(120,170,255,.22);
+  --cyan:#73b7ff;
+  --blue:#2f8fff;
+  --violet:#8b78ff;
+  --pink:#5fd4ff;
+  --gold:#f0b45a;
+  --text:#f4f4f5;
+  --muted:#9b9da1;
+  --success:#55e6bd;
+  --danger:#ff6f91;
+  --shadow:0 18px 50px rgba(0,0,0,.58);
 }
 
 *{box-sizing:border-box}
@@ -32,10 +35,10 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 14% 16%,rgba(47,143,255,.18),transparent 30%),
+    radial-gradient(circle at 86% 18%,rgba(139,120,255,.15),transparent 30%),
+    radial-gradient(circle at 50% 88%,rgba(85,230,189,.08),transparent 34%),
+    linear-gradient(180deg,#080808 0%,#111214 52%,#080808 100%);
 }
 
 body::before{
@@ -45,8 +48,8 @@ body::before{
   z-index:-4;
   pointer-events:none;
   background-image:
-    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+    linear-gradient(rgba(170,190,220,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(170,190,220,.035) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
@@ -57,7 +60,7 @@ body::after{
   inset:-30%;
   z-index:-5;
   pointer-events:none;
-  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  background:conic-gradient(from 0deg,rgba(47,143,255,.08),rgba(139,120,255,.06),rgba(85,230,189,.05),rgba(47,143,255,.08));
   filter:blur(70px);
   animation:ambientSpin 30s linear infinite;
 }
@@ -74,9 +77,9 @@ body::after{
   pointer-events:none;
   z-index:-2;
 }
-.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
-.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
-.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+.orb-a{left:-130px;top:26%;background:#2f8fff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#8b78ff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#55e6bd;animation:floatOrb 20s ease-in-out infinite}
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
 .app{min-height:100vh;display:flex;flex-direction:column}
@@ -86,8 +89,8 @@ body::after{
   top:0;
   z-index:50;
   padding:12px clamp(14px,3vw,32px);
-  background:rgba(4,8,21,.74);
-  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(10,10,11,.82);
+  border-bottom:1px solid rgba(120,170,255,.14);
   backdrop-filter:blur(18px) saturate(145%);
   -webkit-backdrop-filter:blur(18px) saturate(145%);
 }
@@ -118,9 +121,9 @@ body::after{
   border-radius:12px;
   display:grid;
   place-items:center;
-  background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));
-  border:1px solid rgba(94,246,255,.30);
-  box-shadow:0 0 24px rgba(94,246,255,.12);
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(115,183,255,.08));
+  border:1px solid rgba(120,170,255,.22);
+  box-shadow:0 0 22px rgba(47,143,255,.10);
 }
 
 .title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
@@ -161,7 +164,7 @@ body::after{
 }
 .hero-card,.stats-card,.game-panel{
   border:1px solid rgba(255,255,255,.09);
-  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  background:linear-gradient(145deg,rgba(24,25,28,.92),rgba(10,10,11,.82));
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
   box-shadow:var(--shadow);
@@ -175,11 +178,11 @@ body::after{
   font-size:clamp(58px,9vw,110px);
   font-weight:950;
   letter-spacing:-.12em;
-  color:rgba(94,246,255,.045);
+  color:rgba(115,183,255,.055);
 }
 .eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
-.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 span{background:linear-gradient(90deg,#f5f7fa 0%,#bfc5cc 36%,#73b7ff 60%,#8b78ff 82%,#d8dde3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
 
 .stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
@@ -213,15 +216,15 @@ body::after{
 
 .drawing-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:430px}
 .hangman-svg{width:min(300px,100%);height:auto;filter:drop-shadow(0 0 22px rgba(94,246,255,.06))}
-.gallows{stroke:#dfe7ff;stroke-width:5;stroke-linecap:round;fill:none}
-.person-part{stroke:#ff7a92;stroke-width:5;stroke-linecap:round;fill:none;opacity:0;transition:opacity .2s ease}
+.gallows{stroke:#d8dde3;stroke-width:5;stroke-linecap:round;fill:none}
+.person-part{stroke:#ff6f91;stroke-width:5;stroke-linecap:round;fill:none;opacity:0;transition:opacity .2s ease}
 .person-part.visible{opacity:1}
 
 .mistakes-label{margin-top:18px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
 .mistakes-count{margin-top:5px;font-size:24px;font-weight:950;color:var(--danger)}
 
 .play-panel{display:flex;flex-direction:column;justify-content:center;min-width:0}
-.category-badge{align-self:center;padding:8px 12px;border-radius:999px;background:rgba(94,246,255,.07);border:1px solid rgba(94,246,255,.16);color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.category-badge{align-self:center;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,rgba(115,183,255,.10),rgba(139,120,255,.10));border:1px solid rgba(115,183,255,.22);color:#8fc5ff;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .word-display{
   margin:26px auto 16px;
   width:100%;
@@ -234,7 +237,7 @@ body::after{
 .letter-slot{
   width:clamp(30px,5vw,42px);
   min-height:50px;
-  border-bottom:3px solid rgba(94,246,255,.55);
+  border-bottom:3px solid rgba(115,183,255,.62);
   display:grid;
   place-items:center;
   font-size:clamp(22px,4vw,30px);
@@ -262,12 +265,12 @@ body::after{
 .key:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(94,246,255,.32);box-shadow:0 0 18px rgba(94,246,255,.07)}
 .key:active:not(:disabled){transform:scale(.96)}
 .key:disabled{cursor:default;opacity:.45}
-.key.correct{background:rgba(105,255,189,.13);border-color:rgba(105,255,189,.35);color:var(--success);opacity:1}
-.key.wrong{background:rgba(255,96,125,.10);border-color:rgba(255,96,125,.27);color:#ff9aae;opacity:.55}
+.key.correct{background:rgba(85,230,189,.12);border-color:rgba(85,230,189,.35);color:var(--success);opacity:1}
+.key.wrong{background:rgba(255,111,145,.10);border-color:rgba(255,111,145,.28);color:#ff9db5;opacity:.55}
 
 .round-summary{margin:18px auto 0;min-height:50px;width:min(620px,100%);padding:13px 16px;border-radius:15px;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(3,8,22,.54);border:1px solid rgba(94,246,255,.10);color:#dfe8ff;font-weight:750;line-height:1.45}
-.round-summary.win{border-color:rgba(105,255,189,.30);color:var(--success)}
-.round-summary.lose{border-color:rgba(255,96,125,.30);color:#ff9aae}
+.round-summary.win{border-color:rgba(85,230,189,.30);color:var(--success)}
+.round-summary.lose{border-color:rgba(255,111,145,.30);color:#ff9db5}
 
 /* Footer */
 .site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
@@ -296,6 +299,19 @@ body::after{
 .end-card{text-align:center}
 .end-card .result-word{font-size:clamp(28px,7vw,46px);font-weight:950;margin:12px 0;background:linear-gradient(90deg,var(--cyan),#c49cff,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
 .modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+
+.brand-mark img,.title-icon img,.footer-logo img{width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit}
+.brand-mark img,.footer-logo img{padding:4px}
+.title-icon{display:grid;place-items:center;border-radius:10px;background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(115,183,255,.07));border:1px solid rgba(120,170,255,.18);box-shadow:0 0 18px rgba(47,143,255,.08)}
+.title-icon img{padding:4px}
+.footer-logo img{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(115,183,255,.08));border:1px solid rgba(120,170,255,.18);box-shadow:0 0 18px rgba(47,143,255,.10)}
+.site-footer{background:radial-gradient(circle at 15% 0%,rgba(47,143,255,.07),transparent 30%),radial-gradient(circle at 85% 10%,rgba(139,120,255,.06),transparent 32%),linear-gradient(180deg,rgba(14,14,16,.90),rgba(7,7,8,.98));border-top:1px solid rgba(120,170,255,.16)}
+.footer-time{background:rgba(255,255,255,.025);border-color:rgba(120,170,255,.12)}
+.footer-time strong{color:#73b7ff}
+.footer-links a:hover,.footer-links button:hover{color:#73b7ff}
+.status-dot{background:#55e6bd;box-shadow:0 0 12px rgba(85,230,189,.65)}
+.modal-card{background:linear-gradient(145deg,rgba(24,25,28,.98),rgba(10,10,11,.98));border-color:rgba(120,170,255,.18);box-shadow:0 24px 90px rgba(0,0,0,.58),0 0 34px rgba(47,143,255,.06)}
 
 @media(max-width:900px){
   .hero,.game-stage{grid-template-columns:1fr}
@@ -339,12 +355,12 @@ body::after{
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
-      <div class="brand-mark">G</div>
+      <div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
       <span>G-GAMES</span>
     </a>
 
     <div class="title-wrap">
-      <img class="title-icon" src="image/Hangman.png" alt="Hangman icon" onerror="this.style.display='none'">
+      <div class="title-icon"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
       <div class="page-title">
         <strong>Hangman</strong>
         <span>Word Challenge • Letter Puzzle</span>
@@ -415,30 +431,17 @@ body::after{
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo">
-          <span class="footer-logo-mark">G</span>
-          <span>G-GAMES</span>
-        </div>
+        <div class="footer-logo"><img src="image/GGAMES.ico" alt="G-GAMES logo"><span>G-GAMES</span></div>
         <div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div>
       </div>
-
-      <div class="footer-time" aria-live="polite">
-        <strong>Philippine Standard Time</strong>
-        <span id="phTime">Loading Philippine Standard Time...</span>
-      </div>
-
+      <div class="footer-time" aria-live="polite"><strong>Live Clock</strong><span id="phTime">Loading Philippine Standard Time...</span></div>
       <nav class="footer-links" aria-label="Footer links">
         <a href="privacy-policy.html">Privacy Policy</a>
         <a href="terms-of-service.html">Terms of Service</a>
-        <button type="button" onclick="openHelp()">How to Play</button>
-        <a href="index.html">Game Lobby</a>
+        <button type="button" onclick="openAbout()">About</button>
       </nav>
     </div>
-
-    <div class="footer-bottom">
-      <span>© 2025 Accxs Creations. All rights reserved.</span>
-      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
-    </div>
+    <div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="status"><span class="status-dot"></span>G-GAMES Online</span></div>
   </div>
 </footer>
 </div>
@@ -456,6 +459,13 @@ body::after{
       <li>Incorrect letters add one part to the Hangman drawing.</li>
       <li>You win by revealing the entire word before reaching six mistakes.</li>
     </ol>
+  </div>
+</div>
+
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="aboutTitle">About G-GAMES</h2><button class="icon-btn" type="button" onclick="closeAbout()" aria-label="Close about">×</button></div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
   </div>
 </div>
 
@@ -515,6 +525,7 @@ const categoryBadge = document.getElementById('categoryBadge');
 const hintText = document.getElementById('hintText');
 const helpPanel = document.getElementById('helpPanel');
 const endModal = document.getElementById('endModal');
+const aboutPanel = document.getElementById('aboutPanel');
 
 function chooseWord(){
   let index;
@@ -651,14 +662,18 @@ function closeHelp(){
   helpPanel.classList.remove('open');
   document.body.style.overflow = '';
 }
+function openAbout(){ aboutPanel.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeAbout(){ aboutPanel.classList.remove('open'); document.body.style.overflow=''; }
 function goBack(){ window.location.href = 'index.html'; }
 
 helpPanel.addEventListener('click', e => { if(e.target === helpPanel) closeHelp(); });
+aboutPanel.addEventListener('click', e => { if(e.target === aboutPanel) closeAbout(); });
 endModal.addEventListener('click', e => { if(e.target === endModal) closeEndModal(false); });
 
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     if(helpPanel.classList.contains('open')) closeHelp();
+    else if(aboutPanel.classList.contains('open')) closeAbout();
     else if(endModal.classList.contains('open')) closeEndModal(false);
     return;
   }
