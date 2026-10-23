@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#060816">
+<meta name="theme-color" content="#080808">
 <title>Math Quiz</title>
-<link rel="icon" type="image/png" href="image/MathQuiz.png">
+<link rel="icon" type="image/png" href="image/GGAMES.ico">
 <style>
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.78);
-  --panel-strong:rgba(8,13,31,.94);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
+  --bg:#080808;
+  --panel:rgba(20,20,22,.84);
+  --panel-strong:rgba(10,10,11,.96);
+  --cyan:#73b7ff;
+  --blue:#2f8fff;
+  --violet:#8b78ff;
+  --pink:#5fd4ff;
+  --gold:#f0b45a;
+  --text:#f4f4f5;
+  --muted:#9b9da1;
+  --success:#55e6bd;
+  --danger:#ff6f91;
   --warning:#ffd76a;
-  --shadow:0 22px 70px rgba(0,0,0,.44);
+  --shadow:0 18px 50px rgba(0,0,0,.58);
 }
 
 *{box-sizing:border-box}
@@ -33,10 +33,10 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 14% 14%,rgba(115,183,255,.12),transparent 30%),
+    radial-gradient(circle at 86% 18%,rgba(139,120,255,.11),transparent 30%),
+    radial-gradient(circle at 52% 88%,rgba(85,230,189,.06),transparent 34%),
+    linear-gradient(180deg,#070707 0%,#111214 48%,#080808 100%);
 }
 body::before{
   content:"";
@@ -68,7 +68,7 @@ body::after{
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 
 .app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(9,10,12,.82);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
 .topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
 .brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
@@ -82,7 +82,7 @@ body::after{
 
 .main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
 .hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
-.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(31,32,36,.92),rgba(12,13,16,.88));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
 .hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
 .hero-card::after{content:"+ − × ÷";position:absolute;right:26px;top:20px;font-size:clamp(36px,8vw,86px);font-weight:950;color:rgba(94,246,255,.045);letter-spacing:.06em}
 .eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
@@ -145,7 +145,7 @@ body::after{
 .result-card{text-align:center}
 .result-score{margin:12px 0;font-size:clamp(42px,10vw,68px);font-weight:950;color:var(--success)}
 
-.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(20,21,24,.88),rgba(7,8,10,.98));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}
 .footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}
 .footer-brand{text-align:left}
@@ -199,6 +199,25 @@ body::after{
   .metrics{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* G-GAMES index-matched black, silver, and color accents */
+.brand-mark,.footer-logo-mark{overflow:hidden;background:linear-gradient(145deg,#f0f1f3 0%,#9ba0a7 46%,#50545a 100%);border:1px solid rgba(220,224,230,.18);box-shadow:0 0 20px rgba(115,183,255,.10)}
+.brand-mark img,.footer-logo-mark img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;border-radius:inherit}
+.title-icon{filter:drop-shadow(0 0 10px rgba(115,183,255,.18))}
+.hero-card,.stats-card,.game-panel{border-color:rgba(210,214,220,.10)}
+.hero-card::after{color:rgba(115,183,255,.055)}
+.hero h1 span{background:linear-gradient(90deg,#f5f5f5,#bfc2c7 26%,#73b7ff 50%,#8b78ff 72%,#f5f5f5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.quiz-card,.side-panel{background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(115,183,255,.018));border-color:rgba(210,214,220,.08)}
+.math-symbol{background:radial-gradient(circle at 35% 30%,rgba(115,183,255,.18),rgba(139,120,255,.12) 55%,rgba(255,255,255,.02) 72%);border-color:rgba(115,183,255,.16)}
+.progress-bar{background:linear-gradient(90deg,#73b7ff,#8b78ff,#55e6bd)}
+.answer-btn:hover{border-color:rgba(115,183,255,.34);box-shadow:0 0 22px rgba(115,183,255,.07)}
+.btn-primary{background:linear-gradient(135deg,rgba(115,183,255,.20),rgba(139,120,255,.24));border-color:rgba(115,183,255,.28)}
+.feedback-card{background:linear-gradient(145deg,rgba(115,183,255,.045),rgba(139,120,255,.045)),rgba(10,11,13,.72)}
+.modal-card{background:linear-gradient(145deg,rgba(31,32,36,.98),rgba(10,11,13,.98));border-color:rgba(115,183,255,.16)}
+.footer-time{background:linear-gradient(145deg,rgba(255,255,255,.028),rgba(115,183,255,.018))}
+.footer-time strong,.footer-links a:hover,.footer-links button:hover{color:#73b7ff}
+.status-dot{background:#55e6bd;box-shadow:0 0 12px rgba(85,230,189,.5)}
+
 </style>
 </head>
 <body>
@@ -210,10 +229,10 @@ body::after{
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby">
-      <div class="brand-mark">G</div><span>G-GAMES</span>
+      <div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div><span>G-GAMES</span>
     </a>
     <div class="title-wrap">
-      <img class="title-icon" src="image/MathQuiz.png" alt="Math Quiz icon" onerror="this.style.display='none'">
+      <img class="title-icon" src="image/GGAMES.ico" alt="G-GAMES game icon">
       <div class="page-title">
         <strong>Math Quiz</strong>
         <span>Quick Math • Brain Challenge</span>
@@ -306,15 +325,14 @@ body::after{
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo"><span class="footer-logo-mark">G</span><span>G-GAMES</span></div>
+        <div class="footer-logo"><span class="footer-logo-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></span><span>G-GAMES</span></div>
         <div class="footer-tagline">Fast, casual mini-games built for desktop, tablet, and mobile.</div>
       </div>
       <div class="footer-time" aria-live="polite"><strong>Philippine Standard Time</strong><span id="phTime">Loading Philippine Standard Time...</span></div>
       <nav class="footer-links" aria-label="Footer links">
         <a href="privacy-policy.html">Privacy Policy</a>
         <a href="terms-of-service.html">Terms of Service</a>
-        <button type="button" onclick="openHelp()">How to Play</button>
-        <a href="index.html">Game Lobby</a>
+        <button type="button" onclick="openAbout()">About</button>
       </nav>
     </div>
     <div class="footer-bottom">
@@ -323,6 +341,13 @@ body::after{
     </div>
   </div>
 </footer>
+</div>
+
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="aboutTitle">About G-GAMES</h2><button class="icon-btn" type="button" onclick="closeAbout()" aria-label="Close about">×</button></div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
+  </div>
 </div>
 
 <div class="help-panel" id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -350,6 +375,7 @@ body::after{
 
 <script>
 const helpPanel=document.getElementById('helpPanel');
+const aboutPanel=document.getElementById('aboutPanel');
 const endModal=document.getElementById('endModal');
 const answersEl=document.getElementById('answers');
 let currentQuestion=0,totalQuestions=10,score=0,correct=0,wrong=0,streak=0,bestScore=Number(localStorage.getItem('mathQuizBest')||0),locked=false,correctAnswer=0;
@@ -357,10 +383,13 @@ let currentQuestion=0,totalQuestions=10,score=0,correct=0,wrong=0,streak=0,bestS
 document.getElementById('bestStat').textContent=bestScore;
 function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
 function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function openAbout(){aboutPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeAbout(){aboutPanel.classList.remove('open');document.body.style.overflow=''}
 function goBack(){window.location.href='index.html'}
 helpPanel.addEventListener('click',e=>{if(e.target===helpPanel)closeHelp()});
+aboutPanel.addEventListener('click',e=>{if(e.target===aboutPanel)closeAbout()});
 endModal.addEventListener('click',e=>{if(e.target===endModal)closeResultAndRestart()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(endModal.classList.contains('open'))closeResultAndRestart();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(aboutPanel.classList.contains('open'))closeAbout();else if(endModal.classList.contains('open'))closeResultAndRestart();}});
 
 function settings(){return{difficulty:document.getElementById('difficulty').value,count:Number(document.getElementById('questionCountSelect').value)}}
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
