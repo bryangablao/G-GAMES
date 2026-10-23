@@ -3,24 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-<meta name="theme-color" content="#060816">
+<meta name="theme-color" content="#08090b">
 <title>Space Invaders</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060816'/%3E%3Cpath d='M16 24h6v-6h6v6h8v-6h6v6h6v6h6v16h-8v-6h-6v6H24v-6h-6v6h-8V30h6z' fill='%235ef6ff'/%3E%3Crect x='24' y='30' width='5' height='5' fill='%23060816'/%3E%3Crect x='35' y='30' width='5' height='5' fill='%23060816'/%3E%3C/svg%3E">
+<link rel="icon" type="image/x-icon" href="image/GGAMES.ico">
 <style>
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.78);
-  --panel-strong:rgba(8,13,31,.94);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
-  --shadow:0 22px 70px rgba(0,0,0,.44);
+  --bg-1:#080808;
+  --bg-2:#111214;
+  --bg-3:#18191c;
+  --panel:rgba(20,20,22,.84);
+  --panel-strong:rgba(10,10,11,.96);
+  --border:rgba(120,170,255,.22);
+  --text:#f4f4f5;
+  --muted:#9b9da1;
+  --cyan:#73b7ff;
+  --blue:#2f8fff;
+  --violet:#8b78ff;
+  --pink:#5fd4ff;
+  --gold:#f0b45a;
+  --success:#55e6bd;
+  --danger:#ff6f91;
+  --shadow:0 18px 50px rgba(0,0,0,.58);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -31,30 +34,30 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 18% 10%,rgba(47,143,255,.14),transparent 32%),
+    radial-gradient(circle at 82% 14%,rgba(139,120,255,.13),transparent 32%),
+    radial-gradient(circle at 52% 95%,rgba(85,230,189,.08),transparent 38%),
+    linear-gradient(140deg,#050505,#0f1012 52%,#17181b);
 }
 body::before{
   content:"";position:fixed;inset:0;z-index:-4;pointer-events:none;
-  background-image:linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
 body::after{
   content:"";position:fixed;inset:-30%;z-index:-5;pointer-events:none;
-  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  background:conic-gradient(from 0deg,rgba(47,143,255,.08),rgba(139,120,255,.07),rgba(85,230,189,.05),rgba(47,143,255,.08));
   filter:blur(70px);animation:ambientSpin 30s linear infinite;
 }
 @keyframes ambientSpin{to{transform:rotate(360deg)}}
 .orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
-.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
-.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
-.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+.orb-a{left:-130px;top:26%;background:#2f8fff;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#8b78ff;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#55e6bd;animation:floatOrb 20s ease-in-out infinite}
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 .app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
+.topbar{position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);background:rgba(8,8,9,.82);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%)}
 .topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
 .brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
@@ -65,7 +68,7 @@ body::after{
 .icon-btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.40);box-shadow:0 0 24px rgba(94,246,255,.10)}
 .main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 14px 34px}
 .hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
-.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(24,24,27,.88),rgba(10,10,12,.76));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
 .hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
 .hero-card::after{content:"";position:absolute;right:22px;top:18px;width:130px;height:92px;opacity:.065;background:repeating-linear-gradient(0deg,transparent 0 8px,var(--cyan) 8px 13px);clip-path:polygon(10% 25%,25% 25%,25% 10%,40% 10%,40% 25%,60% 25%,60% 10%,75% 10%,75% 25%,90% 25%,90% 45%,100% 45%,100% 75%,82% 75%,82% 62%,65% 62%,65% 82%,35% 82%,35% 62%,18% 62%,18% 75%,0 75%,0 45%,10% 45%)}
 .eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
@@ -82,127 +85,40 @@ body::after{
 .mobile-controls{display:none;grid-template-columns:1fr 1fr 1.3fr;gap:10px;padding:12px;background:rgba(4,8,21,.92);border-top:1px solid rgba(255,255,255,.06);touch-action:none}.control-btn{min-height:58px;border:1px solid rgba(255,255,255,.09);border-radius:16px;color:#fff;background:rgba(255,255,255,.055);font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px;user-select:none;touch-action:none}.control-btn:active,.control-btn.active{background:linear-gradient(135deg,rgba(94,246,255,.20),rgba(155,92,255,.22));border-color:rgba(94,246,255,.35);transform:scale(.98)}.control-btn svg{width:23px;height:23px}.fire-btn{background:linear-gradient(135deg,rgba(255,95,215,.12),rgba(94,246,255,.12))}
 .keyboard-hint{text-align:center;color:var(--muted);font-size:12px;padding:11px 10px 2px}
 .help-panel{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.help-panel.open{display:flex}.modal-card{width:min(560px,100%);max-height:min(86vh,700px);overflow:auto;border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(17,23,51,.98),rgba(8,12,29,.98));border:1px solid rgba(94,246,255,.17);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(94,246,255,.07)}.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.modal-card h2{margin:0;font-size:25px}.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}.modal-card ol{padding-left:20px;margin-bottom:0}
+
+.brand-mark{overflow:hidden;background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border-color:rgba(115,183,255,.22);box-shadow:0 0 22px rgba(47,143,255,.18)}
+.brand-mark img,.footer-logo img{width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit;padding:4px}
+.title-icon{width:34px;height:34px;object-fit:contain;display:block;flex:0 0 34px;filter:drop-shadow(0 0 10px rgba(115,183,255,.22))}
+.hero-card,.stats-card,.game-panel{border-color:rgba(120,170,255,.22)}
+.hero h1 span{background:linear-gradient(90deg,#f5f7fa 0%,#bfc5cc 36%,#73b7ff 60%,#8b78ff 82%,#d8dde3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.game-shell{border-color:rgba(115,183,255,.16);background:linear-gradient(180deg,rgba(8,9,12,.97),rgba(2,4,8,.99));box-shadow:inset 0 0 48px rgba(47,143,255,.04),0 0 32px rgba(139,120,255,.04)}
+.hud-card{background:rgba(255,255,255,.025);border-color:rgba(210,214,220,.10)}
+.mobile-controls{background:rgba(8,8,9,.94)}
+.control-btn{border-color:rgba(115,183,255,.18);background:linear-gradient(145deg,rgba(115,183,255,.06),rgba(139,120,255,.09))}
+.control-btn:active,.control-btn.active{background:linear-gradient(135deg,rgba(47,143,255,.18),rgba(139,120,255,.18));border-color:rgba(115,183,255,.38)}
+.fire-btn{background:linear-gradient(135deg,rgba(255,111,145,.10),rgba(115,183,255,.10))}
+.modal-card,.overlay-card{background:linear-gradient(145deg,rgba(24,24,27,.98),rgba(8,8,10,.98));border-color:rgba(115,183,255,.18)}
+
 /* Footer */
-.site-footer{
-  margin-top:auto;
-  border-top:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-.footer-inner{
-  max-width:1180px;
-  margin:auto;
-  padding:26px 18px 18px;
-}
-
-.footer-grid{
-  display:grid;
-  grid-template-columns:1.2fr 1fr auto;
-  gap:24px;
-  align-items:center;
-}
-
-.footer-brand{text-align:left}
-
-.footer-logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:.05em;
-}
-
-.footer-logo-mark{
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border-radius:11px;
-  color:#041019;
-  background:linear-gradient(135deg,var(--cyan),#b795ff);
-  box-shadow:0 0 22px rgba(94,246,255,.18);
-}
-
-.footer-tagline{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.55;
-}
-
-.footer-time{
-  text-align:center;
-  padding:12px 16px;
-  border-radius:14px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
-  color:#dfe7ff;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.footer-time strong{
-  color:var(--cyan);
-  display:block;
-  margin-bottom:2px;
-}
-
-.footer-links{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-  gap:8px 14px;
-}
-
-.footer-links a,.footer-links button{
-  border:0;
-  padding:0;
-  background:none;
-  color:#c8d1eb;
-  text-decoration:none;
-  cursor:pointer;
-  font:inherit;
-  font-size:13px;
-  transition:.2s ease;
-}
-
-.footer-links a:hover,.footer-links button:hover{
-  color:var(--cyan);
-}
-
-.footer-bottom{
-  margin-top:20px;
-  padding-top:15px;
-  border-top:1px solid rgba(255,255,255,.06);
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  color:#7f8aa9;
-  font-size:12px;
-}
-
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-}
-
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 12px rgba(105,255,189,.65);
-}
-
-@media(max-width:900px){.hero{grid-template-columns:1fr}.stats-card{grid-template-columns:repeat(3,1fr)}.stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}.game-top{grid-template-columns:1fr}.toolbar{justify-content:flex-start}.footer-grid{grid-template-columns:1fr;text-align:center}
-.footer-brand{text-align:center}
-.footer-logo{justify-content:center}
-.footer-links{justify-content:center}}
+.site-footer{position:relative;margin-top:42px;padding:28px;overflow:hidden;border:1px solid rgba(210,214,220,.12);border-radius:26px 26px 0 0;background:radial-gradient(circle at 10% 0%,rgba(47,143,255,.09),transparent 30%),radial-gradient(circle at 90% 100%,rgba(139,120,255,.08),transparent 34%),linear-gradient(180deg,rgba(21,22,24,.94),rgba(7,7,8,.98));box-shadow:0 -18px 60px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.025);color:#85878c;text-align:left}
+.site-footer::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(115,183,255,.55),rgba(139,120,255,.58),transparent);box-shadow:0 0 18px rgba(47,143,255,.14)}
+.footer-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(230px,1.25fr) minmax(260px,1fr) auto;gap:28px;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:13px;min-width:0}
+.footer-logo{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(115,183,255,.22);background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(115,118,124,.12));box-shadow:0 0 20px rgba(255,255,255,.04);overflow:hidden}
+.footer-brand-copy strong{display:block;margin-bottom:4px;color:#eeeeef;font-size:.92rem;letter-spacing:.02em}
+.footer-brand-copy span{display:block;font-size:.75rem;line-height:1.55;color:#7f8186}
+.footer-clock{justify-self:center;width:min(100%,440px);padding:13px 16px;border-radius:16px;border:1px solid rgba(210,214,220,.10);background:rgba(255,255,255,.025);text-align:center}
+.footer-clock-label{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:5px;color:#929499;font-size:.66rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase}
+.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:#55e6bd;box-shadow:0 0 10px rgba(85,230,189,.48);animation:footerPulse 1.8s ease-in-out infinite}
+@keyframes footerPulse{50%{opacity:.38;transform:scale(.78)}}
+#philippineTime{color:#e5e6e8;font-size:.78rem;font-weight:650;line-height:1.5}
+.footer-links{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px}
+.footer-links a,.footer-link-button{position:relative;border:0;padding:4px 0;background:transparent;color:#96989c;font:inherit;font-size:.75rem;text-decoration:none;cursor:pointer;transition:color .2s ease,text-shadow .2s ease}
+.footer-links a:hover,.footer-link-button:hover{color:#e5e6e8;text-shadow:0 0 10px rgba(255,255,255,.10)}
+.footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#6f7175}
+.footer-status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.footer-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#55e6bd;box-shadow:0 0 9px rgba(85,230,189,.42)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.stats-card{grid-template-columns:repeat(3,1fr)}.stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}.game-top{grid-template-columns:1fr}.toolbar{justify-content:flex-start}.footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}.footer-bottom{justify-content:center;flex-direction:column}}
 @media(max-width:720px){.hud{grid-template-columns:repeat(3,1fr)}.hud-card:nth-child(4),.hud-card:nth-child(5){grid-column:auto}.mobile-controls{display:grid}.keyboard-hint{display:none}.canvas-wrap{aspect-ratio:4/3;min-height:330px}}
 @media(max-width:640px){.brand span:last-child{display:none}.page-title span{display:none}.title-icon{width:30px;height:30px}.main{padding-left:10px;padding-right:10px}.hero-card,.stats-card,.game-panel{border-radius:20px}.stats-card{grid-template-columns:repeat(3,1fr);padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}.hud{grid-template-columns:repeat(3,1fr);gap:7px}.hud-card{padding:9px 7px}.hud-card strong{font-size:16px}}
 @media(max-width:430px){.page-title strong{font-size:14px}.title-icon{width:27px;height:27px}.stats-card{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.hud{grid-template-columns:repeat(2,1fr)}.hud-card:last-child{grid-column:1/-1}.canvas-wrap{min-height:315px}.mobile-controls{grid-template-columns:1fr 1fr 1.15fr;gap:7px;padding:9px}.control-btn{min-height:56px;font-size:12px}.overlay-card{padding:18px}.footer-bottom{justify-content:center;text-align:center}}
@@ -214,9 +130,9 @@ body::after{
 <div class="app">
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div><span>G-GAMES</span></a>
     <div class="title-wrap">
-      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="shipG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ef6ff"/><stop offset=".58" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff5fd7"/></linearGradient></defs><path d="M16 24h6v-6h6v6h8v-6h6v6h6v6h6v16h-8v-6h-6v6H24v-6h-6v6h-8V30h6z" fill="url(#shipG)"/><rect x="24" y="30" width="5" height="5" rx="1" fill="#060816"/><rect x="35" y="30" width="5" height="5" rx="1" fill="#060816"/></svg>
+      <img class="title-icon" src="image/GGAMES.ico" alt="G-GAMES logo">
       <div class="page-title"><strong>Space Invaders</strong><span>Arcade Shooter • Alien Defense</span></div>
     </div>
     <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play Space Invaders">?</button>
@@ -282,35 +198,27 @@ body::after{
 </main>
 
 <footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="footer-logo">
-          <span class="footer-logo-mark">G</span>
-          <span>G-GAMES</span>
-        </div>
-        <div class="footer-tagline">
-          Fast, casual mini-games built for desktop, tablet, and mobile.
-        </div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
+      <div class="footer-brand-copy">
+        <strong>G-GAMES</strong>
+        <span>Quick games. Futuristic vibes. Built for play on any screen.</span>
       </div>
-
-      <div class="footer-time" aria-live="polite">
-        <strong>Philippine Standard Time</strong>
-        <span id="phTime">Loading Philippine Standard Time…</span>
-      </div>
-
-      <nav class="footer-links" aria-label="Footer links">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="terms-of-service.html">Terms of Service</a>
-        <button type="button" onclick="openHelp()">How to Play</button>
-        <a href="index.html">Game Lobby</a>
-      </nav>
     </div>
-
-    <div class="footer-bottom">
-      <span>© 2025 Accxs Creations. All rights reserved.</span>
-      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    <div class="footer-clock" aria-live="polite">
+      <div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div>
+      <div id="philippineTime">Philippine Standard Time</div>
     </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <button type="button" class="footer-link-button" onclick="openAbout()">About</button>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Accxs Creations. All rights reserved.</span>
+    <span class="footer-status">G-GAMES Online</span>
   </div>
 </footer>
 </div>
@@ -330,11 +238,19 @@ body::after{
   </div>
 </div>
 
+<div class="help-panel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-card">
+    <div class="modal-top"><h2 id="aboutTitle">About G-GAMES</h2><button class="icon-btn" type="button" onclick="closeAbout()" aria-label="Close about">×</button></div>
+    <p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p>
+  </div>
+</div>
+
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const W = canvas.width, H = canvas.height;
 const helpPanel = document.getElementById('helpPanel');
+const aboutPanel = document.getElementById('aboutPanel');
 const overlay = document.getElementById('gameOverlay');
 const overlayTitle = document.getElementById('overlayTitle');
 const overlayText = document.getElementById('overlayText');
@@ -547,14 +463,14 @@ function drawRoundedRect(x,y,w,h,r,fill,stroke){
 function drawPlayer(){
   if(player.invulnerable>0 && Math.floor(player.invulnerable*10)%2===0) return;
   ctx.save();ctx.translate(player.x,player.y);
-  const g=ctx.createLinearGradient(0,0,player.w,player.h);g.addColorStop(0,'#5ef6ff');g.addColorStop(.55,'#9b5cff');g.addColorStop(1,'#ff5fd7');
+  const g=ctx.createLinearGradient(0,0,player.w,player.h);g.addColorStop(0,'#73b7ff');g.addColorStop(.55,'#8b78ff');g.addColorStop(1,'#55e6bd');
   ctx.fillStyle=g;ctx.shadowColor='#5ef6ff';ctx.shadowBlur=14;
   ctx.beginPath();ctx.moveTo(player.w/2,0);ctx.lineTo(player.w*.72,10);ctx.lineTo(player.w,player.h);ctx.lineTo(player.w*.66,player.h-3);ctx.lineTo(player.w*.57,player.h);ctx.lineTo(player.w*.43,player.h);ctx.lineTo(player.w*.34,player.h-3);ctx.lineTo(0,player.h);ctx.lineTo(player.w*.28,10);ctx.closePath();ctx.fill();
   ctx.fillStyle='#07101f';ctx.fillRect(player.w/2-5,8,10,8);ctx.restore();
 }
 
 function drawEnemy(e,t){
-  const bob=Math.sin(t*3+e.phase)*1.5;ctx.save();ctx.translate(e.x,e.y+bob);ctx.shadowColor=e.row%2?'#9b5cff':'#5ef6ff';ctx.shadowBlur=10;ctx.fillStyle=e.row%2?'#b47cff':'#5ef6ff';
+  const bob=Math.sin(t*3+e.phase)*1.5;ctx.save();ctx.translate(e.x,e.y+bob);ctx.shadowColor=e.row%2?'#8b78ff':'#2f8fff';ctx.shadowBlur=10;ctx.fillStyle=e.row%2?'#9b8cff':'#73b7ff';
   const x=0,y=0,w=e.w,h=e.h;
   ctx.fillRect(x+10,y+6,w-20,5);ctx.fillRect(x+5,y+11,w-10,5);ctx.fillRect(x,y+16,w,9);ctx.fillRect(x+5,y+25,8,5);ctx.fillRect(x+w-13,y+25,8,5);ctx.fillStyle='#07101f';ctx.fillRect(x+13,y+16,6,5);ctx.fillRect(x+w-19,y+16,6,5);ctx.restore();
 }
@@ -566,7 +482,7 @@ function render(t){
   ctx.strokeStyle='rgba(94,246,255,.10)';ctx.lineWidth=1;for(let y=70;y<H;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
   ctx.strokeStyle='rgba(255,96,125,.18)';ctx.setLineDash([7,9]);ctx.beginPath();ctx.moveTo(0,H-92);ctx.lineTo(W,H-92);ctx.stroke();ctx.setLineDash([]);
   enemies.forEach(e=>{if(e.alive)drawEnemy(e,t)});
-  ctx.save();ctx.shadowBlur=12;ctx.shadowColor='#5ef6ff';ctx.fillStyle='#9afaff';bullets.forEach(b=>drawRoundedRect(b.x,b.y,b.w,b.h,2,'#9afaff'));ctx.shadowColor='#ff607d';enemyBullets.forEach(b=>drawRoundedRect(b.x,b.y,b.w,b.h,2,'#ff607d'));ctx.restore();
+  ctx.save();ctx.shadowBlur=12;ctx.shadowColor='#2f8fff';ctx.fillStyle='#a8d5ff';bullets.forEach(b=>drawRoundedRect(b.x,b.y,b.w,b.h,2,'#a8d5ff'));ctx.shadowColor='#ff607d';enemyBullets.forEach(b=>drawRoundedRect(b.x,b.y,b.w,b.h,2,'#ff607d'));ctx.restore();
   drawPlayer();
   particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
   if(state==='paused'){ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='700 18px system-ui';ctx.textAlign='center';ctx.fillText('PAUSED',W/2,H/2)}
@@ -581,8 +497,10 @@ function loop(now){
 
 function openHelp(){helpPanel.classList.add('open');document.body.style.overflow='hidden'}
 function closeHelp(){helpPanel.classList.remove('open');document.body.style.overflow=''}
+function openAbout(){aboutPanel.classList.add('open');document.body.style.overflow='hidden'}
+function closeAbout(){aboutPanel.classList.remove('open');document.body.style.overflow=''}
 function goBack(){window.location.href='index.html'}
-helpPanel.addEventListener('click',e=>{if(e.target===helpPanel)closeHelp()});
+helpPanel.addEventListener('click',e=>{if(e.target===helpPanel)closeHelp()});aboutPanel.addEventListener('click',e=>{if(e.target===aboutPanel)closeAbout()});
 
 document.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
@@ -591,7 +509,7 @@ document.addEventListener('keydown',e=>{
   if(k==='arrowright'||k==='d') keys.right=true;
   if(k===' '){keys.fire=true;firePlayer()}
   if(k==='p') togglePause();
-  if(k==='escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(state==='running'||state==='paused')togglePause();else goBack()}
+  if(k==='escape'){if(helpPanel.classList.contains('open'))closeHelp();else if(aboutPanel.classList.contains('open'))closeAbout();else if(state==='running'||state==='paused')togglePause();else goBack()}
 });
 document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')keys.left=false;if(k==='arrowright'||k==='d')keys.right=false;if(k===' ')keys.fire=false});
 
@@ -624,7 +542,7 @@ function updatePhilippineTime(){
     hour12:true
   });
 
-  document.getElementById('phTime').textContent = formatter.format(new Date());
+  document.getElementById('philippineTime').textContent = `Philippine Standard Time — ${formatter.format(new Date())}`;
 }
 
 function renderIdle(){
