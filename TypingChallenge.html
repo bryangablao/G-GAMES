@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080808">
+<title>Typing Challenge | G-GAMES</title>
+<link rel="icon" href="image/GGAMES.ico" type="image/png">
+<style>
+:root{--cyan:#5ef6ff;--violet:#9b5cff;--pink:#ff5fd7;--text:#f6f8ff;--muted:#9da8c8;--success:#69ffbd;--danger:#ff607d;--shadow:0 22px 70px rgba(0,0,0,.44)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;overflow-x:hidden;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),linear-gradient(180deg,#060816,#080b19 48%,#030610)}
+body:before{content:"";position:fixed;inset:0;z-index:-4;pointer-events:none;background-image:linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 95%)}body:after{content:"";position:fixed;inset:-30%;z-index:-5;pointer-events:none;background:conic-gradient(rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));filter:blur(70px);animation:spin 30s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}.orb-a{left:-130px;top:26%;background:#623cff}.orb-b{right:-120px;top:42%;background:#00caff}.orb-c{left:40%;bottom:-180px;background:#d334ff}
+.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:20;padding:12px clamp(14px,3vw,32px);background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px)}.topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}.brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.3)}.title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}.title-icon{width:34px;height:34px;object-fit:contain}.page-title strong{display:block;font-size:clamp(16px,2.2vw,22px)}.page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:white;font-weight:900;font-size:20px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}.main{flex:1;width:100%;padding:clamp(18px,4vw,44px) 12px 34px}.hero,.game-panel{max-width:1180px;margin:0 auto}.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px;margin-bottom:22px}.hero-card,.stats-card,.game-panel{border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));backdrop-filter:blur(16px);box-shadow:var(--shadow);border-radius:24px}.hero-card{padding:clamp(22px,4vw,38px)}.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:1.05;letter-spacing:-.04em}.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));background-clip:text;color:transparent}.hero p{margin:0;color:var(--muted);line-height:1.65}.stats-card{padding:20px;display:grid;gap:12px;align-content:center}.stat{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.stat span{color:var(--muted);font-size:13px}.stat strong{font-size:17px}.game-panel{padding:clamp(14px,3vw,28px);border-radius:28px}.game-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:18px}.status-label,.panel-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:7px}.status-message{font-size:15px;min-height:22px}.toolbar{display:flex;flex-wrap:wrap;gap:9px}.btn,select{min-height:43px;padding:10px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:800;background:rgba(255,255,255,.055)}.btn{cursor:pointer;transition:transform .2s,border-color .2s}.btn:hover{transform:translateY(-2px);border-color:rgba(94,246,255,.4)}.btn-primary,.btn.active{background:linear-gradient(135deg,rgba(94,246,255,.20),rgba(114,72,255,.35));border-color:rgba(94,246,255,.4)}select{cursor:pointer}select option{background:#10162f}.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:18px}.board-panel,.side-panel{min-width:0;padding:clamp(12px,2vw,22px);border-radius:22px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}.board-controls{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}.pill{padding:11px 14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);border-radius:13px;min-width:95px;text-align:center}.pill small{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}.pill strong{font-size:21px;font-variant-numeric:tabular-nums}.board-scroller{width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 2px 14px;scrollbar-color:rgba(94,246,255,.45) transparent}.board{--cell:38px;display:grid;gap:3px;width:max-content;margin:0 auto;padding:9px;border:1px solid rgba(94,246,255,.13);border-radius:16px;background:rgba(2,7,22,.65);box-shadow:inset 0 0 28px rgba(94,246,255,.035);touch-action:pan-x pan-y}.cell{width:var(--cell);height:var(--cell);padding:0;border-radius:8px;border:1px solid rgba(150,185,255,.16);background:linear-gradient(145deg,#28345c,#192342);color:white;font-size:calc(var(--cell)*.48);font-weight:950;display:grid;place-items:center;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}.cell:not(.revealed):active{transform:scale(.94)}.cell:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}.cell.revealed{background:rgba(87,111,157,.11);border-color:rgba(255,255,255,.045);cursor:default}.cell.flagged{color:#ffcf76;background:rgba(255,215,106,.10)}.cell.mine{background:rgba(255,96,125,.16);color:#ff718a}.cell.exploded{background:#a8284a;color:white}.cell.wrong{background:rgba(255,96,125,.15);color:#ff607d}.cell[data-number="1"]{color:#79c4ff}.cell[data-number="2"]{color:#69ffbd}.cell[data-number="3"]{color:#ff829a}.cell[data-number="4"]{color:#bd9aff}.cell[data-number="5"]{color:#ffcb78}.cell[data-number="6"]{color:#5ef6ff}.cell[data-number="7"]{color:#ff9be6}.cell[data-number="8"]{color:#fff}.cell svg{width:65%;height:65%;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.mobile-tools{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}.hint{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;margin:12px 0 0}.side-panel{display:flex;flex-direction:column;gap:12px}.metric{padding:15px;border-radius:15px;text-align:center;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.metric span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.11em}.metric strong{display:block;margin-top:5px;font-size:22px}.side-note{color:var(--muted);font-size:13px;line-height:1.7;margin:0}.side-note strong{color:#fff}.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(1,4,12,.78);backdrop-filter:blur(10px)}.modal.open{display:flex}.modal-card{width:min(520px,100%);max-height:90dvh;overflow:auto;border-radius:24px;padding:24px;background:linear-gradient(145deg,#151c3b,#080c1d);border:1px solid rgba(94,246,255,.18);box-shadow:0 24px 90px #0009}.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.modal-card h2{margin:0;font-size:25px}.modal-card p,.modal-card li{color:var(--muted);line-height:1.65}.modal-card ol{padding-left:22px}.result-card{text-align:center}.result-card .btn{margin-top:12px}.result-symbol{font-size:48px;font-weight:950;color:var(--cyan)}.site-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));backdrop-filter:blur(18px)}.footer-inner{max-width:1180px;margin:auto;padding:26px 18px 18px}.footer-grid{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:center}.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:.05em}.footer-logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;color:#041019;background:linear-gradient(135deg,var(--cyan),#b795ff)}.footer-tagline{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55}.footer-time{text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:#dfe7ff;font-size:13px;line-height:1.5}.footer-time strong{color:var(--cyan);display:block;margin-bottom:2px}.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 14px}.footer-links a,.footer-links button{border:0;padding:0;background:none;color:#c8d1eb;text-decoration:none;cursor:pointer;font:inherit;font-size:13px}.footer-links a:hover,.footer-links button:hover{color:var(--cyan)}.footer-bottom{margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7f8aa9;font-size:12px}.status{display:inline-flex;align-items:center;gap:7px}.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(105,255,189,.65)}
+@media(max-width:900px){.hero,.game-layout{grid-template-columns:1fr}.stats-card{grid-template-columns:repeat(3,1fr)}.stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}.side-panel{display:grid;grid-template-columns:repeat(3,1fr)}.side-panel .panel-label,.side-note{grid-column:1/-1}.footer-grid{grid-template-columns:1fr;text-align:center}.footer-logo,.footer-links{justify-content:center}}@media(max-width:640px){.brand span:last-child,.page-title span{display:none}.title-icon{width:30px;height:30px}.hero-card,.stats-card,.game-panel{border-radius:20px}.stats-card{padding:10px;gap:7px}.stat{padding:11px 5px}.stat span{font-size:11px}.stat strong{font-size:14px}.board{--cell:clamp(28px,8vw,38px);gap:2px;padding:6px}.toolbar{width:100%;display:grid;grid-template-columns:1fr 1fr}.toolbar .btn{width:100%}.side-panel{gap:8px}.metric{padding:10px 5px}.metric strong{font-size:17px}}@media(max-width:360px){.page-title strong{font-size:14px}.board{--cell:28px}.pill{min-width:80px;padding:9px}.side-panel{grid-template-columns:1fr 1fr}.side-panel .metric:last-of-type{grid-column:1/-1}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+
+/* G-GAMES index theme overrides */
+:root{--bg:#080808;--panel:rgba(20,20,22,.84);--panel-strong:rgba(10,10,11,.96);--cyan:#73b7ff;--blue:#2f8fff;--violet:#8b78ff;--pink:#5fd4ff;--text:#f4f4f5;--muted:#9b9da1;--success:#55e6bd;--danger:#ff6f91;--shadow:0 18px 50px rgba(0,0,0,.58)}
+body{background:radial-gradient(circle at 18% 10%,rgba(47,143,255,.14),transparent 32%),radial-gradient(circle at 82% 14%,rgba(139,120,255,.13),transparent 32%),radial-gradient(circle at 52% 95%,rgba(85,230,189,.08),transparent 38%),linear-gradient(140deg,#050505,#0f1012 52%,#17181b)}
+body:before{background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:48px 48px}
+body:after{background:conic-gradient(from 0deg,rgba(47,143,255,.08),rgba(139,120,255,.06),rgba(85,230,189,.05),rgba(47,143,255,.08))}
+.orb-a{background:#2f8fff}.orb-b{background:#8b78ff}.orb-c{background:#55e6bd}.orb{opacity:.16}
+.topbar{background:rgba(7,7,8,.82);border-bottom:1px solid rgba(210,214,220,.12)}
+.brand-mark{background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border:1px solid rgba(210,214,220,.22);box-shadow:0 0 22px rgba(47,143,255,.18);overflow:hidden}
+.brand-mark img,.footer-logo img{width:100%;height:100%;object-fit:contain;display:block}.brand-mark img,.footer-logo img{padding:4px;border-radius:inherit}.title-icon{width:34px;height:34px;object-fit:contain;display:block;flex:0 0 34px;border-radius:9px;padding:3px;filter:drop-shadow(0 0 10px rgba(47,143,255,.16))}@media(max-width:640px){.title-icon{width:30px;height:30px;flex-basis:30px}}@media(max-width:390px){.title-icon{width:27px;height:27px;flex-basis:27px}}
+.hero-card,.stats-card,.game-panel{background:linear-gradient(145deg,rgba(28,29,32,.88),rgba(11,12,14,.88));border-color:rgba(210,214,220,.12)}
+.hero h1 span{background:linear-gradient(90deg,#fff,#73b7ff 38%,#8b78ff 72%,#5fd4ff);background-clip:text;color:transparent}
+.eyebrow{color:#73b7ff}.board-panel,.side-panel{background:rgba(255,255,255,.025);border-color:rgba(210,214,220,.10)}
+.board{background:rgba(5,6,8,.78);border-color:rgba(115,183,255,.18);box-shadow:inset 0 0 28px rgba(47,143,255,.035)}
+.cell{background:linear-gradient(145deg,#2a2c31,#17191e);border-color:rgba(180,190,205,.14)}
+.cell.revealed{background:rgba(112,119,130,.10)}
+.cell.flagged{color:#d5ad5b;background:rgba(213,173,91,.10)}
+.cell.mine{background:rgba(255,111,145,.15);color:#ff7d9b}.cell.exploded{background:#8f2940}.cell.wrong{color:#ff6f91}
+.cell[data-number="1"]{color:#73b7ff}.cell[data-number="2"]{color:#55e6bd}.cell[data-number="3"]{color:#ff7d9b}.cell[data-number="4"]{color:#a896ff}.cell[data-number="5"]{color:#d5ad5b}.cell[data-number="6"]{color:#5fd4ff}.cell[data-number="7"]{color:#df8fff}.cell[data-number="8"]{color:#f3f4f6}
+.modal-card{background:linear-gradient(145deg,rgba(28,29,32,.98),rgba(10,10,11,.98));border-color:rgba(115,183,255,.16)}
+.site-footer{position:relative;margin-top:42px;padding:28px;overflow:hidden;border:1px solid rgba(210,214,220,.12);border-radius:26px 26px 0 0;background:radial-gradient(circle at 10% 0%,rgba(47,143,255,.09),transparent 30%),radial-gradient(circle at 90% 100%,rgba(139,120,255,.08),transparent 34%),linear-gradient(180deg,rgba(21,22,24,.94),rgba(7,7,8,.98));box-shadow:0 -18px 60px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.025);color:#85878c;text-align:left}
+.site-footer:before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(115,183,255,.55),rgba(139,120,255,.58),transparent);box-shadow:0 0 18px rgba(47,143,255,.14)}
+.footer-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(230px,1.25fr) minmax(260px,1fr) auto;gap:28px;align-items:center}.footer-brand{display:flex;align-items:center;gap:13px;min-width:0}.footer-logo{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(115,183,255,.22);background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(115,118,124,.12));box-shadow:0 0 20px rgba(255,255,255,.04);overflow:hidden}.footer-brand-copy strong{display:block;margin-bottom:4px;color:#eeeeef;font-size:.92rem;letter-spacing:.02em}.footer-brand-copy span{display:block;font-size:.75rem;line-height:1.55;color:#7f8186}.footer-clock{justify-self:center;width:min(100%,440px);padding:13px 16px;border-radius:16px;border:1px solid rgba(210,214,220,.10);background:rgba(255,255,255,.025);text-align:center}.footer-clock-label{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:5px;color:#929499;font-size:.66rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase}.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:#55e6bd;box-shadow:0 0 10px rgba(85,230,189,.48);animation:footerPulse 1.8s ease-in-out infinite}@keyframes footerPulse{50%{opacity:.38;transform:scale(.78)}}#philippineTime{color:#e5e6e8;font-size:.78rem;font-weight:650;line-height:1.5}.footer-links{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px}.footer-links a,.footer-link-button{position:relative;border:0;padding:4px 0;background:transparent;color:#96989c;font:inherit;font-size:.75rem;text-decoration:none;cursor:pointer;transition:color .2s ease,text-shadow .2s ease}.footer-links a:hover,.footer-link-button:hover{color:#e5e6e8;text-shadow:0 0 10px rgba(255,255,255,.10)}.footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#6f7175}.footer-status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+@media(max-width:930px){.footer-grid{grid-template-columns:1fr;gap:18px;text-align:center}.footer-brand{justify-content:center;text-align:left}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}}
+@media(max-width:640px){.footer-bottom{justify-content:center;text-align:center;flex-wrap:wrap}}
+
+
+/* Typing Challenge game styles */
+.typing-panel{max-width:1180px;margin:0 auto;padding:clamp(18px,3vw,30px);border:1px solid rgba(210,214,220,.12);background:linear-gradient(145deg,rgba(28,29,32,.88),rgba(11,12,14,.88));backdrop-filter:blur(16px);box-shadow:var(--shadow);border-radius:28px}
+.typing-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}.typing-status{min-width:220px}.mode-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--muted);margin-bottom:7px}.typing-config{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.typing-config button{min-height:40px;padding:8px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.10);color:#c9ccd3;background:rgba(255,255,255,.04);font:inherit;font-weight:750;cursor:pointer}.typing-config button:hover{border-color:rgba(115,183,255,.38);color:#fff}.typing-config button.on{color:#101113;background:linear-gradient(135deg,#dfe5ec,#73b7ff 62%,#8b78ff);border-color:transparent}.typing-config .sep{width:1px;height:22px;background:rgba(255,255,255,.10);margin:0 2px}
+.typing-stage{min-height:420px;display:flex;align-items:center;justify-content:center;padding:clamp(14px,3vw,28px);border-radius:22px;background:rgba(255,255,255,.022);border:1px solid rgba(210,214,220,.09)}.typing-inner{width:100%;max-width:920px}#live{color:var(--cyan);font-size:1.4rem;font-weight:700;height:2.2rem;opacity:0;transition:opacity .2s}#live.show{opacity:1}#test{position:relative;cursor:text}#box{--lh:2.8rem;height:calc(var(--lh)*3);overflow:hidden;font-size:1.5rem;position:relative;color:#686b72;transition:filter .2s,opacity .2s}#box.blur{filter:blur(5px);opacity:.5}#inner{position:relative;display:flex;flex-wrap:wrap;transition:transform .12s}.word{height:var(--lh);line-height:var(--lh);margin-right:.5em;white-space:nowrap;border-bottom:2px solid transparent}.word.err{border-bottom-color:var(--danger)}.l.ok{color:var(--text)}.l.bad,.l.extra{color:var(--danger)}.l.extra{opacity:.75}#caret{position:absolute;width:2px;height:1.7rem;background:var(--cyan);border-radius:1px;transition:left .09s,top .09s;pointer-events:none;animation:blink 1s step-end infinite;box-shadow:0 0 10px rgba(115,183,255,.45)}#caret.typing{animation:none}@keyframes blink{50%{opacity:0}}#msg{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:var(--text);font-size:.95rem;pointer-events:none}#box.blur + #msg{display:flex}#cap{position:fixed;left:-999px;top:0;opacity:0;width:1px;height:1px}.typing-hint{font-size:.8rem;margin-top:16px;color:var(--muted);text-align:center}.typing-hint kbd{background:rgba(255,255,255,.06);padding:2px 7px;border-radius:6px;color:var(--text);border:1px solid rgba(255,255,255,.08)}#res{display:none}.result-stats{display:grid;grid-template-columns:auto 1fr;gap:28px 48px;align-items:center}.big+.big{margin-top:14px}.big .k{font-size:1.1rem;color:var(--muted)}.big .v{font-size:4rem;color:var(--cyan);line-height:1.05;font-weight:750}.small{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px}.small .k{font-size:.85rem;color:var(--muted)}.small .v{font-size:1.5rem;font-weight:700}#chart{width:100%;height:220px;margin:26px 0 8px;background:rgba(255,255,255,.025);border-radius:14px;border:1px solid rgba(255,255,255,.06)}.legend{font-size:.8rem;display:flex;gap:18px;justify-content:center;color:var(--muted)}.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px}#best{color:var(--cyan);font-size:.9rem;margin-top:8px;min-height:1.2em;text-align:center}.again{display:block;margin:16px auto 0;min-height:43px;padding:9px 18px;border-radius:12px;border:1px solid rgba(115,183,255,.35);background:linear-gradient(135deg,rgba(115,183,255,.18),rgba(139,120,255,.28));color:#fff;font:inherit;font-weight:800;cursor:pointer}#rpg{display:none}#rpg canvas{width:100%;height:auto;image-rendering:pixelated;border-radius:14px;display:block;background:#000;cursor:pointer;border:1px solid rgba(255,255,255,.08)}
+@media(max-width:860px){.result-stats{grid-template-columns:1fr}.big .v{font-size:3rem}#box{font-size:1.2rem;--lh:2.3rem}#caret{height:1.4rem}.typing-stage{min-height:360px}.typing-top{align-items:flex-start}.typing-config{width:100%}.typing-config button{flex:1 1 auto}}
+@media(max-width:560px){.typing-panel{border-radius:20px;padding:14px}.typing-stage{padding:14px;min-height:330px}.typing-config .sep{display:none}.typing-config{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.typing-config button{width:100%}.hero{display:block}.stats-card{margin-top:14px}}
+</style>
+</head>
+<body><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+<div class="app">
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><span class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></span><span>G-GAMES</span></a><div class="title-wrap"><img class="title-icon" src="image/GGAMES.ico" alt="G-GAMES game icon"><div class="page-title"><strong>Typing Challenge</strong><span>Speed & Accuracy • Brain Game</span></div></div><button class="icon-btn" id="helpButton" aria-label="How to play" type="button">?</button></div></header>
+<main class="main">
+<section class="hero"><div class="hero-card"><div class="eyebrow">G-GAMES • Typing Challenge</div><h1>Type Fast. <span>Stay Accurate.</span></h1><p>Test your typing speed, improve your accuracy, and challenge yourself with timed or word based rounds. Switch to Typing Quest for an arcade style typing battle.</p></div><aside class="stats-card"><div class="stat"><span>Modes</span><strong>2</strong></div><div class="stat"><span>Focus</span><strong>Speed</strong></div><div class="stat"><span>Scoring</span><strong>WPM</strong></div></aside></section>
+<section class="typing-panel">
+<div class="typing-top"><div class="typing-status"><div class="mode-label">Game Mode</div><div class="status-message">Choose a mode and start typing.</div></div><div class="typing-config" id="cfg"></div></div>
+<div class="typing-stage" id="stage"><div class="typing-inner">
+<div id="testView"><div id="live"></div><div id="test"><div id="box" class="blur"><div id="inner"></div></div><div id="msg">Click here or press any key to focus</div></div><div class="typing-hint"><kbd>Tab</kbd> restarts the test</div></div>
+<div id="res"><div class="result-stats"><div><div class="big"><div class="k">wpm</div><div class="v" id="rWpm">0</div></div><div class="big"><div class="k">accuracy</div><div class="v" id="rAcc">0%</div></div></div><div class="small"><div><div class="k">raw</div><div class="v" id="rRaw"></div></div><div><div class="k">consistency</div><div class="v" id="rCon"></div></div><div><div class="k">characters</div><div class="v" id="rChr"></div></div><div><div class="k">time</div><div class="v" id="rTime"></div></div><div><div class="k">test</div><div class="v" id="rMode"></div></div></div></div><svg id="chart" viewBox="0 0 700 220" preserveAspectRatio="none" role="img" aria-label="Words per minute over time"></svg><div class="legend"><span><i style="background:var(--cyan)"></i>wpm</span><span><i style="background:var(--muted)"></i>raw</span><span><i style="background:var(--danger)"></i>errors</span></div><div id="best"></div><button class="again" id="again">New Test</button><div class="typing-hint"><kbd>Tab</kbd> or <kbd>Enter</kbd> for a new test</div></div>
+<div id="rpg"><canvas id="rc" width="640" height="240"></canvas><div class="typing-hint">Type the word above an enemy to strike it. Beat the boss to clear a stage. <kbd>Backspace</kbd> unlocks your target, <kbd>Tab</kbd> restarts the run.</div></div>
+</div></div>
+</section>
+<input id="cap" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Typing input">
+</main>
+<footer class="site-footer"><div class="footer-grid"><div class="footer-brand"><div class="footer-logo"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div><div class="footer-brand-copy"><strong>G-GAMES</strong><span>Quick games. Futuristic vibes. Built for play on any screen.</span></div></div><div class="footer-clock" aria-live="polite"><div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div><div id="philippineTime">Philippine Standard Time</div></div><nav class="footer-links" aria-label="Footer navigation"><a href="privacy-policy.html">Privacy Policy</a><a href="terms-of-service.html">Terms of Service</a><button type="button" class="footer-link-button" id="footerAboutBtn">About</button></nav></div><div class="footer-bottom"><span>© 2025 Accxs Creations. All rights reserved.</span><span class="footer-status">G-GAMES Online</span></div></footer>
+</div>
+<div class="modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="modal-card"><div class="modal-top"><h2 id="helpTitle">How to Play Typing Challenge</h2><button class="icon-btn" id="closeHelp" aria-label="Close help">×</button></div><ol><li>Choose Typing Test or Typing Quest.</li><li>For Typing Test, select time or word mode and choose the round length.</li><li>Start typing the displayed words. Correct letters brighten while mistakes are marked.</li><li>Your result shows WPM, accuracy, raw speed, consistency, characters, and time.</li><li>In Typing Quest, type the word above an enemy to attack it and defeat the boss.</li><li>Press Tab at any time to restart the current mode.</li></ol></div></div>
+<div class="modal" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="modal-card"><div class="modal-top"><h2 id="aboutTitle">About G-GAMES</h2><button class="icon-btn" id="closeAbout" aria-label="Close about">×</button></div><p>G-GAMES is a collection of quick, responsive browser games designed for desktop, tablet, and mobile play.</p></div></div>
+<script>
+
+const W="the be of and a to in he have it that for they with as not on she at by this we you do but from or which one would all will there say who make when can more if no man out other so what time up go about than into could state only new year some take come these know see use get like then first any work now may such give over think most even find day also after way many must look before great back through long where much should well people down own just because good each those feel seem how high too place little world very still nature hand school keep never last let thought city tree cross farm hard start might story saw far sea draw left late run while press close night real life few north open together next white children begin got walk example ease paper group always music both mark often letter until mile river car feet care second book carry took science eat room friend idea fish mountain stop once base hear horse cut sure watch color face wood main enough plain girl usual young ready above ever red list though talk bird soon body dog family direct song measure door product black short class wind question happen complete ship area half rock order fire south problem piece told knew pass since top whole king space heard best hour better true during hundred five remember step early hold west ground interest reach fast sing listen six table travel less morning ten simple several toward war lay against pattern slow center love person money serve appear road map rain rule pull cold notice voice unit power town fine certain fly fall lead cry dark machine note wait plan figure star box field rest correct able done beauty drive stood contain front teach week final gave green quick develop ocean warm free minute strong special mind behind clear tail produce fact street lot nothing course stay wheel full force blue object decide surface deep moon island foot busy test record boat common gold possible plane age dry wonder laugh thousand ago ran check game shape hot miss brought heat snow bed bring sit perhaps fill east weight language among".split(" ");
+
+const $=id=>document.getElementById(id);
+const box=$('box'),inner=$('inner'),cap=$('cap'),live=$('live');
+let cfg={mode:'time',time:30,words:25,punct:false};
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+try{Object.assign(cfg,JSON.parse(ls('cfg')||'{}'))}catch(e){}
+let view=cfg.view==='rpg'?'rpg':'test';
+
+// config bar
+function drawCfg(){
+  const b=(label,on,fn)=>{const e=document.createElement('button');e.textContent=label;if(on)e.className='on';e.onclick=()=>{fn();ls('cfg',JSON.stringify(cfg));drawCfg();setup()};return e};
+  const c=$('cfg');c.innerHTML='';
+  const sep=()=>{const s=document.createElement('span');s.className='sep';c.appendChild(s)};
+  c.append(b('typing test',view==='test',()=>view=cfg.view='test'),b('⚔ quest',view==='rpg',()=>view=cfg.view='rpg'));sep();if(view==='rpg')return;
+  c.append(b('punctuation',cfg.punct,()=>cfg.punct=!cfg.punct));sep();
+  c.append(b('time',cfg.mode==='time',()=>cfg.mode='time'),b('words',cfg.mode==='words',()=>cfg.mode='words'));sep();
+  const opts=cfg.mode==='time'?[15,30,60,120]:[10,25,50,100];
+  opts.forEach(n=>c.append(b(n,cfg[cfg.mode]===n,()=>cfg[cfg.mode]=n)));
+}
+
+// state
+let words=[],T=[],wi=0,started=false,finished=false,t0=0,timer=null;
+let keys=0,wrongKeys=0,samples=[],lastKeys=0,lastErr=0,lastSec=0;
+const els=[];
+
+function gen(n){
+  const out=[];
+  for(let i=0;i<n;i++){
+    let w=W[Math.floor(Math.random()*W.length)];
+    if(cfg.punct){
+      const prev=out[i-1];
+      if(i===0||/[.?!]$/.test(prev||''))w=w[0].toUpperCase()+w.slice(1);
+      const r=Math.random();
+      if(r<.1)w+=',';else if(r<.17)w+='.';else if(r<.2)w+='?';else if(r<.22)w+='!';
+      else if(r<.26)w="'"+w+"'";
+    }
+    out.push(w);
+  }
+  return out;
+}
+function addWordEls(from){
+  for(let i=from;i<words.length;i++){
+    const d=document.createElement('div');d.className='word';
+    d.innerHTML=[...words[i]].map(c=>`<span class="l">${c}</span>`).join('');
+    inner.insertBefore(d,$('caret'));els[i]=d;
+  }
+}
+function setup(){
+  clearInterval(timer);
+  const rq=view==='rpg';$('rpg').style.display=rq?'block':'none';
+  if(rq){finished=false;$('testView').style.display='none';$('res').style.display='none';rpgReset();return}
+  words=gen(cfg.mode==='time'?100:cfg.words);T=[];wi=0;started=false;finished=false;keys=0;wrongKeys=0;samples=[];lastKeys=0;lastErr=0;lastSec=0;els.length=0;
+  inner.innerHTML='<div id="caret"></div>';addWordEls(0);
+  inner.style.transform='translateY(0)';
+  $('res').style.display='none';$('testView').style.display='block';
+  live.classList.remove('show');live.textContent=cfg.mode==='time'?cfg[cfg.mode]:'0/'+cfg.words;
+  $('caret').classList.remove('typing');
+  requestAnimationFrame(()=>{pos();focus()});
+}
+function focus(){cap.focus({preventScroll:true})}
+
+function renderWord(i){
+  const w=words[i],t=T[i]||'',el=els[i];let h='';
+  const n=Math.max(w.length,t.length);
+  for(let j=0;j<n;j++){
+    if(j<w.length)h+=`<span class="l ${j<t.length?(t[j]===w[j]?'ok':'bad'):''}">${w[j]}</span>`;
+    else h+=`<span class="l extra">${t[j]}</span>`;
+  }
+  el.innerHTML=h;
+  el.className='word'+(i<wi&&t!==w?' err':'');
+}
+function pos(){
+  const el=els[wi];if(!el)return;
+  const lh=parseFloat(getComputedStyle(el).height);
+  inner.style.transform=`translateY(-${Math.max(0,el.offsetTop-lh)}px)`;
+  const t=(T[wi]||'').length,ls_=el.children;
+  let x;
+  if(!ls_.length)return;
+  if(t<ls_.length)x=ls_[t].offsetLeft;
+  else{const l=ls_[ls_.length-1];x=l.offsetLeft+l.offsetWidth}
+  const c=$('caret');
+  c.style.left=x-1+'px';c.style.top=el.offsetTop+(lh-c.offsetHeight)/2+'px';
+}
+
+function start(){
+  started=true;t0=performance.now();live.classList.add('show');
+  timer=setInterval(tick,200);
+}
+function stats(el){
+  let ok=0;
+  for(let i=0;i<=wi&&i<words.length;i++){
+    const t=T[i]||'',w=words[i];
+    if(i<wi){if(t===w)ok+=w.length+1}
+    else for(let j=0;j<t.length;j++)if(t[j]===w[j])ok++;
+  }
+  const min=Math.max(el,.001)/60;
+  return {wpm:ok/5/min,raw:keys/5/min,ok};
+}
+function tick(){
+  if(finished)return;
+  const el=(performance.now()-t0)/1000;
+  if(cfg.mode==='time')live.textContent=Math.max(0,Math.ceil(cfg.time-el));
+  const sec=Math.floor(el);
+  if(sec>lastSec){
+    const s=stats(sec);
+    samples.push({wpm:s.wpm,raw:(keys-lastKeys)*12,err:wrongKeys-lastErr});
+    lastKeys=keys;lastErr=wrongKeys;lastSec=sec;
+  }
+  if(cfg.mode==='time'&&el>=cfg.time)finish(cfg.time);
+}
+function typeChar(c){
+  if(view==='rpg'){rpgKey(c);return}
+  if(finished)return;
+  if(!started)start();
+  $('caret').classList.add('typing');
+  clearTimeout(typeChar.t);typeChar.t=setTimeout(()=>$('caret').classList.remove('typing'),700);
+  const w=words[wi];
+  if(c===' '){
+    if(!T[wi])return;
+    keys++;
+    if(T[wi]!==w)wrongKeys++;
+    wi++;
+    renderWord(wi-1);
+    if(cfg.mode==='words'){live.textContent=wi+'/'+cfg.words;if(wi>=words.length){finish();return}}
+    else if(words.length-wi<40){const n=words.length;words.push(...gen(60));addWordEls(n)}
+    pos();return;
+  }
+  const t=T[wi]||'';
+  if(t.length>=w.length+10)return;
+  keys++;
+  if(c!==w[t.length])wrongKeys++;
+  T[wi]=t+c;
+  renderWord(wi);
+  if(cfg.mode==='words'&&wi===words.length-1&&T[wi]===w){wi++;live.textContent=wi+'/'+cfg.words;finish();return}
+  pos();
+}
+function back(all){
+  if(view==='rpg'){rpgBack();return}
+  if(finished||!started)return;
+  const t=T[wi]||'';
+  if(t.length){T[wi]=all?'':t.slice(0,-1);renderWord(wi)}
+  else if(wi>0&&T[wi-1]!==words[wi-1]){const p=wi;wi--;els[p].className='word';if(all)T[wi]='';renderWord(wi)}
+  pos();
+}
+
+function finish(fixed){
+  if(finished)return;finished=true;clearInterval(timer);
+  const el=fixed||(performance.now()-t0)/1000;
+  const s=stats(el);
+  if(!samples.length||el-lastSec>=.5)samples.push({wpm:s.wpm,raw:(keys-lastKeys)/Math.max(el-lastSec,.5)*12,err:wrongKeys-lastErr});
+  const raws=samples.map(x=>x.raw),mean=raws.reduce((a,b)=>a+b,0)/raws.length;
+  const sd=Math.sqrt(raws.reduce((a,b)=>a+(b-mean)**2,0)/raws.length);
+  const con=raws.length>1&&mean>0?Math.max(0,Math.round(100*(1-sd/mean))):100;
+  const acc=keys?Math.round((keys-wrongKeys)/keys*100):0;
+  const wpm=Math.round(s.wpm);
+  $('rWpm').textContent=wpm;$('rAcc').textContent=acc+'%';$('rRaw').textContent=Math.round(s.raw);
+  $('rCon').textContent=con+'%';$('rChr').textContent=(keys-wrongKeys)+'/'+wrongKeys;
+  $('rTime').textContent=Math.round(el)+'s';
+  const label=(cfg.mode==='time'?'time '+cfg.time:'words '+cfg.words)+(cfg.punct?' +p':'');
+  $('rMode').textContent=label.replace(' +p','');
+  const key='best:'+cfg.mode+cfg[cfg.mode]+cfg.punct,prev=parseInt(ls(key)||'0');
+  $('best').textContent=wpm>prev&&wpm>0?(prev?'new personal best':'first result saved'):(prev?'personal best: '+prev+' wpm':'');
+  if(wpm>prev)ls(key,String(wpm));
+  drawChart();
+  $('testView').style.display='none';$('res').style.display='block';
+}
+function drawChart(){
+  const svg=$('chart'),n=samples.length,P=28,Wd=700,H=220;
+  const max=Math.max(20,...samples.map(s=>Math.max(s.wpm,s.raw)))*1.1;
+  const X=i=>n<2?Wd/2:P+i/(n-1)*(Wd-2*P),Y=v=>H-P-v/max*(H-2*P);
+  let h='';
+  for(let g=0;g<=4;g++){const v=max/4*g,y=Y(v);h+=`<line x1="${P}" x2="${Wd-P}" y1="${y}" y2="${y}" stroke="var(--bd)" stroke-width="1"/><text x="4" y="${y+3}" font-size="9" fill="var(--muted)">${Math.round(v)}</text>`}
+  const pl=k=>samples.map((s,i)=>X(i)+','+Y(s[k])).join(' ');
+  if(n>1){
+    h+=`<polyline points="${pl('raw')}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>`;
+    h+=`<polyline points="${pl('wpm')}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+  }
+  samples.forEach((s,i)=>{
+    h+=`<circle cx="${X(i)}" cy="${Y(s.wpm)}" r="3.5" fill="var(--accent)"/>`;
+    if(s.err)h+=`<text x="${X(i)}" y="${Y(s.wpm)-8}" font-size="11" text-anchor="middle" fill="var(--err)">&#215;</text>`;
+  });
+  svg.innerHTML=h;
+}
+
+// input
+cap.addEventListener('input',()=>{const v=cap.value;cap.value='';for(const c of v)typeChar(c)});
+cap.addEventListener('blur',()=>{if(!finished)box.classList.add('blur')});
+cap.addEventListener('focus',()=>box.classList.remove('blur'));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Tab'||(e.key==='Enter'&&(finished||(view==='rpg'&&R.over)))||(e.key==='Escape')){e.preventDefault();setup();return}
+  if(finished)return;
+  if(e.key==='Backspace'){e.preventDefault();back(e.ctrlKey||e.altKey||e.metaKey);return}
+  if(document.activeElement!==cap&&e.key.length===1&&!e.ctrlKey&&!e.metaKey)focus();
+});
+$('test').addEventListener('click',focus);
+$('again').onclick=setup;
+addEventListener('resize',pos);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(pos);
+
+
+// ===== typing RPG =====
+const PAL={k:'#1a1a2e',w:'#eee',s:'#f5c9a0',b:'#4a6fe3',r:'#d94141',g:'#5fd068',G:'#2e8b3d',y:'#f2c230',p:'#8e5ad6',o:'#c9792b',d:'#6b4a2e'};
+const SP={
+hero:['...bbbb...','..bbbbbb..','..bskskb..','..bsssbb..','...bbbb..w','..bbyybbww','.sbbbbbbw.','..bbbbbb..','..bb..bb..','..bb..bb..','..dd..dd..'],
+slime:['...GGGG...','..GggggG..','.GgkggkgG.','.GggggggG.','GgggggggGG','GGGGGGGGGG'],
+bat:['pp......pp','ppp.pp.ppp','pppppppppp','.pprppr pp.'.replace(' ','p'),'..pppppp..','...w..w...'],
+skel:['...wwww...','..wwwwww..','..wkwwkw..','..wwwwww..','...wkkw...','..wwwwww..','.w.wwww.w.','.w.wwww.w.','...wwww...','..ww..ww..','..w....w..'],
+orc:['..GGGGGG..','.GGGGGGGG.','.GkGGGGkG.','.GGGGGGGG.','.GwGGGGwG.','..oooooo..','.oooooooo.','GooooooooG','GooooooooG','..oo..oo..','..dd..dd..'],
+dragon:['..........rr..','........rrrrr.','...r...rrkrrr.','..rr..rrrrrrrr','.rrrrrrrrrr.yy','rrrrrrrrrrrrr.','.rrrrrrrrrrr..','..rrrrrrrrr...','..rr..rr......','..yy..yy......']};
+const SPR={};
+for(const n in SP){const rows=SP[n],cv=document.createElement('canvas');cv.width=rows[0].length;cv.height=rows.length;const q=cv.getContext('2d');rows.forEach((r,j)=>[...r].forEach((ch,i)=>{if(PAL[ch]){q.fillStyle=PAL[ch];q.fillRect(i,j,1,1)}}));SPR[n]=cv}
+const EN=[{n:'slime',hp:1,sp:34},{n:'bat',hp:1,sp:58},{n:'skel',hp:1,sp:44},{n:'orc',hp:2,sp:36}];
+const BG=[{nm:'Meadow',sky:'#6ec6ff',far:'#4a8fc4',cl:'#fff',gr:'#5a9e3c',g2:'#4a8a30'},{nm:'Dunes',sky:'#f4c27a',far:'#d08a4a',cl:'#ffe7bd',gr:'#d9b46a',g2:'#c29c52'},{nm:'Crypt',sky:'#14122b',far:'#2a2150',cl:'#3b3470',gr:'#3a3a52',g2:'#2e2e44'},{nm:'Ember Keep',sky:'#3a0f12',far:'#7a2218',cl:'#a8421f',gr:'#4a2a2a',g2:'#6a3220'}];
+let R={over:true},lt=performance.now();
+const rnd=a=>a[Math.random()*a.length|0],ml=()=>Math.min(3+(R.stage>>1),7);
+function pick(a,b){const u=R.en.map(e=>e.w[0]);let p=W.filter(w=>w.length>=a&&w.length<=b&&!u.includes(w[0]));if(!p.length)p=W.filter(w=>w.length>=a&&w.length<=b);return rnd(p)}
+const bw=()=>pick(Math.min(5+(R.stage>>1),9),10);
+function rpgReset(){R={t:0,stage:1,killed:0,need:6,spawned:0,hp:5,score:0,combo:0,en:[],tgt:null,typed:0,spawn:2,boss:false,banner:2.2,atk:0,flash:0,shake:0,fx:[],chars:0,miss:0,scroll:0,over:false,kills:0};focus()}
+function burst(x,y,c,n){for(let i=0;i<(n||14);i++)R.fx.push({x:x,y:y,vx:(Math.random()-.5)*220,vy:-Math.random()*180-30,l:.6,c:c})}
+function addEn(){const t=rnd(EN.slice(0,Math.min(EN.length,R.stage)));R.en.push({n:t.n,x:660,hp:t.hp,sp:t.sp,dmg:1,sc:4,w:pick(ml(),ml()+2)});R.spawned++}
+function addBoss(){R.boss=true;R.en.push({n:'dragon',x:670,hp:Math.min(2+R.stage,7),sp:20,dmg:2,sc:5,boss:1,w:bw()})}
+function strike(e){
+ R.atk=.18;R.combo++;e.hp--;R.score+=Math.round(e.w.length*10*(1+R.combo*.1));
+ R.fx.push({s:1,x:e.x+20,y:150,l:.15});R.tgt=null;R.typed=0;
+ if(e.hp>0){e.x+=14;e.w=e.boss?bw():pick(ml(),ml()+2);burst(e.x+20,160,'#fff',6);return}
+ burst(e.x+20,160,e.boss?'#d94141':'#5fd068',e.boss?36:16);R.en=R.en.filter(x=>x!==e);R.kills++;
+ if(e.boss){R.stage++;R.spawned=0;R.killed=0;R.need=Math.min(4+R.stage*2,16);R.boss=false;R.hp=Math.min(5,R.hp+1);R.banner=2.4;R.spawn=2.5;R.score+=500}else R.killed++;
+}
+function rpgKey(c){
+ if(R.over||c===' ')return;c=c.toLowerCase();let e=R.tgt;
+ if(!e){e=R.en.filter(x=>x.w[0]===c&&x.x<640).sort((a,b)=>a.x-b.x)[0];if(!e){R.miss++;R.combo=0;R.flash=.12;return}R.tgt=e;R.typed=0}
+ if(e.w[R.typed]===c){R.typed++;R.chars++;if(R.typed>=e.w.length)strike(e)}else{R.miss++;R.combo=0;R.flash=.12}
+}
+function rpgBack(){if(!R.over){R.tgt=null;R.typed=0}}
+function step(dt){
+ R.banner-=dt;R.atk-=dt;R.flash-=dt;R.shake-=dt;
+ R.fx=R.fx.filter(p=>(p.l-=dt)>0);for(const p of R.fx)if(!p.s){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt}
+ if(R.over)return;
+ R.t+=dt;R.scroll+=dt*(30+R.stage*4+(R.en.length?0:50));
+ const m=1+.14*(R.stage-1);R.spawn-=dt;
+ if(!R.boss&&R.spawned<R.need&&R.spawn<=0){addEn();R.spawn=Math.max(.9,2.7-.25*R.stage)*(.7+Math.random()*.6)}
+ else if(!R.boss&&R.spawned>=R.need&&!R.en.length&&R.banner<0)addBoss();
+ for(const e of R.en)e.x-=e.sp*m*dt;
+ for(const e of R.en)if(e.x<92){R.hp-=e.dmg;R.combo=0;R.shake=.3;R.flash=.2;burst(100,170,'#ff4d4d');if(R.tgt===e){R.tgt=null;R.typed=0}if(e.boss)e.x=380;else e.d=1}
+ R.en=R.en.filter(e=>!e.d);
+ if(R.hp<=0){R.over=true;R.tgt=null;const b=+(ls('rpgBest')||0);if(R.stage>b)ls('rpgBest',String(R.stage))}
+}
+function draw(){
+ const cv=$('rc'),x=cv.getContext('2d'),B=BG[(R.stage-1)%4],GY=190,F='bold 13px ui-monospace,Consolas,monospace';
+ const tx=(s,X,Y,col,al,f)=>{x.font=f||F;x.textAlign=al||'left';x.fillStyle='#000';x.fillText(s,X+2,Y+2);x.fillStyle=col;x.fillText(s,X,Y)};
+ x.imageSmoothingEnabled=false;x.save();
+ if(R.shake>0)x.translate(Math.random()*6-3,Math.random()*6-3);
+ x.fillStyle=B.sky;x.fillRect(-5,-5,650,250);
+ x.fillStyle=B.cl;for(let k=0;k<6;k++){const cx=((k*170-R.scroll*.1)%700+700)%700-30;x.fillRect(cx,36+k%3*22,28,6);x.fillRect(cx+6,30+k%3*22,16,6)}
+ x.fillStyle=B.far;const o=R.scroll*.3;for(let i=0;i<=640;i+=8){const h=50+Math.sin((i+o)*.02)*22+Math.sin((i+o)*.05)*10;x.fillRect(i,GY-h|0,8,h)}
+ x.fillStyle=B.gr;x.fillRect(-5,GY,650,60);x.fillStyle=B.g2;
+ for(let i=-16;i<660;i+=16){const gx=i-(R.scroll%16);x.fillRect(gx,GY,8,4);x.fillRect(gx+8,GY+16,8,4);x.fillRect(gx+3,GY+32,8,4)}
+ const hs=SPR.hero,bob=R.over?0:(Math.sin(R.t*14)>0?-2:0);
+ x.drawImage(hs,50+(R.atk>0?12:0),GY-hs.height*4+bob,hs.width*4,hs.height*4);
+ for(const e of R.en){
+  const s=SPR[e.n],w=s.width*e.sc,h=s.height*e.sc;
+  const y=e.n==='bat'?GY-h-50+Math.sin(R.t*6+e.x*.05)*10:GY-h+(!e.boss&&Math.sin(R.t*10+e.x)>0?-2:0);
+  x.save();x.translate(e.x+w,y);x.scale(-1,1);x.drawImage(s,0,0,w,h);x.restore();
+  x.font=F;x.textAlign='left';const lk=e===R.tgt,mw=x.measureText(e.w).width,lx=e.x+w/2-mw/2,ly=y-10;
+  x.fillStyle=lk?'rgba(20,60,30,.9)':'rgba(0,0,0,.7)';x.fillRect(lx-5,ly-13,mw+10,18);
+  if(lk){x.strokeStyle='#7CFF8A';x.strokeRect(lx-4.5,ly-12.5,mw+9,17)}
+  const ty=lk?e.w.slice(0,R.typed):'',tw=x.measureText(ty).width;
+  x.fillStyle='#7CFF8A';x.fillText(ty,lx,ly);x.fillStyle='#fff';x.fillText(e.w.slice(ty.length),lx+tw,ly);
+  if(e.hp>1){x.fillStyle='#ff6b6b';x.fillText('♥'.repeat(e.hp),lx,ly-18)}
+ }
+ for(const p of R.fx){
+  if(p.s){x.strokeStyle='#fff';x.lineWidth=3;x.beginPath();x.moveTo(p.x-18,p.y-24);x.lineTo(p.x+18,p.y+24);x.stroke()}
+  else{x.fillStyle=p.c;x.fillRect(p.x|0,p.y|0,4,4)}
+ }
+ if(R.flash>0){x.fillStyle='rgba(255,40,40,.22)';x.fillRect(-5,-5,650,250)}
+ x.restore();
+ x.fillStyle='rgba(0,0,0,.35)';x.fillRect(0,0,640,6);x.fillStyle=R.boss?'#d94141':'#7f85f5';x.fillRect(0,0,640*(R.boss?1:R.killed/R.need),6);
+ for(let i=0;i<5;i++)tx('♥',10+i*18,30,i<R.hp?'#ff4d4d':'#5a4a4a','left','16px sans-serif');
+ tx((R.boss?'BOSS · ':'')+'Stage '+R.stage+' · '+B.nm,320,26,'#fff','center');
+ const wpm=R.t>1?Math.round(R.chars/5/(R.t/60)):0;
+ tx('SCORE '+R.score,630,26,'#fff','right');tx(wpm+' wpm',630,44,'#fff','right');if(R.combo>1)tx('x'+R.combo+' combo',630,62,'#f2c230','right');
+ if(R.banner>0&&!R.over){x.globalAlpha=Math.min(1,R.banner);tx('STAGE '+R.stage,320,100,'#fff','center','bold 34px ui-monospace,monospace');tx(B.nm,320,124,'#fff','center');x.globalAlpha=1}
+ if(R.over){
+  x.fillStyle='rgba(0,0,0,.72)';x.fillRect(0,0,640,240);
+  const acc=R.chars+R.miss?Math.round(R.chars/(R.chars+R.miss)*100):0;
+  tx('DEFEATED',320,80,'#ff4d4d','center','bold 34px ui-monospace,monospace');
+  tx('Stage '+R.stage+'  ·  '+R.kills+' kills  ·  '+R.score+' pts  ·  '+wpm+' wpm  ·  '+acc+'% acc',320,118,'#fff','center');
+  tx('Best stage: '+Math.max(R.stage,+(ls('rpgBest')||0)),320,142,'#f2c230','center');
+  tx('Press Enter or click to try again',320,176,'#7CFF8A','center');
+ }
+}
+function loop(n){const dt=Math.min(.05,(n-lt)/1000);lt=n;if(view==='rpg'&&R.en){step(dt);draw()}requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+$('rc').addEventListener('click',()=>{if(R.over)setup()});
+drawCfg();setup();
+
+const helpModal=$('helpModal'),aboutPanel=$('aboutPanel');
+$('helpButton').addEventListener('click',()=>{helpModal.classList.add('open');$('closeHelp').focus()});
+$('closeHelp').addEventListener('click',()=>helpModal.classList.remove('open'));
+helpModal.addEventListener('click',e=>{if(e.target===helpModal)helpModal.classList.remove('open')});
+$('footerAboutBtn').addEventListener('click',()=>{aboutPanel.classList.add('open');$('closeAbout').focus()});
+$('closeAbout').addEventListener('click',()=>aboutPanel.classList.remove('open'));
+aboutPanel.addEventListener('click',e=>{if(e.target===aboutPanel)aboutPanel.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){helpModal.classList.remove('open');aboutPanel.classList.remove('open')}});
+function updatePhilippineTime(){$('philippineTime').textContent='Philippine Standard Time — '+new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Manila',weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true}).format(new Date())}updatePhilippineTime();setInterval(updatePhilippineTime,1000);
+</script>
+</body></html>
