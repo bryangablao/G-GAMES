@@ -319,8 +319,8 @@ body::after{background:conic-gradient(from 0deg,rgba(47,143,255,.07),rgba(139,12
 .orb-a{background:#2f8fff}.orb-b{background:#8b78ff}.orb-c{background:#55e6bd}
 .topbar{background:rgba(8,8,9,.82);border-bottom-color:rgba(210,214,220,.11)}
 .brand-mark{background:linear-gradient(145deg,#f2f2f2 0%,#9b9da2 42%,#505257 100%);border-color:rgba(115,183,255,.22);box-shadow:0 0 22px rgba(47,143,255,.18);overflow:hidden}
-.brand-mark img,.footer-logo img,.title-icon{width:100%;height:100%;object-fit:contain;display:block}
-.brand-mark img,.footer-logo img{padding:4px}.title-icon{padding:3px;border-radius:9px}
+.brand-mark img,.footer-logo img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;border-radius:inherit}
+.title-icon{width:34px;height:34px;object-fit:contain;display:block;flex:0 0 34px;padding:3px;border-radius:9px}
 .hero-card,.stats-card,.game-panel{border-color:rgba(210,214,220,.12);background:linear-gradient(145deg,rgba(25,26,29,.9),rgba(9,9,10,.82))}
 .hero-card::after{color:rgba(115,183,255,.055)}
 .hero h1 span,#scrambledWord{background:linear-gradient(90deg,#f5f5f5,#73b7ff 38%,#8b78ff 70%,#55e6bd);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -357,7 +357,8 @@ body::after{background:conic-gradient(from 0deg,rgba(47,143,255,.07),rgba(139,12
 .footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#6f7175}
 .footer-status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.footer-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#55e6bd;box-shadow:0 0 9px rgba(85,230,189,.42)}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr;text-align:center}.footer-brand{justify-content:center}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}}
-@media(max-width:640px){.site-footer{padding:24px 18px;text-align:center}.footer-bottom{flex-direction:column;justify-content:center}}
+@media(max-width:640px){.site-footer{padding:24px 18px;text-align:center}.footer-bottom{flex-direction:column;justify-content:center}.title-icon{width:30px;height:30px;flex-basis:30px}}
+@media(max-width:400px){.title-icon{width:27px;height:27px;flex-basis:27px}}
 
 </style>
 </head>
