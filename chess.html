@@ -3,24 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#060816">
+<meta name="theme-color" content="#090a0c">
 <title>Chess</title>
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%23060816"/%3E%3Cpath d="M24 12h16l-3 13c6 3 10 9 10 16H17c0-7 4-13 10-16zM15 44h34v8H15z" fill="none" stroke="%235ef6ff" stroke-width="4" stroke-linejoin="round"/%3E%3Ccircle cx="32" cy="18" r="4" fill="%23ff5fd7"/%3E%3C/svg%3E'>
+<link rel="icon" type="image/png" href="image/GGAMES.ico">
 <style>
 :root{
-  --bg:#050816;
-  --panel:rgba(13,19,43,.80);
-  --panel-strong:rgba(8,13,31,.95);
-  --cyan:#5ef6ff;
-  --blue:#69a8ff;
-  --violet:#9b5cff;
-  --pink:#ff5fd7;
-  --gold:#ffd76a;
-  --text:#f6f8ff;
-  --muted:#9da8c8;
-  --success:#69ffbd;
-  --danger:#ff607d;
-  --shadow:0 22px 70px rgba(0,0,0,.44);
+  --bg:#08090b;
+  --panel:rgba(22,23,26,.88);
+  --panel-strong:rgba(10,10,12,.97);
+  --silver:#d8dade;
+  --silver-2:#9ca0a7;
+  --cyan:#49cfff;
+  --blue:#6c9cff;
+  --violet:#9b72ff;
+  --pink:#e96acb;
+  --gold:#f0c96a;
+  --text:#f5f6f7;
+  --muted:#9a9da3;
+  --success:#56e7b4;
+  --danger:#ff6f88;
+  --shadow:0 22px 70px rgba(0,0,0,.58);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -31,42 +33,43 @@ body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 14% 16%,rgba(104,48,255,.31),transparent 29%),
-    radial-gradient(circle at 86% 18%,rgba(0,202,255,.20),transparent 28%),
-    radial-gradient(circle at 50% 88%,rgba(255,69,210,.10),transparent 32%),
-    linear-gradient(180deg,#060816 0%,#080b19 48%,#030610 100%);
+    radial-gradient(circle at 14% 16%,rgba(73,207,255,.12),transparent 29%),
+    radial-gradient(circle at 86% 18%,rgba(155,114,255,.10),transparent 28%),
+    radial-gradient(circle at 50% 88%,rgba(86,231,180,.06),transparent 32%),
+    linear-gradient(140deg,#050505 0%,#101114 52%,#17181b 100%);
 }
 body::before{
   content:"";
   position:fixed; inset:0; z-index:-4; pointer-events:none;
   background-image:
-    linear-gradient(rgba(96,150,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(96,150,255,.045) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:linear-gradient(to bottom,rgba(0,0,0,.95),transparent 95%);
 }
 body::after{
   content:""; position:fixed; inset:-30%; z-index:-5; pointer-events:none;
-  background:conic-gradient(from 0deg,rgba(96,55,255,.10),rgba(0,211,255,.06),rgba(255,70,218,.08),rgba(96,55,255,.10));
+  background:conic-gradient(from 0deg,rgba(73,207,255,.045),rgba(155,114,255,.04),rgba(86,231,180,.035),rgba(73,207,255,.045));
   filter:blur(70px); animation:ambientSpin 30s linear infinite;
 }
 @keyframes ambientSpin{to{transform:rotate(360deg)}}
 .orb{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.25;pointer-events:none;z-index:-2}
-.orb-a{left:-130px;top:26%;background:#623cff;animation:floatOrb 14s ease-in-out infinite}
-.orb-b{right:-120px;top:42%;background:#00caff;animation:floatOrb 17s ease-in-out infinite reverse}
-.orb-c{left:40%;bottom:-180px;background:#d334ff;animation:floatOrb 20s ease-in-out infinite}
+.orb-a{left:-130px;top:26%;background:#2f6f84;animation:floatOrb 14s ease-in-out infinite}
+.orb-b{right:-120px;top:42%;background:#584b83;animation:floatOrb 17s ease-in-out infinite reverse}
+.orb-c{left:40%;bottom:-180px;background:#436f63;animation:floatOrb 20s ease-in-out infinite}
 @keyframes floatOrb{50%{transform:translate3d(45px,-35px,0) scale(1.12)}}
 .app{min-height:100vh;display:flex;flex-direction:column}
 .topbar{
   position:sticky;top:0;z-index:50;padding:12px clamp(14px,3vw,32px);
-  background:rgba(4,8,21,.74);border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(8,8,10,.82);border-bottom:1px solid rgba(255,255,255,.08);
   backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
 }
 .topbar-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.08em;white-space:nowrap}
-.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(94,246,255,.18),rgba(155,92,255,.23));border:1px solid rgba(94,246,255,.30);box-shadow:0 0 24px rgba(94,246,255,.12)}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#e9eaec,#777b82);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 24px rgba(73,207,255,.08);overflow:hidden}
+.brand-mark img,.title-icon img,.footer-logo-mark img{width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit}.brand-mark img{padding:3px}
 .title-wrap{display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
-.title-icon{width:34px;height:34px;filter:drop-shadow(0 0 10px rgba(94,246,255,.22))}
+.title-icon{width:34px;height:34px;display:grid;place-items:center;overflow:hidden;border-radius:10px;background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(73,207,255,.07));border:1px solid rgba(255,255,255,.10);filter:drop-shadow(0 0 10px rgba(73,207,255,.12))}.title-icon img{padding:3px}
 .page-title strong{display:block;font-size:clamp(16px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .page-title span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .icon-btn,.btn{
@@ -82,14 +85,14 @@ body::after{
 .hero{max-width:1180px;margin:0 auto 22px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
 .hero-card,.stats-card,.game-panel{
   border:1px solid rgba(255,255,255,.09);
-  background:linear-gradient(145deg,rgba(17,23,51,.82),rgba(8,13,31,.68));
+  background:linear-gradient(160deg,rgba(31,32,35,.94),rgba(12,12,14,.96));
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)
 }
 .hero-card{border-radius:24px;padding:clamp(22px,4vw,38px);position:relative;overflow:hidden}
 .hero-card::after{content:"";position:absolute;right:-24px;top:-18px;width:175px;height:175px;border-radius:28px;border:24px solid rgba(94,246,255,.035);box-shadow:inset 0 0 0 20px rgba(155,92,255,.025)}
 .eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .hero h1{margin:9px 0 10px;font-size:clamp(30px,5.6vw,60px);line-height:.98;letter-spacing:-.04em}
-.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#c49cff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan) 40%,#bca8ff 72%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{max-width:700px;margin:0;color:var(--muted);font-size:clamp(14px,2vw,16px);line-height:1.65}
 .stats-card{border-radius:24px;padding:20px;display:grid;gap:12px;align-content:center}
 .stat{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
@@ -175,17 +178,17 @@ body::after{
   cursor:pointer;
   line-height:0;
 }
-.square.light{background:#eee9df}
-.square.dark{background:#5b6470}
-.square.selected{box-shadow:inset 0 0 0 4px #29c6ff,inset 0 0 22px rgba(41,198,255,.22)}
+.square.light{background:linear-gradient(145deg,#d9dadd,#bfc2c7)}
+.square.dark{background:linear-gradient(145deg,#363a42,#22252b)}
+.square.selected{box-shadow:inset 0 0 0 4px #49cfff,inset 0 0 22px rgba(73,207,255,.22)}
 .square.legal::after{
-  content:"";width:20%;height:20%;border-radius:50%;background:rgba(20,156,90,.80);box-shadow:0 0 10px rgba(20,156,90,.35)
+  content:"";width:20%;height:20%;border-radius:50%;background:rgba(86,231,180,.78);box-shadow:0 0 10px rgba(86,231,180,.30)
 }
 .square.capture::after{
-  content:"";position:absolute;inset:7%;border-radius:50%;border:4px solid rgba(214,52,75,.78);box-shadow:0 0 14px rgba(214,52,75,.25)
+  content:"";position:absolute;inset:7%;border-radius:50%;border:4px solid rgba(255,111,136,.78);box-shadow:0 0 14px rgba(255,111,136,.24)
 }
-.square.last{box-shadow:inset 0 0 0 4px rgba(240,189,52,.68)}
-.square.check{box-shadow:inset 0 0 0 5px rgba(214,52,75,.90),inset 0 0 30px rgba(214,52,75,.24)}
+.square.last{box-shadow:inset 0 0 0 4px rgba(240,201,106,.72)}
+.square.check{box-shadow:inset 0 0 0 5px rgba(255,111,136,.90),inset 0 0 30px rgba(255,111,136,.24)}
 .piece{
   width:76%;
   height:76%;
@@ -223,131 +226,21 @@ body::after{
 .end-card{text-align:center}.result-mark{width:88px;height:88px;border-radius:22px;margin:0 auto 14px;display:grid;place-items:center;background:radial-gradient(circle,rgba(105,255,189,.18),rgba(94,246,255,.07) 60%,rgba(255,255,255,.02));border:1px solid rgba(105,255,189,.22)}.result-mark svg{width:48px;height:48px}
 .promotion-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.promotion-choice{min-height:74px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;cursor:pointer;display:grid;place-items:center}.promotion-choice:hover{border-color:rgba(94,246,255,.38);background:rgba(94,246,255,.07)}.promotion-choice svg{width:46px;height:46px}
 
-/* Footer */
-.site-footer{
-  margin-top:auto;
-  border-top:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(180deg,rgba(7,10,24,.78),rgba(3,5,14,.97));
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-.footer-inner{
-  max-width:1180px;
-  margin:auto;
-  padding:26px 18px 18px;
-}
-
-.footer-grid{
-  display:grid;
-  grid-template-columns:1.2fr 1fr auto;
-  gap:24px;
-  align-items:center;
-}
-
-.footer-brand{text-align:left}
-
-.footer-logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:.05em;
-}
-
-.footer-logo-mark{
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border-radius:11px;
-  color:#041019;
-  background:linear-gradient(135deg,var(--cyan),#b795ff);
-  box-shadow:0 0 22px rgba(94,246,255,.18);
-}
-
-.footer-tagline{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.55;
-}
-
-.footer-time{
-  text-align:center;
-  padding:12px 16px;
-  border-radius:14px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
-  color:#dfe7ff;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.footer-time strong{
-  color:var(--cyan);
-  display:block;
-  margin-bottom:2px;
-}
-
-.footer-links{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-  gap:8px 14px;
-}
-
-.footer-links a,.footer-links button{
-  border:0;
-  padding:0;
-  background:none;
-  color:#c8d1eb;
-  text-decoration:none;
-  cursor:pointer;
-  font:inherit;
-  font-size:13px;
-  transition:.2s ease;
-}
-
-.footer-links a:hover,.footer-links button:hover{
-  color:var(--cyan);
-}
-
-.footer-bottom{
-  margin-top:20px;
-  padding-top:15px;
-  border-top:1px solid rgba(255,255,255,.06);
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  color:#7f8aa9;
-  font-size:12px;
-}
-
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-}
-
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 12px rgba(105,255,189,.65);
-}
-
+/* Premium index-style footer */
+.site-footer{position:relative;margin:42px auto 0;width:min(1180px,calc(100% - 28px));padding:28px;overflow:hidden;border:1px solid rgba(73,207,255,.14);border-radius:26px 26px 0 0;background:radial-gradient(circle at 10% 0%,rgba(73,207,255,.07),transparent 30%),radial-gradient(circle at 90% 100%,rgba(155,114,255,.08),transparent 34%),linear-gradient(180deg,rgba(21,22,24,.96),rgba(7,7,8,.99));box-shadow:0 -18px 60px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.025);color:#85878c;text-align:left}
+.site-footer::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(73,207,255,.65),rgba(155,114,255,.65),transparent);box-shadow:0 0 18px rgba(73,207,255,.20)}
+.footer-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(230px,1.25fr) minmax(260px,1fr) auto;gap:28px;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:13px;min-width:0}.footer-logo-mark{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(73,207,255,.06));box-shadow:0 0 22px rgba(73,207,255,.08);overflow:hidden}.footer-logo-mark img{padding:4px}.footer-brand-copy strong{display:block;margin-bottom:4px;color:#f1f2f3;font-size:.92rem}.footer-brand-copy span{display:block;font-size:.75rem;line-height:1.55;color:#85888e}
+.footer-clock{justify-self:center;width:min(100%,440px);padding:13px 16px;border-radius:16px;border:1px solid rgba(73,207,255,.12);background:rgba(73,207,255,.035);text-align:center}.footer-clock-label{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:5px;color:#9ba0a8;font-size:.66rem;font-weight:800;letter-spacing:.10em;text-transform:uppercase}.footer-clock-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px rgba(73,207,255,.9);animation:footerPulse 1.8s ease-in-out infinite}@keyframes footerPulse{50%{opacity:.38;transform:scale(.78)}}#phTime{color:#e7e9ec;font-size:.78rem;font-weight:650;line-height:1.5}
+.footer-links{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px}.footer-links a,.footer-links button{position:relative;border:0;padding:4px 0;background:transparent;color:#969aa1;font:inherit;font-size:.75rem;text-decoration:none;cursor:pointer;transition:color .2s ease,text-shadow .2s ease}.footer-links a:hover,.footer-links button:hover{color:#eaf7ff;text-shadow:0 0 14px rgba(73,207,255,.30)}
+.footer-bottom{position:relative;z-index:1;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.72rem;color:#70747b}.status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.status-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px rgba(73,207,255,.7)}
 @media(max-width:930px){
   .hero,.game-shell{grid-template-columns:1fr}
   .stats-card{grid-template-columns:repeat(3,1fr)}
   .stat{display:block;text-align:center}.stat span,.stat strong{display:block}.stat strong{margin-top:5px}
   .side-panel{grid-template-columns:1fr 1fr}.info-card:last-child{grid-column:1/-1}
   .footer-grid{grid-template-columns:1fr;text-align:center}
-  .footer-brand{text-align:center}
-  .footer-logo{justify-content:center}
+  .footer-brand{justify-content:center;text-align:center}
   .footer-links{justify-content:center}
 }
 @media(max-width:640px){
@@ -356,7 +249,7 @@ body::after{
   .stats-card{padding:12px;gap:8px}.stat{padding:11px 7px}.stat span{font-size:11px}.stat strong{font-size:14px}
   .game-top{grid-template-columns:1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr;width:100%}.btn{width:100%}
   .board-wrap{padding:8px}.board-frame{--coord-size:24px}.side-panel{grid-template-columns:1fr}.info-card:last-child{grid-column:auto}
-  .site-footer{width:calc(100% - 20px);padding:18px}
+  .site-footer{width:calc(100% - 16px);padding:22px 18px;text-align:center}.footer-grid{grid-template-columns:1fr;gap:18px}.footer-brand{justify-content:center}.footer-clock{justify-self:stretch;width:100%}.footer-links{justify-content:center}.footer-bottom{flex-direction:column;justify-content:center}
 }
 @media(max-width:430px){
   .stats-card{grid-template-columns:1fr 1fr}.stats-card .stat:last-child{grid-column:1/-1}
@@ -370,13 +263,9 @@ body::after{
 <div class="app">
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark">G</div><span>G-GAMES</span></a>
+    <a class="brand" href="index.html" aria-label="Back to G-GAMES lobby"><div class="brand-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div><span>G-GAMES</span></a>
     <div class="title-wrap">
-      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
-        <defs><linearGradient id="chessG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5ef6ff"/><stop offset=".55" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff5fd7"/></linearGradient></defs>
-        <path d="M24 11h16l-3 14c7 3 11 9 11 17H16c0-8 4-14 11-17zM14 45h36v8H14z" fill="none" stroke="url(#chessG)" stroke-width="4" stroke-linejoin="round"/>
-        <circle cx="32" cy="17" r="4" fill="#69ffbd"/>
-      </svg>
+      <div class="title-icon"><img src="image/GGAMES.ico" alt="G-GAMES Chess icon"></div>
       <div class="page-title"><strong>Chess</strong><span>Classic Strategy • Player vs Player • Player vs AI</span></div>
     </div>
     <button class="icon-btn" type="button" onclick="openHelp()" aria-label="How to play">
@@ -389,7 +278,7 @@ body::after{
   <section class="hero">
     <div class="hero-card">
       <div class="eyebrow">G-GAMES • Strategy Board</div>
-      <h1>Master the <span>Neon Board</span></h1>
+      <h1>Master the <span>Strategic Board</span></h1>
       <p>Play a full game of chess locally against another player or challenge the built-in AI. Select a piece, choose a highlighted legal square, and work toward checkmate.</p>
     </div>
     <aside class="stats-card">
@@ -459,35 +348,27 @@ body::after{
 </main>
 
 <footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="footer-logo">
-          <span class="footer-logo-mark">G</span>
-          <span>G-GAMES</span>
-        </div>
-        <div class="footer-tagline">
-          Fast, casual mini-games built for desktop, tablet, and mobile.
-        </div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo-mark"><img src="image/GGAMES.ico" alt="G-GAMES logo"></div>
+      <div class="footer-brand-copy">
+        <strong>G-GAMES</strong>
+        <span>Quick games. Futuristic vibes. Built for play on any screen.</span>
       </div>
-
-      <div class="footer-time" aria-live="polite">
-        <strong>Philippine Standard Time</strong>
-        <span id="phTime">Loading Philippine Standard Time…</span>
-      </div>
-
-      <nav class="footer-links" aria-label="Footer links">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="terms-of-service.html">Terms of Service</a>
-        <button type="button" onclick="openHelp()">How to Play</button>
-        <a href="index.html">Game Lobby</a>
-      </nav>
     </div>
-
-    <div class="footer-bottom">
-      <span>© 2025 Accxs Creations. All rights reserved.</span>
-      <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
+    <div class="footer-clock" aria-live="polite">
+      <div class="footer-clock-label"><span class="footer-clock-dot" aria-hidden="true"></span>Live Clock</div>
+      <div id="phTime">Philippine Standard Time</div>
     </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <button type="button" onclick="openAbout()">About</button>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Accxs Creations. All rights reserved.</span>
+    <span class="status"><span class="status-dot"></span>G-GAMES Online</span>
   </div>
 </footer>
 </div>
@@ -931,7 +812,7 @@ function updatePhilippineTime(){
     hour12:true
   });
 
-  document.getElementById('phTime').textContent = formatter.format(new Date());
+  document.getElementById('phTime').textContent = 'Philippine Standard Time — ' + formatter.format(new Date());
 }
 updatePhilippineTime();setInterval(updatePhilippineTime,1000);
 newGame();
